@@ -27,8 +27,8 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-left">
 					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#">Help</a></li>
-					<li><a href="#">About</a></li>
+					<li><a href="#" role="button" data-toggle="modal" data-target="#help">Help</a></li>
+					<li><a href="#" role="button" data-toggle="modal" data-target="#about">About</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
@@ -72,7 +72,7 @@
 			
 			<div class="col-md-offset-4 col-lg-offset-4 col-xs-12 col-sm-12 col-md-8 col-lg-8 doc-area"> <!-- document area -->
 				<ul id="documentTab" class="nav nav-tabs" role="tablist">
-					<li role="presentation" class="active"><a href="#Doc1" id="Doc1-tab" role="tab" data-toggle="tab" aria-controls="Doc1" aria-expanded="true">Doc1&nbsp;<span class="glyphicon glyphicon-remove"></span></a></li>
+					<li role="presentation" class="active"><a href="#Doc1" id="Doc1-tab" role="tab" data-toggle="tab" aria-controls="Doc1" aria-expanded="true">Doc1&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>
 				</ul>
 				<div id="documentTabContent" class="tab-content">
 					<div role="tabpanel" class="tab-pane fade in active" id="Doc1" aria-labelledBy="Doc1-tab">
@@ -94,9 +94,57 @@
 	<!-- Footer -->
 	<div class="footer">
 		<div class="container">
-			<p class="text-muted">&copy; Pap&agrave;Igloo group</p>
+			<p class="text-muted">&copy; Pap&agrave;Igloo</p>
 		</div>
 	</div>
 	
+	<!-- Modal -->
+	<div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="About Annotaria" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">About Annotaria</h4>
+				</div>
+				<div class="modal-body">
+					<p>Progetto del corso di Tecnologie Web all'Università di Bologna</p>
+					<p>Autors: Abrignani Federico, Cazzoli Lorenzo, Ferrari Daniele, Gozzoli Alessio.</p>
+					<p>&copy; 2014 Pap&agrave;Igloo. All right reserved.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="Help Annotaria" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Help</h4>
+				</div>
+				<div class="modal-body">
+					<p>Testo da decidere.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- finestra modale per l'inserimento delle annotazioni	
+	<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="Help Annotaria" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Help</h4>
+				</div>
+				<div class="modal-body">
+					<p>Utilizzata per gli scopi del corso di Tecnologie Web all'Università di Bologna</p>
+					<p>© 2014 Fabio Vitali. All right reserved.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+				</div>
+			</div>
+		</div>
+	</div> --> 
 </body>
 </html>

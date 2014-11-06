@@ -45,11 +45,11 @@ function addTab() {
 	$('.doc-area #documentTab li.active').removeClass('active');
 	$('.doc-area #documentTabContent div.active').removeClass('active');
 	
-	$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#Doc' + numDoc +'" id="Doc' + numDoc +'-tab" role="tab" data-toggle="tab" aria-controls="Doc' + numDoc +'" aria-expanded="true">Doc' + numDoc +'&nbsp;<span class="glyphicon glyphicon-remove"></span></a></li>');
+	$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#Doc' + numDoc +'" id="Doc' + numDoc +'-tab" role="tab" data-toggle="tab" aria-controls="Doc' + numDoc +'" aria-expanded="true">Doc' + numDoc +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
 	
 	$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc' + numDoc +'" aria-labelledBy="Doc' + numDoc +'-tab"><p class="text-justify"> Content tab numero ' + numDoc +'. Al momento sono attivi ' + activeDoc +' content tab.</p></div>');
 	
-	$('#Doc' + numDoc + '-tab span.glyphicon-remove').click(deleteTab);
+	$('#Doc' + numDoc + '-tab button.close').click(deleteTab);
 	checkTab();
 }
 
@@ -70,7 +70,7 @@ $( document ).ready(function() {
 		$('#mode').html( htmlString );
 	});
 	
-	$('.doc-area #documentTab li a span.glyphicon-remove').click(deleteTab);	
+	$('.doc-area #documentTab li a button.close').click(deleteTab);	
 	
 	$('.sidebar #siderTabContent span.glyphicon-tower').click(addTab);
 });
