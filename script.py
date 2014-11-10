@@ -1,24 +1,35 @@
 
 import os, json, sys
-jsonInfo = {}
+
+jsonList = []
+
 
 for docName in os.listdir(sys.argv[1]):
 	docPath = "{0}/{1}".format(sys.argv[1], docName)
 
-	if os.path.isfile(docPath):
+	if (os.path.isfile(docPath) and docName.endswith(".html")):
+		jsonInfoChunk = {}
+
 		doc = open(docPath,"r")
 		docText = doc.read()
 
 		title = ((docText.split("<title"))[1].split("</title>")[0]).split(">")[1]
 
 		URL = os.path.abspath(docName)
-		jsonInfo[title] = URL
+		jsonInfoChunk["url"] = URL
+		jsonInfoChunk["label"] = title
+		
+
 
 		doc.close()
+		jsonList.append(jsonInfoChunk)
+
+
+
 
 try:
 	jsonFile = open("lamammadiLollosucchiai.json","w")
-	json.dump(jsonInfo, jsonFile, indent=4, separators=(',', ': '))
+	json.dump(jsonList, jsonFile, indent=4, separators=(',', ': '))
 	jsonFile.close()
 	
 except:
