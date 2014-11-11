@@ -1,3 +1,13 @@
+# 
+# jsonDocListCreator.py
+# 	script per la creazione di un documento formato Jason contenente la lista dei documenti
+#	presenti nella cartella passata come parametro.
+#	Nel file Jason sono presenti due campi:
+#	- il label, contenente il nome del documento
+#	- la URL, con il path assoluto del documento
+#
+# @Authors: Federico Abrignani, Daniele Ferrari
+
 
 import os, json, sys
 
@@ -14,19 +24,15 @@ for docName in os.listdir(sys.argv[1]):
 		docText = doc.read()
 
 		title = ((docText.split("<title"))[1].split("</title>")[0]).split(">")[1]
-
 		URL = os.path.abspath(docName)
+		
 		jsonInfoChunk["url"] = URL
 		jsonInfoChunk["label"] = title
 		
-
-
 		doc.close()
 		jsonList.append(jsonInfoChunk)
-
-
-
-
+		
+		
 try:
 	jsonFile = open("lamammadiLollosucchiai.json","w")
 	json.dump(jsonList, jsonFile, indent=4, separators=(',', ': '))
