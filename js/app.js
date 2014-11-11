@@ -81,10 +81,13 @@ function title_reader() {
 
 
 function set_provinence() {
+	
 	usr.name = $('#usr_name').val();
 	usr.surname = $('#usr_surname').val();
 	usr.email = $('#usr_email').val();
 	title_annotator();
+	$("#modal_provinence").modal('hide');
+	
 }
 
 $(document).ready(function () {
