@@ -1,4 +1,3 @@
-# 
 # jsonDocListCreator.py
 # 	script per la creazione di un documento formato Jason contenente la lista dei documenti
 #	presenti nella cartella passata come parametro.
