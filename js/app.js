@@ -1,12 +1,12 @@
 var numDoc = 1;
 var activeDoc = 1;
-
+var usr = {};
 /*
 * checkTab
 *
 * se le tab esistenti sono meno di 2 nasconde i tab, al contrario li mostra
 */
-function checkTab () {
+function checkTab() {
 	if (activeDoc < 2)
 		$('.doc-area #documentTab').fadeOut();
 	else
@@ -53,24 +53,47 @@ function addTab() {
 	checkTab();
 }
 
+/*
+* title_annotator
+*
+* modifica il navbar-brand e la scritta del mode
+*/
 
-$( document ).ready(function() {
+function title_annotator() {
+	$('.navbar-brand').text("Annotaria");
+	var htmlString = $('#sel-annotator').html();
+	htmlString += '&nbsp;<span class="caret"></span>';
+	$('#mode').html( htmlString );
+}
+
+/*
+* title_reader
+*
+* modifica il navbar-brand e la scritta del mode
+*/
+
+function title_reader() {
+	$('.navbar-brand').text("Leggotaria");
+	var htmlString = $('#sel-reader').html();
+	htmlString += '&nbsp;<span class="caret"></span>';
+	$('#mode').html(htmlString);
+}
+
+
+function set_provinence() {
+	usr.name = $('#usr_name').val();
+	usr.surname = $('#usr_surname').val();
+	usr.email = $('#usr_email').val();
+	title_annotator();
+}
+
+$(document).ready(function () {
 		
-	$('#sel-annotator').click(function () {
-		$('.navbar-brand').text("Annotaria");
-		var htmlString = $( this ).html();
-		htmlString += '&nbsp;<span class="caret"></span>';
-		$('#mode').html( htmlString );
-	});
+	//$('#sel-annotator').click(title_annotator);
 	
-	$('#sel-reader').click(function () {
-		$('.navbar-brand').text("Leggotaria");
-		var htmlString = $( this ).html();
-		htmlString += '&nbsp;<span class="caret"></span>';
-		$('#mode').html( htmlString );
-	});
+	$('#sel-reader').click(title_reader);
 	
-	$('.doc-area #documentTab li a button.close').click(deleteTab);	
+	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
 	$('.sidebar #siderTabContent span.glyphicon-tower').click(addTab);
 });
