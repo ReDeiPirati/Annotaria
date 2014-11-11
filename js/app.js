@@ -81,17 +81,18 @@ function title_reader() {
 
 
 function set_provinence() {
-	
+	alert("entra nella funzione");
 	usr.name = $('#usr_name').val();
 	usr.surname = $('#usr_surname').val();
 	usr.email = $('#usr_email').val();
 	title_annotator();
 	$("#modal_provinence").modal('hide');
+	alert("esce dalla funzione");
 	
 }
 
 $(document).ready(function () {
-		
+	$('#submit_prominance').click(set_prominance);
 	//$('#sel-annotator').click(title_annotator);
 	
 	$('#sel-reader').click(title_reader);
