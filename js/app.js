@@ -1,6 +1,7 @@
 var numDoc = 1;
 var activeDoc = 1;
 var usr = {};
+
 /*
 * checkTab
 *
@@ -61,7 +62,7 @@ function addTab() {
 
 function title_annotator() {
 	$('.navbar-brand').text("Annotaria");
-	var htmlString = $('#sel-annotator').html();
+	var htmlString =  '<span class="glyphicon glyphicon-pencil">&nbsp;</span>' + usr.name + ' ' + usr.surname; 
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html( htmlString );
 }
@@ -74,28 +75,26 @@ function title_annotator() {
 
 function title_reader() {
 	$('.navbar-brand').text("Leggotaria");
-	var htmlString = $('#sel-reader').html();
+	var htmlString = $('#sel_reader').html();
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html(htmlString);
 }
 
 
 function set_provinence() {
-	alert("entra nella funzione");
 	usr.name = $('#usr_name').val();
 	usr.surname = $('#usr_surname').val();
 	usr.email = $('#usr_email').val();
-	title_annotator();
-	$("#modal_provinence").modal('hide');
-	alert("esce dalla funzione");
-	
+	$("#modal_provinence").modal("hide");
+	title_annotator();	
 }
 
 $(document).ready(function () {
-	$('#submit_prominance').click(set_prominance);
-	//$('#sel-annotator').click(title_annotator);
 	
-	$('#sel-reader').click(title_reader);
+	$('#submit_prominance').click(set_provinence);
+	
+	
+	$('#sel_reader').click(title_reader);
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
