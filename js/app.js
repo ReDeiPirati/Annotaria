@@ -118,7 +118,7 @@ function listload() {
 				var link = $(vet[i]).attr('href');
 				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
 					var label = link.substr(0, link.length - str.length);
-					$('#list').append("<li id=" + label + " onclick='loaddoc(\"" + link + "\" , \"" + label + "\" , \"p" + i + "\")'>" + label + "</li>");
+					$('#doc_list').append('<li id="' + label + '"  class="list-group-item" >' + label + '</li>');
 				}
 			}
 		},
