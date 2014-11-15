@@ -73,3 +73,10 @@ body {
 .doc-area {
 	
 }
+
+/*
+* modal
+*/
+.modal {
+	margin-top: 50px;
+}

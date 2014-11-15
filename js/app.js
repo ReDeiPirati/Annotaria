@@ -54,6 +54,11 @@ function addTab() {
 	checkTab();
 }
 
+function toggle_mode_selector () {
+	$('#sel_annotator').toggle();
+	$('#sel_reader').toggle();
+}
+
 /*
 * title_annotator
 *
@@ -65,6 +70,7 @@ function title_annotator() {
 	var htmlString =  '<span class="glyphicon glyphicon-pencil">&nbsp;</span>' + usr.name + ' ' + usr.surname; 
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html( htmlString );
+	toggle_mode_selector();
 }
 
 /*
@@ -78,6 +84,7 @@ function title_reader() {
 	var htmlString = $('#sel_reader').html();
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html(htmlString);
+	toggle_mode_selector();
 }
 
 
@@ -89,12 +96,23 @@ function set_provinence() {
 	title_annotator();	
 }
 
+function reset_provinence() {
+	usr.name = "";
+	$('#usr_name').val('');
+	usr.surname = ""; 
+	$('#usr_surname').val('');
+	usr.email = "";
+	$('#usr_email').val('');
+	title_reader();	
+}
+
 $(document).ready(function () {
 	
+	$('#sel_reader').toggle();
 	$('#submit_prominance').click(set_provinence);
 	
 	
-	$('#sel_reader').click(title_reader);
+	$('#sel_reader').click(reset_provinence);
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
