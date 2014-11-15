@@ -112,8 +112,9 @@ function listload() {
 		method: 'GET',
 		url: docs,
 		success: function(d) {
-			var vet = $(d).find('a'), str = '.html';
-			for (var i=0; i<vet.length; i++) {
+			var vet = $(d).find('a');
+			var str = '.html';
+			for (var i = 0; i < vet.length; i++) {
 				var link = $(vet[i]).attr('href');
 				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
 					var label = link.substr(0, link.length - str.length);
@@ -122,7 +123,7 @@ function listload() {
 			}
 		},
 		error: function(a,b,c) {
-			alert('Impossibile caricare la lista dei documenti');
+			alert('Error on load of the document');
 		}
 	});
 
