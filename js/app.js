@@ -1,6 +1,7 @@
 var numDoc = 1;
 var activeDoc = 1;
 var usr = {};
+var docs = '//annotaria.web.cs.unibo.it/documents/';
 
 /*
 * checkTab
@@ -106,7 +107,31 @@ function reset_provinence() {
 	title_reader();	
 }
 
+function listload() {
+	$.ajax({
+		method: 'GET',
+		url: docs,
+		success: function(d) {
+			var vet = $(d).find('a'), str = '.html';
+			for (var i=0; i<vet.length; i++) {
+				var link = $(vet[i]).attr('href');
+				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
+					var label = link.substr(0, link.length - str.length);
+					$('#list').append("<li id=" + label + " onclick='loaddoc(\"" + link + "\" , \"" + label + "\" , \"p" + i + "\")'>" + label + "</li>");
+				}
+			}
+		},
+		error: function(a,b,c) {
+			alert('Impossibile caricare la lista dei documenti');
+		}
+	});
+
+}
+
+
 $(document).ready(function () {
+	
+	listload();
 	
 	$('#sel_reader').toggle();
 	$('#submit_prominance').click(set_provinence);
