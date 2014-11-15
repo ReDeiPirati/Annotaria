@@ -2,7 +2,7 @@ var numDoc = 1;
 var activeDoc = 1;
 var usr = {};
 var docs = '//annotaria.web.cs.unibo.it/documents/';
-
+var nDocList = 0;
 /*
 * checkTab
 *
@@ -107,7 +107,14 @@ function reset_provinence() {
 	title_reader();	
 }
 
-function listload() {
+/*
+* doc_list_load
+*
+* carica i documenti dal lind docs e li inserisce in una tabella
+* se i documenti sono piu' di 10 mostra i pulsanti per lo switch di pagina
+*
+*/
+function doc_list_load() {
 	$.ajax({
 		method: 'GET',
 		url: docs,
@@ -118,8 +125,12 @@ function listload() {
 				var link = $(vet[i]).attr('href');
 				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
 					var label = link.substr(0, link.length - str.length);
-					$('#doc_list').append('<li id="' + label + '"  class="list-group-item" >' + label + '</li>');
+					$('#docList').append('<a id="' + label + '"  class="list-group-item" >' + label + '</a>');
+					nDocList ++;
 				}
+			}
+			if (nDocList > 10) {
+				$('#docList').after('<nav><ul class="pager"><li><a href="#">Previous</a></li><li><a href="#">Next</a></li></ul></nav>');
 			}
 		},
 		error: function(a,b,c) {
@@ -132,7 +143,7 @@ function listload() {
 
 $(document).ready(function () {
 	
-	listload();
+	doc_list_load();
 	
 	$('#sel_reader').toggle();
 	$('#submit_prominance').click(set_provinence);
@@ -141,8 +152,6 @@ $(document).ready(function () {
 	$('#sel_reader').click(reset_provinence);
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
-	
-	$('.sidebar #siderTabContent span.glyphicon-tower').click(addTab);
 });
 
 

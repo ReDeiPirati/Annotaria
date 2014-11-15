@@ -80,3 +80,31 @@ body {
 .modal {
 	margin-top: 50px;
 }
+
+/*
+*
+*/
+div .tab-pane {
+	padding-top: 20px;
+	margin-bottom: 60px;
+}
+
+#cerca span, #cerca input {
+	border-bottom-right-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+}
+
+.list-group .list-group-item {
+	border-left: none !important;
+	border-right: none !important;
+}
+
+.list-group .list-group-item:first-child  {
+	border-top-right-radius: 0px !important;
+	border-top-left-radius: 0px !important;
+}
+
+.list-group .list-group-item:last-child  {
+	border-bottom-right-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+}
