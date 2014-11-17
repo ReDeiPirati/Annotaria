@@ -1,7 +1,7 @@
 var numDoc = 1;
 var activeDoc = 1;
 var usr = {};
-var docs = '//annotaria.web.cs.unibo.it/documents/';
+var docs = 'http://annotaria.web.cs.unibo.it/documents/';
 var nDocList = 0;
 /*
 * checkTab
@@ -129,9 +129,9 @@ function doc_list_load() {
 					nDocList ++;
 				}
 			}
-			if (nDocList > 10) {
+			/*if (nDocList > 10) {
 				$('#docList').after('<nav><ul class="pager"><li><a href="#">Previous</a></li><li><a href="#">Next</a></li></ul></nav>');
-			}
+			} */
 		},
 		error: function(a,b,c) {
 			alert('Error on load of the document');

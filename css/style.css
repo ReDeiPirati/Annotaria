@@ -94,6 +94,11 @@ div .tab-pane {
 	border-bottom-left-radius: 0px !important;
 }
 
+#docList {
+	max-height: 400px;	
+	overflow-y: auto;
+}
+
 .list-group .list-group-item {
 	border-left: none !important;
 	border-right: none !important;
