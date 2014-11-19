@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Annotaria</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="css/style.css">
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> 
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script src="js/app.js"></script>
+</head>
+<body>
+	<!-- Fixed navbar -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand " href="#">Leggotaria</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#" role="button" data-toggle="modal" data-target="#help">Help</a></li>
+					<li><a href="#" role="button" data-toggle="modal" data-target="#about">About</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a id="mode" href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-search">&nbsp;</span>Reader&nbsp;<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a id="sel_reader" href="#"><span class="glyphicon glyphicon-search">&nbsp;</span>Reader</a></li>
+							<li class="divider"></li>
+							<li><a id="sel_annotator" href="#" role="button" data-toggle="modal" data-target="#modal_provinence"><span class="glyphicon glyphicon-pencil">&nbsp;</span>Annotator</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</nav>
+	<!-- End Fixed navbar -->
+	
+	<!-- Central part -->
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 sidebar"> <!-- sider tab -->
+				<ul id="siderTab" class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#Documenti" id="Documenti-tab" role="tab" data-toggle="tab" aria-controls="Documetni" aria-expanded="true">Documenti</a></li>
+					<li role="presentation"><a href="#Filtri" role="tab" id="Filtri-tab" data-toggle="tab" aria-controls="Filtri">Filtri</a></li>
+					<li role="presentation"><a href="#Info" role="tab" id="Info-tab" data-toggle="tab" aria-controls="Info">Info</a></li>
+				</ul>
+				<!-- tab-content -->
+				<div id="siderTabContent" class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="Documenti" aria-labelledBy="Documenti-tab">
+						<p>...lista dei documenti...</p>
+						<br />
+						<span class="glyphicon glyphicon-tower"></span>
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="Filtri" aria-labelledBy="Filtri-tab">
+						<p>...lista dei filtri...</p>
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="Info" aria-labelledBy="Info-tab">
+						<p>...lista dei meta-dati...</p>
+					</div>
+				</div>
+			</div> <!-- end sider tab -->
+			
+			<div class="col-md-offset-4 col-lg-offset-4 col-xs-12 col-sm-12 col-md-8 col-lg-8 doc-area"> <!-- document area -->
+				<ul id="documentTab" class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#Doc1" id="Doc1-tab" role="tab" data-toggle="tab" aria-controls="Doc1" aria-expanded="true">Doc1&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>
+				</ul>
+				<div id="documentTabContent" class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="Doc1" aria-labelledBy="Doc1-tab">
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+					</div>
+				</div>
+			</div> <!-- end document area -->
+		</div> <!-- row -->
+	</div> <!-- container -->
+	
+	<!-- Footer -->
+	<div class="footer">
+		<div class="container">
+			<p class="text-muted">&copy; Pap&agrave;Igloo</p>
+		</div>
+	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="About Annotaria" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modalAboutLabel">About Annotaria</h4>
+				</div>
+				<div class="modal-body">
+					<p>Progetto del corso di Tecnologie Web all'Università di Bologna</p>
+					<p>Autors: Abrignani Federico, Cazzoli Lorenzo, Ferrari Daniele, Gozzoli Alessio.</p>
+					<p>&copy; 2014 Pap&agrave;Igloo. All right reserved.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="Help Annotaria" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modalHelpLabel">Help</h4>
+				</div>
+				<div class="modal-body">
+					<p>Testo da decidere.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- form user provinence -->
+	<div class="modal fade" id="modal_provinence" tabindex="-1" role="dialog" aria-labelledby="Annotator data" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modalProvinenceLabel">Annotator data</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="usr_name">Name:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="usr_name" placeholder="Enter name" required="required">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="usr_surname">Surname:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="usr_surname" placeholder="Enter surname" required="required">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="usr_email">Email:</label>
+							<div class="col-sm-8">
+								<input type="email" class="form-control" id="usr_email" placeholder="Enter email address" required="required" autofocus>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class=" col-sm-offset-3 col-sm-8">
+								<button class="btn btn-success" id="submit_prominance" type="submit">Sign in</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- finestra modale per l'inserimento delle annotazioni	
+	<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="Help Annotaria" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Help</h4>
+				</div>
+				<div class="modal-body">
+					<p>Utilizzata per gli scopi del corso di Tecnologie Web all'Università di Bologna</p>
+					<p>© 2014 Fabio Vitali. All right reserved.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+				</div>
+			</div>
+		</div>
+	</div> --> 
+</body>
+</html>
