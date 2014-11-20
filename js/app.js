@@ -108,6 +108,22 @@ function reset_provinence() {
 }
 
 /*
+* docs_search 
+*
+* cerca tutti i documenti nella doc list il cui nome inizia con il valore dell'input cerca
+*/
+function docs_search() {
+	var idDoc = $('#cerca input').val();
+	$("#docList a:not(.found)").show();
+	$('.found').removeClass('found');
+	if (idDoc != "") {
+		$("#docList a[id^='" + idDoc + "']").addClass('found'); 
+		var docListVector = $('#docList a');
+		$("#docList a:not(.found)").hide();
+	}
+}
+
+/*
 * doc_list_load
 *
 * carica i documenti dal lind docs e li inserisce in una tabella
@@ -129,6 +145,8 @@ function doc_list_load() {
 					nDocList ++;
 				}
 			}
+			$('#cerca input').on('change', docs_search);
+			
 			/*if (nDocList > 10) {
 				$('#docList').after('<nav><ul class="pager"><li><a href="#">Previous</a></li><li><a href="#">Next</a></li></ul></nav>');
 			} */
