@@ -113,3 +113,8 @@ div .tab-pane {
 	border-bottom-right-radius: 0px !important;
 	border-bottom-left-radius: 0px !important;
 }
+
+.filter-round {
+	background: rgba(53, 137, 121, 0.82);
+	border-radius: 100%;
+}
