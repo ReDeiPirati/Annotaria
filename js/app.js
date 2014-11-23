@@ -152,6 +152,16 @@ function doc_list_load() {
 
 }
 
+function selectFilterAll () {
+	
+	alert($('#filtri div.row input:checkbox').length);
+	alert("dgsdfg");
+}
+
+function selectFilterNone () {
+	$('#filtri div.row input:checked').prop('checked', false);
+	alert("");
+}
 
 $(document).ready(function () {
 	

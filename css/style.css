@@ -5,7 +5,7 @@ html {
 }
 
 body {
-	padding-top: 70px;
+	padding-top: 60px;
 	margin-bottom: 60px;
 }
 
@@ -52,14 +52,14 @@ body {
 @media (min-width: 992px) {
 	.sidebar {
 		position: fixed;
-		top: 51px;
+		top: 60px;
 		bottom: 0;
 		left: 0;
 		z-index: 999;
 		display: block;
-		padding: 20px;
+		padding: 0 10px;
 		overflow-x: hidden;
-		overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+		overflow-y: hidden; /* Scrollable contents if viewport is shorter than content. */
 		border-right: 1px solid #eee;
 		border-bottom: 0px;
 		margin-bottom: 0px;
