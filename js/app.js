@@ -153,15 +153,17 @@ function doc_list_load() {
 }
 
 function selectFilterAll () {
-	
-	alert($('#filtri div.row input:checkbox').length);
-	alert("dgsdfg");
+	$('#filter div.row input:checkbox').attr("checked","checked");
 }
 
 function selectFilterNone () {
-	$('#filtri div.row input:checked').prop('checked', false);
-	alert("");
+	$('#filter div.row input:checked').prop('checked', false);
 }
+
+function activeFilter () {
+	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', false);
+}
+
 
 $(document).ready(function () {
 	
