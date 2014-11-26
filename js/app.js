@@ -42,18 +42,37 @@ function openDoc() {
 	activeDoc ++;
 	
 	$(this).toggleClass('active');
+	//cosa fare se clicco su un documento gia' attivo? focus o close?
 	
 	var title = $(this).attr("id");
+	$.ajax({
+		method: 'GET',
+		url:  docs + title + '.html',
+		success: function(d) {
+
+			$('.doc-area #documentTab li.active').removeClass('active');
+			$('.doc-area #documentTabContent div.active').removeClass('active');
+
+			$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#Doc-' + title +'" id="' + title +'-tab" role="tab" data-toggle="tab" aria-controls="Doc-' + title +'" aria-expanded="true">' + title +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
+
+			$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc-' + title +'" aria-labelledBy="' + title +'-tab">');
+			
+			$('#Doc-' + title).html(d);
+			/* aggiorno i link delle immagini */
+			var imgs = $('#Doc-' + title + ' img');			
+			for (var i=0; i<imgs.length; i++) {
+				var src = $(imgs[i]).attr('src');
+				$(imgs[i]).attr('src', docs + src);
+			}
+			
+			$('#' + title + '-tab button.close').click(deleteTab);
+			checkTab();
+		},
+		error: function(a,b,c) {
+			alert('Error on load ' + docs + title + '.html');
+		}
+	});
 	
-	$('.doc-area #documentTab li.active').removeClass('active');
-	$('.doc-area #documentTabContent div.active').removeClass('active');
-	
-	$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#' + title +'" id="' + title +'-tab" role="tab" data-toggle="tab" aria-controls="' + title +'" aria-expanded="true">' + title +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
-	
-	$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="' + title +'" aria-labelledBy="' + title +'-tab"><p class="text-justify">Al momento sono attivi ' + activeDoc +' content tab.</p><p>DOcumento: ' + title + '</div>');
-	
-	$('#' + title + '-tab button.close').click(deleteTab);
-	checkTab();
 }
 
 function toggleModeSelector () {
