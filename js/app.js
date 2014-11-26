@@ -178,6 +178,9 @@ function activeFilter () {
 	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', false);
 }
 
+function disableFilter () {
+	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', true);
+}
 
 
 
