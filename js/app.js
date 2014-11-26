@@ -160,9 +160,25 @@ function selectFilterNone () {
 	$('#filter div.row input:checked').prop('checked', false);
 }
 
+function toggleFilterData() {
+	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
+		$('#filterDate').prop('disabled', false);
+	else
+		$('#filterDate').prop('disabled', true);
+}
+
+function toggleFilterAuthor() {
+	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
+		$('#filterAuthor').prop('disabled', false);
+	else
+		$('#filterAuthor').prop('disabled', true);
+}
+
 function activeFilter () {
 	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', false);
 }
+
+
 
 
 $(document).ready(function () {
