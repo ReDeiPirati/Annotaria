@@ -1,4 +1,3 @@
-var numDoc = 1;
 var activeDoc = 1;
 var usr = {};
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
@@ -39,20 +38,21 @@ function deleteTab() {
 * la nuova tab e' aggiunta attiva
 */
 
-function addTab() { 
-	numDoc ++;
+function openDoc() { 
 	activeDoc ++;
+	
+	$(this).toggleClass('active');
 	
 	var title = $(this).attr("id");
 	
 	$('.doc-area #documentTab li.active').removeClass('active');
 	$('.doc-area #documentTabContent div.active').removeClass('active');
 	
-	$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#Doc' + numDoc +'" id="Doc' + numDoc +'-tab" role="tab" data-toggle="tab" aria-controls="Doc' + numDoc +'" aria-expanded="true">' + title +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
+	$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#' + title +'" id="' + title +'-tab" role="tab" data-toggle="tab" aria-controls="' + title +'" aria-expanded="true">' + title +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
 	
-	$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc' + numDoc +'" aria-labelledBy="Doc' + numDoc +'-tab"><p class="text-justify"> Content tab numero ' + numDoc +'. Al momento sono attivi ' + activeDoc +' content tab.</p></div>');
+	$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="' + title +'" aria-labelledBy="' + title +'-tab"><p class="text-justify">Al momento sono attivi ' + activeDoc +' content tab.</p><p>DOcumento: ' + title + '</div>');
 	
-	$('#Doc' + numDoc + '-tab button.close').click(deleteTab);
+	$('#' + title + '-tab button.close').click(deleteTab);
 	checkTab();
 }
 
@@ -144,7 +144,7 @@ function loadDocList() {
 					var label = link.substr(0, link.length - str.length);
 					$('#docList').append('<a id="' + label + '"  class="list-group-item" >' + label + '</a>');
 					nDocList ++;
-					$('#' + label).click(addTab);
+					$('#' + label).click(openDoc);
 				}
 			}
 			$('#cerca input').on('change', searchDoc);
