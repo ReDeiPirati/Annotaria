@@ -148,11 +148,6 @@ function loadDocList() {
 				}
 			}
 			$('#cerca input').on('change', searchDoc);
-			
-			
-			/*if (nDocList > 10) {
-				$('#docList').after('<nav><ul class="pager"><li><a href="#">Previous</a></li><li><a href="#">Next</a></li></ul></nav>');
-			} */
 		},
 		error: function(a,b,c) {
 			alert('Error on load of the document');
@@ -160,6 +155,40 @@ function loadDocList() {
 	});
 
 }
+
+
+function selectFilterAll () {
+	$('#filter div.row input:checkbox').attr("checked","checked");
+}
+
+function selectFilterNone () {
+	$('#filter div.row input:checked').prop('checked', false);
+}
+
+function toggleFilterData() {
+	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
+		$('#filterDate').prop('disabled', false);
+	else
+		$('#filterDate').prop('disabled', true);
+}
+
+function toggleFilterAuthor() {
+	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
+		$('#filterAuthor').prop('disabled', false);
+	else
+		$('#filterAuthor').prop('disabled', true);
+}
+
+function activeFilter () {
+	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', false);
+}
+
+function disableFilter () {
+	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', true);
+	selectFilterAll();
+	$('#filter form fieldset input:checked').prop('checked', false);
+}
+
 
 
 $(document).ready(function () {
