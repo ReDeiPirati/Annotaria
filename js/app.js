@@ -2,6 +2,7 @@ var numDoc = 1;
 var activeDoc = 1;
 var usr = {};
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
+var nDocList = 0;
 /*
 * checkTab
 *
@@ -42,11 +43,12 @@ function addTab() {
 	numDoc ++;
 	activeDoc ++;
 	
+	var title = $(this).attr("id");
 	
 	$('.doc-area #documentTab li.active').removeClass('active');
 	$('.doc-area #documentTabContent div.active').removeClass('active');
 	
-	$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#Doc' + numDoc +'" id="Doc' + numDoc +'-tab" role="tab" data-toggle="tab" aria-controls="Doc' + numDoc +'" aria-expanded="true">Doc' + numDoc +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
+	$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#Doc' + numDoc +'" id="Doc' + numDoc +'-tab" role="tab" data-toggle="tab" aria-controls="Doc' + numDoc +'" aria-expanded="true">' + title +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
 	
 	$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc' + numDoc +'" aria-labelledBy="Doc' + numDoc +'-tab"><p class="text-justify"> Content tab numero ' + numDoc +'. Al momento sono attivi ' + activeDoc +' content tab.</p></div>');
 	
@@ -54,64 +56,64 @@ function addTab() {
 	checkTab();
 }
 
-function toggle_mode_selector () {
+function toggleModeSelector () {
 	$('#sel_annotator').toggle();
 	$('#sel_reader').toggle();
 }
 
 /*
-* title_annotator
+* titleAnnotator
 *
 * modifica il navbar-brand e la scritta del mode
 */
 
-function title_annotator() {
+function titleAnnotator() {
 	$('.navbar-brand').text("Annotaria");
 	var htmlString =  '<span class="glyphicon glyphicon-pencil">&nbsp;</span>' + usr.name + ' ' + usr.surname; 
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html( htmlString );
-	toggle_mode_selector();
+	toggleModeSelector();
 }
 
 /*
-* title_reader
+* titleReader
 *
 * modifica il navbar-brand e la scritta del mode
 */
 
-function title_reader() {
+function titleReader() {
 	$('.navbar-brand').text("Leggotaria");
 	var htmlString = $('#sel_reader').html();
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html(htmlString);
-	toggle_mode_selector();
+	toggleModeSelector();
 }
 
 
-function set_provinence() {
+function setProvinence() {
 	usr.name = $('#usr_name').val();
 	usr.surname = $('#usr_surname').val();
 	usr.email = $('#usr_email').val();
 	$("#modal_provinence").modal("hide");
-	title_annotator();	
+	titleAnnotator();	
 }
 
-function reset_provinence() {
+function resetProvinence() {
 	usr.name = "";
 	$('#usr_name').val('');
 	usr.surname = ""; 
 	$('#usr_surname').val('');
 	usr.email = "";
 	$('#usr_email').val('');
-	title_reader();	
+	titleReader();	
 }
 
 /*
-* docs_search 
+* searchDoc 
 *
 * cerca tutti i documenti nella doc list il cui nome inizia con il valore dell'input cerca
 */
-function docs_search() {
+function searchDoc() {
 	var idDoc = $('#cerca input').val();
 	$("#docList a:not(.found)").show();
 	$('.found').removeClass('found');
@@ -123,13 +125,13 @@ function docs_search() {
 }
 
 /*
-* doc_list_load
+* loadDocList
 *
 * carica i documenti dal lind docs e li inserisce in una tabella
 * se i documenti sono piu' di 10 mostra i pulsanti per lo switch di pagina
 *
 */
-function doc_list_load() {
+function loadDocList() {
 	$.ajax({
 		method: 'GET',
 		url: docs,
@@ -141,9 +143,16 @@ function doc_list_load() {
 				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
 					var label = link.substr(0, link.length - str.length);
 					$('#docList').append('<a id="' + label + '"  class="list-group-item" >' + label + '</a>');
+					nDocList ++;
+					$('#' + label).click(addTab);
 				}
 			}
-			$('#cerca input').on('change', docs_search);
+			$('#cerca input').on('change', searchDoc);
+			
+			
+			/*if (nDocList > 10) {
+				$('#docList').after('<nav><ul class="pager"><li><a href="#">Previous</a></li><li><a href="#">Next</a></li></ul></nav>');
+			} */
 		},
 		error: function(a,b,c) {
 			alert('Error on load of the document');
@@ -152,47 +161,16 @@ function doc_list_load() {
 
 }
 
-function selectFilterAll () {
-	$('#filter div.row input:checkbox').attr("checked","checked");
-}
-
-function selectFilterNone () {
-	$('#filter div.row input:checked').prop('checked', false);
-}
-
-function toggleFilterData() {
-	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
-		$('#filterDate').prop('disabled', false);
-	else
-		$('#filterDate').prop('disabled', true);
-}
-
-function toggleFilterAuthor() {
-	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
-		$('#filterAuthor').prop('disabled', false);
-	else
-		$('#filterAuthor').prop('disabled', true);
-}
-
-function activeFilter () {
-	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', false);
-}
-
-function disableFilter () {
-	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', true);
-}
-
-
 
 $(document).ready(function () {
 	
-	doc_list_load();
+	loadDocList();
 	
 	$('#sel_reader').toggle();
-	$('#submit_prominance').click(set_provinence);
+	$('#submit_prominance').click(setProvinence);
 	
 	
-	$('#sel_reader').click(reset_provinence);
+	$('#sel_reader').click(resetProvinence);
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 });
