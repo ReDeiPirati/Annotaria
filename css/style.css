@@ -19,9 +19,6 @@ body {
 	background-color: #f5f5f5;
 }
 
-.container .text-muted {
-	margin: 20px 0;
-}
 
 /* 
 * Central title 
@@ -74,6 +71,13 @@ body {
 	
 }
 
+.doc-tabs a {
+	max-width: 100px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 /*
 * modal
 */
@@ -95,7 +99,7 @@ div .tab-pane {
 }
 
 #docList {
-	max-height: 400px;	
+	/* max-height: 400px;	*/
 	overflow-y: auto;
 }
 
