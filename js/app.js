@@ -18,11 +18,15 @@ function checkTab() {
 * deleteTab ()
 *
 * elimina la tab di cui e' stata cliccata la x e il relativo tabcontent
+* rimuove la classe active del documento dalla doc-list
 */
 function deleteTab() {
 	var tabId = $(this).parent().attr("href");
+	var listId = tabId.split('-');
 	$(tabId).remove();
 	$(this).parent().parent().remove();
+	$('#' + listId[1]).removeClass('active');
+	
 	activeDoc --;
 	if(activeDoc && !$('.doc-area #documentTab li.active').length) { // activeDoc != 0 && tabs.active == 0
 			$('.doc-area #documentTab li').first().addClass('active');
@@ -36,43 +40,46 @@ function deleteTab() {
 *
 * aggiunge una nuova tab e il relativo tabcontent
 * la nuova tab e' aggiunta attiva
+* viene caricato il documento al suo interno e aggiunta la classe active all'elemento della doc-list collegato
 */
 
 function openDoc() { 
-	activeDoc ++;
-	
-	$(this).toggleClass('active');
-	//cosa fare se clicco su un documento gia' attivo? focus o close?
-	
 	var title = $(this).attr("id");
-	$.ajax({
-		method: 'GET',
-		url:  docs + title + '.html',
-		success: function(d) {
-
-			$('.doc-area #documentTab li.active').removeClass('active');
-			$('.doc-area #documentTabContent div.active').removeClass('active');
-
-			$('.doc-area #documentTab').append('<li role="presentation" class="active"><a href="#Doc-' + title +'" id="' + title +'-tab" role="tab" data-toggle="tab" aria-controls="Doc-' + title +'" aria-expanded="true">' + title +'&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>');
-
-			$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc-' + title +'" aria-labelledBy="' + title +'-tab">');
-			
-			$('#Doc-' + title).html(d);
-			/* aggiorno i link delle immagini */
-			var imgs = $('#Doc-' + title + ' img');			
-			for (var i=0; i<imgs.length; i++) {
-				var src = $(imgs[i]).attr('src');
-				$(imgs[i]).attr('src', docs + src);
-			}
-			
-			$('#' + title + '-tab button.close').click(deleteTab);
-			checkTab();
-		},
-		error: function(a,b,c) {
-			alert('Error on load ' + docs + title + '.html');
-		}
-	});
 	
+	if ($(this).hasClass('active')) { //set the focus on the document
+		$( '#' + title + '-tab').trigger("click");
+	}
+	else {
+		$.ajax({
+			method: 'GET',
+			url:  docs + title + '.html',
+			success: function(d) {
+				$('#' + title).toggleClass('active');
+				activeDoc ++;
+
+				$('.doc-area #documentTab li.active').removeClass('active');
+				$('.doc-area #documentTabContent div.active').removeClass('active');
+
+				$('.doc-area #documentTab').append('<li role="presentation" class="active doc-tabs"><a href="#Doc-' + title +'" id="' + title +'-tab" role="tab" data-toggle="tab" aria-controls="Doc-' + title +'" aria-expanded="true"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&nbsp;&times;</button>' + title +'</a></li>');
+
+				$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc-' + title +'" aria-labelledBy="' + title +'-tab">');
+
+				$('#Doc-' + title).html(d);
+				/* aggiorno i link delle immagini */
+				var imgs = $('#Doc-' + title + ' img');			
+				for (var i=0; i<imgs.length; i++) {
+					var src = $(imgs[i]).attr('src');
+					$(imgs[i]).attr('src', docs + src);
+				}
+
+				$('#' + title + '-tab button.close').click(deleteTab);
+				checkTab();
+			},
+			error: function(a,b,c) {
+				alert('Error on load ' + docs + title + '.html');
+			}
+		});
+	}
 }
 
 function toggleModeSelector () {
@@ -208,10 +215,29 @@ function disableFilter () {
 	$('#filter form fieldset input:checked').prop('checked', false);
 }
 
-
+/*
+* docListMaxHeight
+*
+* ridimensiona la max-height dell'elemento doc-list in proporzione alla wiewport
+*/
+function docListMaxHeight () {
+	var wpWidth = $(window).width();
+	var margin;
+	if ( wpWidth > 992) {
+		margin = 60 + 60 + 10 + 100;
+	}
+	else {
+		margin = 60 + 30 + 10 + 100;
+	}
+	
+	var docListHeight = $(window).height() - margin;
+	$('#docList').css('max-height', docListHeight);
+}
 
 $(document).ready(function () {
 	
+	docListMaxHeight();
+	$(window).resize(docListMaxHeight); // ridemensiona l'altezza della doc list ogni volta che il documento cambia dimensione
 	loadDocList();
 	
 	$('#sel_reader').toggle();
