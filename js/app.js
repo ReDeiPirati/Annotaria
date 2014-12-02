@@ -1,7 +1,6 @@
 var activeDoc = 1;
 var usr = {};
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
-var nDocList = 0;
 /*
 * checkTab
 *
@@ -28,9 +27,13 @@ function deleteTab() {
 	$('#' + listId[1]).removeClass('active');
 	
 	activeDoc --;
+	
 	if(activeDoc && !$('.doc-area #documentTab li.active').length) { // activeDoc != 0 && tabs.active == 0
-			$('.doc-area #documentTab li').first().addClass('active');
-			$('.doc-area #documentTabContent div').first().addClass('active');
+		/*$($('.doc-area #documentTab li')[0]).trigger('click');
+		*/
+		$('.doc-area #documentTab li').first().addClass('active');
+		$('.doc-area #documentTabContent div').first().addClass('active');
+	
 	}
 	checkTab();
 }
@@ -65,6 +68,13 @@ function openDoc() {
 				$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc-' + title +'" aria-labelledBy="' + title +'-tab">');
 
 				$('#Doc-' + title).html(d);
+				/* aggiorno i link dei css 
+				var links = $('#Doc-' + title + ' link');
+				for (var i=0; i<links.length; i++) {
+					var href = $(links[i]).attr('href');
+					$(links[i]).attr('href', docs + href);
+				}
+				*/
 				/* aggiorno i link delle immagini */
 				var imgs = $('#Doc-' + title + ' img');			
 				for (var i=0; i<imgs.length; i++) {
@@ -162,24 +172,27 @@ function loadDocList() {
 		method: 'GET',
 		url: docs,
 		success: function(d) {
+			
 			var vet = $(d).find('a');
 			var str = '.html';
-			for (var i = 0; i < vet.length; i++) {
+			
+			for (var i = 0; i < vet.length ; i++) {
 				var link = $(vet[i]).attr('href');
+				
 				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
 					var label = link.substr(0, link.length - str.length);
 					$('#docList').append('<a id="' + label + '"  class="list-group-item" >' + label + '</a>');
-					nDocList ++;
 					$('#' + label).click(openDoc);
+					
 				}
-			}
-			$('#cerca input').on('change', searchDoc);
+			}			
 		},
 		error: function(a,b,c) {
 			alert('Error on load of the document');
 		}
 	});
-
+	
+	$('#cerca input').on('change', searchDoc);
 }
 
 
