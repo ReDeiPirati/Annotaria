@@ -46,10 +46,9 @@ function deleteTab() {
 * viene caricato il documento al suo interno e aggiunta la classe active all'elemento della doc-list collegato
 */
 
-function openDoc() { 
-	var title = $(this).attr("id");
+function openDoc( title ) { 
 	
-	if ($(this).hasClass('active')) { //set the focus on the document
+	if ($('#' + title).hasClass('active')) { //set the focus on the document
 		$( '#' + title + '-tab').trigger("click");
 	}
 	else {
@@ -68,7 +67,7 @@ function openDoc() {
 				$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc-' + title +'" aria-labelledBy="' + title +'-tab">');
 
 				$('#Doc-' + title).html(d);
-				/* aggiorno i link dei css 
+				/* aggiorno i link dei css  
 				var links = $('#Doc-' + title + ' link');
 				for (var i=0; i<links.length; i++) {
 					var href = $(links[i]).attr('href');
@@ -154,7 +153,7 @@ function searchDoc() {
 	$("#docList a:not(.found)").show();
 	$('.found').removeClass('found');
 	if (idDoc != "") {
-		$("#docList a[id^='" + idDoc + "']").addClass('found'); 
+		$("#docList a[id*='" + idDoc + "']").addClass('found'); 
 		var docListVector = $('#docList a');
 		$("#docList a:not(.found)").hide();
 	}
@@ -181,9 +180,8 @@ function loadDocList() {
 				
 				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
 					var label = link.substr(0, link.length - str.length);
-					$('#docList').append('<a id="' + label + '"  class="list-group-item" >' + label + '</a>');
-					$('#' + label).click(openDoc);
 					
+					$('#docList').append("<a id='" + label + "'  class='list-group-item' onclick='openDoc(\"" + label + "\")' >" + label + "</a>");
 				}
 			}			
 		},
