@@ -29,11 +29,7 @@ function deleteTab() {
 	activeDoc --;
 	
 	if(activeDoc && !$('.doc-area #documentTab li.active').length) { // activeDoc != 0 && tabs.active == 0
-		/*$($('.doc-area #documentTab li')[0]).trigger('click');
-		*/
-		$('.doc-area #documentTab li').first().addClass('active');
-		$('.doc-area #documentTabContent div').first().addClass('active');
-	
+		$('.doc-area #documentTab li a').first().trigger("click");
 	}
 	checkTab();
 }
@@ -46,27 +42,27 @@ function deleteTab() {
 * viene caricato il documento al suo interno e aggiunta la classe active all'elemento della doc-list collegato
 */
 
-function openDoc( title ) { 
+function openDoc( title, itemId ) { 
 	
-	if ($('#' + title).hasClass('active')) { //set the focus on the document
-		$( '#' + title + '-tab').trigger("click");
+	if ($('#' + itemId).hasClass('active')) { //set the focus on the document
+		$( '#' + itemId + '-tab').trigger("click");
 	}
 	else {
 		$.ajax({
 			method: 'GET',
 			url:  docs + title + '.html',
 			success: function(d) {
-				$('#' + title).toggleClass('active');
+				$('#' + itemId).toggleClass('active');
 				activeDoc ++;
 
 				$('.doc-area #documentTab li.active').removeClass('active');
 				$('.doc-area #documentTabContent div.active').removeClass('active');
 
-				$('.doc-area #documentTab').append('<li role="presentation" class="active doc-tabs"><a href="#Doc-' + title +'" id="' + title +'-tab" role="tab" data-toggle="tab" aria-controls="Doc-' + title +'" aria-expanded="true"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&nbsp;&times;</button>' + title +'</a></li>');
+				$('.doc-area #documentTab').append('<li role="presentation" class="active doc-tabs"><a href="#Doc-' + itemId +'" id="' + itemId +'-tab" role="tab" data-toggle="tab" aria-controls="Doc-' + itemId +'" aria-expanded="true"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&nbsp;&times;</button>' + title +'</a></li>');
 
-				$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc-' + title +'" aria-labelledBy="' + title +'-tab">');
+				$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active" id="Doc-' + itemId +'" aria-labelledBy="' + itemId +'-tab">');
 
-				$('#Doc-' + title).html(d);
+				$('#Doc-' + itemId).html(d);
 				/* aggiorno i link dei css  
 				var links = $('#Doc-' + title + ' link');
 				for (var i=0; i<links.length; i++) {
@@ -74,14 +70,15 @@ function openDoc( title ) {
 					$(links[i]).attr('href', docs + href);
 				}
 				*/
+				
 				/* aggiorno i link delle immagini */
-				var imgs = $('#Doc-' + title + ' img');			
+				var imgs = $('#Doc-' + itemId + ' img');			
 				for (var i=0; i<imgs.length; i++) {
 					var src = $(imgs[i]).attr('src');
 					$(imgs[i]).attr('src', docs + src);
 				}
 
-				$('#' + title + '-tab button.close').click(deleteTab);
+				$('#' + itemId + '-tab button.close').click(deleteTab);
 				checkTab();
 			},
 			error: function(a,b,c) {
@@ -171,17 +168,17 @@ function loadDocList() {
 		method: 'GET',
 		url: docs,
 		success: function(d) {
-			
 			var vet = $(d).find('a');
 			var str = '.html';
-			
+			var itemId;
 			for (var i = 0; i < vet.length ; i++) {
 				var link = $(vet[i]).attr('href');
 				
 				if (link.indexOf(str, link.length - str.length) !== -1) { // controlla se il file e' .html
+					itemId = "dc" + i;
 					var label = link.substr(0, link.length - str.length);
 					
-					$('#docList').append("<a id='" + label + "'  class='list-group-item' onclick='openDoc(\"" + label + "\")' >" + label + "</a>");
+					$('#docList').append("<a id='" + itemId + "'  class='list-group-item' onclick='openDoc(\"" + label + "\", \"" + itemId + "\")' >" + label + "</a>");
 				}
 			}			
 		},
