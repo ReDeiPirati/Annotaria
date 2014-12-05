@@ -24,20 +24,21 @@ body {
 * Central title 
 */
 .navbar-brand {
-	position: absolute;
-	width: 100%;
-	left: 0;
-	top: 0;
-	text-align: center;
-	margin: auto;
-	font-size: 40px;
+	font-size: 30px;
 }
 
-@media (max-width: 678px) {
+@media (min-width: 768px) {
 	.navbar-brand {
-		font-size: 30px;
+		position: absolute;
+		width: 100%;
+		left: 0;
+		top: 0;
+		text-align: center;
+		margin: auto;
+		font-size: 40px;
 	}
 }
+
 /*
 * Sidebar
 */
