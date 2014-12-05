@@ -1,5 +1,3 @@
 Problemi:
- - non apre l'ultimo documento caricato
- - non carica un documento nella lista
- - non da il focus al documenttabcontent quando rimane solo un documento attivo (si nota aprendo piu' documeti e chiudendo sempre quello attivo)
  - non linko il css dei documenti ( mi cambia lo stile di tutto il sito)
+ - login si chiude anche se immetti dati errati
