@@ -1,3 +1,2 @@
 Problemi:
  - non linko il css dei documenti ( mi cambia lo stile di tutto il sito)
- - login si chiude anche se immetti dati errati
