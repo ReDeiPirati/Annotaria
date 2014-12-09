@@ -117,10 +117,18 @@ function titleReader() {
 
 
 function setProvenance() {
-	alert("set provenance");
+	if (!$('#usr_name').val()) {
+		$('#usr_name').trigger("focus");
+		return;
+	}
+	if (!$('#usr_email').val() || $('#usr_email').val().indexOf("@") == -1) {
+		$('#usr_email').trigger("focus");
+		return;
+	}
+	
 	usr.name = $('#usr_name').val();
 	usr.email = $('#usr_email').val();
-	//$("#modalProvenance").modal("hide");
+	$("#modalProvenance").modal("hide");
 	titleAnnotator();	
 }
 
