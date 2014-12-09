@@ -101,7 +101,7 @@ function toggleModeSelector () {
 
 function titleAnnotator() {
 	$('.navbar-brand').text("Annotaria");
-	var htmlString =  '<span class="glyphicon glyphicon-pencil">&nbsp;</span>' + usr.name + ' ' + usr.surname; 
+	var htmlString =  '<span class="glyphicon glyphicon-pencil">&nbsp;</span>' + usr.name; 
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html( htmlString );
 	toggleModeSelector();
@@ -122,19 +122,25 @@ function titleReader() {
 }
 
 
-function setProvinence() {
+function setProvenance() {
+	if (!$('#usr_name').val()) {
+		$('#usr_name').trigger("focus");
+		return;
+	}
+	if (!$('#usr_email').val() || $('#usr_email').val().indexOf("@") == -1) {
+		$('#usr_email').trigger("focus");
+		return;
+	}
+	
 	usr.name = $('#usr_name').val();
-	usr.surname = $('#usr_surname').val();
 	usr.email = $('#usr_email').val();
-	$("#modal_provinence").modal("hide");
+	$("#modalProvenance").modal("hide");
 	titleAnnotator();	
 }
 
-function resetProvinence() {
+function resetProvenance() {
 	usr.name = "";
 	$('#usr_name').val('');
-	usr.surname = ""; 
-	$('#usr_surname').val('');
 	usr.email = "";
 	$('#usr_email').val('');
 	titleReader();	
@@ -249,10 +255,10 @@ $(document).ready(function () {
 	loadDocList();
 	
 	$('#sel_reader').toggle();
-	$('#submit_prominance').click(setProvinence);
+	//$('#submitProvenance').click(setProvenance);
 	
 	
-	$('#sel_reader').click(resetProvinence);
+	$('#sel_reader').click(resetProvenance);
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 });
