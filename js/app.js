@@ -152,11 +152,11 @@ function resetProvenance() {
 * cerca tutti i documenti nella doc list il cui nome inizia con il valore dell'input cerca
 */
 function searchDoc() {
-	var idDoc = $('#cerca input').val();
+	var docVal = $('#cerca input').val();
 	$("#docList a:not(.found)").show();
 	$('.found').removeClass('found');
-	if (idDoc != "") {
-		$("#docList a[id*='" + idDoc + "']").addClass('found'); 
+	if (docVal != "") {
+		$("#docList a[name*='" + docVal + "']").addClass('found'); 
 		var docListVector = $('#docList a');
 		$("#docList a:not(.found)").hide();
 	}
@@ -184,7 +184,7 @@ function loadDocList() {
 					itemId = "dc" + i;
 					var label = link.substr(0, link.length - str.length);
 					
-					$('#docList').append("<a id='" + itemId + "'  class='list-group-item' onclick='openDoc(\"" + label + "\", \"" + itemId + "\")' >" + label + "</a>");
+					$('#docList').append("<a id='" + itemId + "' name='" + label + "' class='list-group-item' onclick='openDoc(\"" + label + "\", \"" + itemId + "\")' >" + label + "</a>");
 				}
 			}			
 		},
