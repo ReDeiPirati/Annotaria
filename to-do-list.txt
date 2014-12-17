@@ -1,0 +1,2 @@
+Problemi:
+ - il footer si alza dal fondo pagina quando apro un documento

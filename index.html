@@ -7,6 +7,7 @@
   <title>Annotaria</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="css/jats-preview.css">
 	<link rel="stylesheet" href="css/style.css">
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> 
@@ -37,8 +38,7 @@
 						<a id="mode" href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-search">&nbsp;</span>Reader&nbsp;<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a id="sel_reader" href="#"><span class="glyphicon glyphicon-search">&nbsp;</span>Reader</a></li>
-							<!-- <li class="divider"></li> --> <!-- con i toggle dei mode selectro non serve piu' -->
-							<li><a id="sel_annotator" href="#" role="button" data-toggle="modal" data-backdrop="static" data-target="#modal_provinence"><span class="glyphicon glyphicon-pencil">&nbsp;</span>Annotator</a></li>
+							<li><a id="sel_annotator" href="#" role="button" data-toggle="modal" data-backdrop="static" data-target="#modalProvenance"><span class="glyphicon glyphicon-pencil">&nbsp;</span>Annotator</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -53,9 +53,10 @@
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 sidebar"> <!-- sider tab -->
 				<ul id="siderTab" class="nav nav-tabs" role="tablist">
 					<li role="presentation" class="active"><a href="#Documenti" id="Documenti-tab" role="tab" data-toggle="tab" aria-controls="Documetni" aria-expanded="true">Documenti</a></li>
-					<li role="presentation"><a href="#Filtri" role="tab" id="Filtri-tab" data-toggle="tab" aria-controls="Filtri">Filtri</a></li>
+					<li role="presentation"><a href="#filter" role="tab" id="filter-tab" data-toggle="tab" aria-controls="filter">Filtri</a></li>
 					<li role="presentation"><a href="#Info" role="tab" id="Info-tab" data-toggle="tab" aria-controls="Info">Info</a></li>
 				</ul>
+				
 				<!-- tab-content -->
 				<div id="siderTabContent" class="tab-content">
 					<div role="tabpanel" class="tab-pane fade in active" id="Documenti" aria-labelledBy="Documenti-tab">
@@ -68,9 +69,144 @@
 						<div class="list-group" id = "docList"></div>
 						<!-- end document list -->
 					</div>
-					<div role="tabpanel" class="tab-pane fade" id="Filtri" aria-labelledBy="Filtri-tab">
-						<p>...lista dei filtri...</p>
+					
+					<div role="tabpanel" class="tab-pane fade" id="filter" aria-labelledBy="filter-tab">
+						<div class="btn-group btn-group-justified" role="group" aria-label="selectAll_None">
+							<a class="btn btn-sm btn-link" id="filter-all" onclick="selectFilterAll()">ALL</a>
+							<a class="btn btn-sm btn-link" id="filter-none" onclick="selectFilterNone()">NONE</a>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="denotesPerson">
+										Persona
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="denotesPlace">
+										Luogo
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="denotesDisease">
+										Malattia
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="hasSubject">
+										Argomento
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="relatesTo">
+										Collegamento
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="hasClarityScore">
+										Chiarezza
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="hasOriginalityScore">
+										Originalit&agrave;
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="hasFormattingScore">
+										Giudizio
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="cites">
+										Citazione
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" disabled checked value="hasComment">
+										Commenti
+									</label>
+								</div>
+								<div class="checkbox">
+										Annotazioni Multiple
+								</div>
+							</div><!-- .col-xs-10 .col-sm-10 .col-md-10 .col-lg-10 -->
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<div class="checkbox">
+									<div class="filter-round denotesPerson">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round denotesPlace">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round denotesDisease">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round hasSubject">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round relatesTo">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round hasClarityScore">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round hasOriginalityScore">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round hasFormattingScore">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round cites">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round hasComment">&nbsp;</div>
+								</div>
+								<div class="checkbox">
+									<div class="filter-round multiple">&nbsp;</div>
+								</div>
+							</div>
+						</div><!-- /.row -->
+						
+						<hr>
+						
+						<form role="form">
+							<fieldset disabled>
+								<div class="form-group">
+									<div class="checkbox">
+										<label for="filterDate">
+											<input type="checkbox" value="selDate" onClick="toggleFilterData()">
+											Data:
+										</label>
+									</div>
+									<input type="date" class="form-control" disabled id="filterDate">
+								</div>
+								<div class="form-group">
+									<div class="checkbox">
+										<label for="filterAuthor">
+											<input type="checkbox" value="selAuthor" onClick="toggleFilterAuthor()">
+											Autore:
+										</label>
+									</div>
+									<select class="form-control" disabled id="filterAuthor">
+										<option>Disabled select</option>
+									</select>
+								</div>
+							</fieldset>
+						</form>						
 					</div>
+					
 					<div role="tabpanel" class="tab-pane fade" id="Info" aria-labelledBy="Info-tab">
 						<p>...lista dei meta-dati...</p>
 					</div>
@@ -79,19 +215,11 @@
 			
 			<div class="col-md-offset-4 col-lg-offset-4 col-xs-12 col-sm-12 col-md-8 col-lg-8 doc-area"> <!-- document area -->
 				<ul id="documentTab" class="nav nav-tabs" role="tablist">
-					<li role="presentation" class="active"><a href="#Doc1" id="Doc1-tab" role="tab" data-toggle="tab" aria-controls="Doc1" aria-expanded="true">Doc1&nbsp;<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></a></li>
+					<li role="presentation" class="active doc-tabs"><a href="#Doc1" id="Doc1-tab" role="tab" data-toggle="tab" aria-controls="Doc1" aria-expanded="true"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&nbsp;&times;</button>Doc1</a></li>
 				</ul>
 				<div id="documentTabContent" class="tab-content">
-					<div role="tabpanel" class="tab-pane fade in active" id="Doc1" aria-labelledBy="Doc1-tab">
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
-						<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>		
+					<div role="tabpanel" class="tab-pane fade in active docStyle" id="Doc1" aria-labelledBy="Doc1-tab">
+						<p class="text-justify">testo da riempire con le istruzioni iniziali del sito</p>		
 					</div>
 				</div>
 			</div> <!-- end document area -->
@@ -135,38 +263,32 @@
 		</div>
 	</div>
 	
-	<!-- form user provinence -->
-	<div class="modal fade" id="modal_provinence" tabindex="-1" role="dialog" aria-labelledby="Annotator data" aria-hidden="true">
+	<!-- form user provenance -->
+	<div class="modal fade" id="modalProvenance" tabindex="-1" role="dialog" aria-labelledby="Annotator data" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" id="modalProvinenceLabel">Annotator data</h4>
+					<h4 class="modal-title" id="modalProvenanceLabel">Annotator provenance</h4>
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="usr_name">Nome:</label>
-							<div class="col-sm-8">
+							<label class="control-label col-xs-4 col-sm-4 col-md-4 col-lg-4" for="usr_name">Nome e Cognome:</label>
+							<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
 								<input type="text" class="form-control" id="usr_name" placeholder="Enter name" required="required">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="usr_surname">Cognome:</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="usr_surname" placeholder="Enter surname" required="required">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-3" for="usr_email">Email:</label>
-							<div class="col-sm-8">
+							<label class="control-label col-xs-4 col-sm-4 col-md-4 col-lg-4" for="usr_email">Email:</label>
+							<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
 								<input type="email" class="form-control" id="usr_email" placeholder="Enter email address" required="required">
 							</div>
 						</div>
 						<div class="form-group">
-							<div class=" col-sm-offset-3 col-sm-8">
+							<div class=" col-sm-offset-4 col-sm-7">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								<button type="submit" class="btn btn-success" id="submit_prominance" >Login</button>
+								<button type="button" class="btn btn-success" id="submitProvenance" onclick="setProvenance()" >Login</button>
 							</div>
 						</div>
 					</form>

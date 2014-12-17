@@ -1,0 +1,216 @@
+/*  Stylesheet for NLM/NCBI  Journal Publishing 3.0 Preview HTML
+    January 2009
+
+    ~~~~~~~~~~~~~~
+    National Center for Biotechnology Information (NCBI)
+    National Library of Medicine (NLM)
+    ~~~~~~~~~~~~~~
+    
+This work is in the public domain and may be reproduced, published or 
+otherwise used without the permission of the National Library of Medicine (NLM).
+
+We request only that the NLM is cited as the source of the work.
+
+Although all reasonable efforts have been taken to ensure the accuracy and 
+reliability of the software and data, the NLM and the U.S. Government  do 
+not and cannot warrant the performance or results that may be obtained  by
+using this software or data. The NLM and the U.S. Government disclaim all 
+warranties, express or implied, including warranties of performance, 
+merchantability or fitness for any particular purpose.
+
+*/
+
+
+/* --------------- Page setup ------------------------ */
+
+/* page and text defaults */
+
+.docStyle body { margin-left: 8%;
+     margin-right: 8%;
+     background-color: #f8f8f8 }
+
+
+.docStyle div > *:first-child { margin-top:0em }
+
+.docStyle div { margin-top: 0.5em }
+
+.docStyle div.front, .docStyle div.footer { }
+
+.docStyle .back, .docStyle .body { font-family: serif }
+
+.docStyle div.metadata { font-family: sans-serif }
+.docStyle div.centered { text-align: center }
+
+.docStyle div.table { display: table }
+.docStyle div.metadata.table { width: 100% }
+.docStyle div.row { display: table-row }
+.docStyle div.cell { display: table-cell; padding-left: 0.25em; padding-right: 0.25em }
+
+.docStyle div.metadata div.cell {
+    vertical-align: top }
+
+.docStyle div.two-column div.cell {
+    width: 50% }
+
+.docStyle div.one-column div.cell.spanning { width: 100% }
+
+.docStyle div.metadata-group { margin-top: 0.5em;
+  font-size: 75% }
+
+.docStyle div.metadata-group > p, div.metadata-group > div { margin-top: 0.5em }
+
+.docStyle div.metadata-area * { margin: 0em }
+
+.docStyle div.metadata-chunk { margin-left: 1em }
+
+.docStyle div.branding { text-align: center }
+
+.docStyle div.document-title-notes {
+   text-align: center;
+   width: 60%;
+   margin-left: auto;
+   margin-right: auto
+   }
+
+.docStyle div.footnote { font-size: 90% }
+
+/* rules */
+.docStyle hr.part-rule {
+    border: thin solid black;
+    width: 50%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    }
+
+.docStyle hr.section-rule {
+    border: thin dotted black;
+    width: 50%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    }
+
+/* superior numbers that are cross-references */
+.docStyle .xref {
+    color: red;
+    }
+    
+/* generated text */     
+.docStyle .generated { color: gray; }
+
+.docStyle .warning, .docStyle .tex-math {
+    font-size:80%; font-family: sans-serif }
+
+.docStyle .warning {
+    color: red }
+
+.docStyle .tex-math { color: green }
+
+.docStyle .data {
+    color: black;
+    }
+
+.docStyle .formula {
+    font-family: sans-serif;
+    font-size: 90% }
+    
+/* --------------- Titling levels -------------------- */
+
+
+.docStyle h1, .docStyle h2, .docStyle h3, .docStyle h4, .docStyle h5, .docStyle h6 {
+   display: block;
+   margin-top: 0em;
+   margin-bottom: 0.5em;
+   font-family: helvetica, sans-serif;
+   font-weight: bold;
+   color: midnightblue;
+  }
+/* titling level 1: document title */
+.docStyle .document-title {
+   text-align: center;
+   }
+
+/* callout titles appear in a left column (table cell)
+   opposite what they head */
+.docStyle .callout-title { text-align: right;
+  margin-top: 0.5em;
+  margin-right: 1em;
+  font-size: 140% }
+  
+
+
+.docStyle div.section, .docStyle div.back-section {
+  margin-top: 1em; margin-bottom: 0.5em }
+
+.docStyle div.panel { background-color: white;
+  font-size: 90%;
+  border: thin solid black;
+  padding-left: 0.5em; padding-right: 0.5em;
+  padding-top: 0.5em; padding-bottom: 0.5em;
+  margin-top: 0.5em; margin-bottom: 0.5em }
+
+.docStyle div.blockquote { font-size: 90%;
+  margin-left: 1em; margin-right: 1em;
+  margin-top: 0.5em; margin-bottom: 0.5em }
+
+.docStyle div.caption {
+  margin-top: 0.5em; margin-bottom: 0.5em }
+
+.docStyle div.speech {
+  margin-left: 1em; margin-right: 1em;
+  margin-top: 0.5em; margin-bottom: 0.5em }
+
+.docStyle div.verse-group {
+  margin-left: 1em;
+  margin-top: 0.5em; margin-bottom: 0.5em }
+
+.docStyle div.verse-group div.verse-group {
+  margin-left: 1em;
+  margin-top: 0em; margin-bottom: 0em }
+
+.docStyle div.note { margin-top: 0em; margin-left: 1em;
+  font-size: 85% }
+
+.docStyle .ref-label { margin-top: 0em; vertical-align: top }
+
+.docStyle .ref-content { margin-top: 0em; padding-left: 0.25em }
+
+.docStyle h5.label { margin-top: 0em; margin-bottom: 0em }
+
+.docStyle p { margin-top: 0.5em; margin-bottom: 0em }
+
+.docStyle p.first { margin-top: 0em }
+
+.docStyle p.verse-line, .docStyle p.citation { margin-top: 0em; margin-bottom: 0em; margin-left: 2em; text-indent: -2em }
+
+.docStyle p.address-line { margin-top: 0em; margin-bottom: 0em; margin-left: 2em }
+
+.docStyle ul, .docStyle ol { margin-top: 0.5em }
+
+.docStyle li { margin-top: 0.5em; margin-bottom: 0em }
+.docStyle li > p { margin-top: 0.2em; margin-bottom: 0em  }
+
+.docStyle div.def-list { border-spacing: 0.25em }
+
+.docStyle div.def-list div.cell { vertical-align: top;
+  border-bottom: thin solid black;
+  padding-bottom: 0.5em }
+
+.docStyle div.def-list div.def-list-head {
+  text-align: left }
+
+/* text decoration */
+.docStyle .label { font-weight: bold; font-family: sans-serif; font-size: 80% }
+
+.docStyle .monospace {
+	font-family: monospace;
+	}
+
+.docStyle .overline{
+	text-decoration: overline;
+	}
+ 
+.docStyle a       { text-decoration: none }
+.docStyle a:hover { text-decoration: underline }
+
+/* ---------------- End ------------------------------ */
+

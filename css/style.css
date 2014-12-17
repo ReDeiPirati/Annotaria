@@ -5,7 +5,7 @@ html {
 }
 
 body {
-	padding-top: 70px;
+	padding-top: 60px;
 	margin-bottom: 60px;
 }
 
@@ -19,28 +19,26 @@ body {
 	background-color: #f5f5f5;
 }
 
-.container .text-muted {
-	margin: 20px 0;
-}
 
 /* 
 * Central title 
 */
 .navbar-brand {
-	position: absolute;
-	width: 100%;
-	left: 0;
-	top: 0;
-	text-align: center;
-	margin: auto;
-	font-size: 40px;
+	font-size: 30px;
 }
 
-@media (max-width: 678px) {
+@media (min-width: 768px) {
 	.navbar-brand {
-		font-size: 30px;
+		position: absolute;
+		width: 100%;
+		left: 0;
+		top: 0;
+		text-align: center;
+		margin: auto;
+		font-size: 40px;
 	}
 }
+
 /*
 * Sidebar
 */
@@ -52,14 +50,14 @@ body {
 @media (min-width: 992px) {
 	.sidebar {
 		position: fixed;
-		top: 51px;
+		top: 60px;
 		bottom: 0;
 		left: 0;
 		z-index: 999;
 		display: block;
-		padding: 20px;
+		padding: 0 10px;
 		overflow-x: hidden;
-		overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+		overflow-y: hidden; /* Scrollable contents if viewport is shorter than content. */
 		border-right: 1px solid #eee;
 		border-bottom: 0px;
 		margin-bottom: 0px;
@@ -72,6 +70,13 @@ body {
 
 .doc-area {
 	
+}
+
+.doc-tabs a {
+	max-width: 100px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 /*
@@ -95,7 +100,7 @@ div .tab-pane {
 }
 
 #docList {
-	max-height: 400px;	
+	/* max-height: 400px;	*/
 	overflow-y: auto;
 }
 
@@ -112,4 +117,50 @@ div .tab-pane {
 .list-group .list-group-item:last-child  {
 	border-bottom-right-radius: 0px !important;
 	border-bottom-left-radius: 0px !important;
+}
+
+.filter-round {
+	border-radius: 50%;
+	height: 20px;
+	width: 20px;
+}
+
+/*
+* Annotation style
+*/
+
+.denotesPerson {
+	background: rgba(230, 72, 66, 0.7);
+}
+
+.denotesPlace {
+	background: rgba(219, 164, 61, 0.7);
+}
+.denotesDisease {
+	background: rgba(130, 204, 29, 0.7);
+}
+.hasSubject {
+	background: rgba(31, 199, 115, 0.7);
+}
+.relatesTo {
+	background: rgba(31, 227, 219, 0.7);
+}
+.hasClarityScore {
+	background: rgba(30, 116, 203, 0.7);
+}
+.hasOriginalityScore {
+	background: rgba(49, 60, 216, 0.7);
+}
+.hasFormattingScore {
+	background: rgba(108, 44, 211, 0.7);
+}
+.cites {
+	background: rgba(226, 46, 198, 0.7);
+}
+.hasComment {
+	background: rgba(224, 72, 137, 0.7);
+}
+.multiple {
+	background: rgb(151, 189, 240);
+	border-bottom: 2px dashed black
 }
