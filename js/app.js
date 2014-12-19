@@ -97,6 +97,7 @@ function toggleModeSelector () {
 * titleAnnotator
 *
 * modifica il navbar-brand e la scritta del mode
+* mostra il pulsante annote della navbar
 */
 
 function titleAnnotator() {
@@ -104,13 +105,15 @@ function titleAnnotator() {
 	var htmlString =  '<span class="glyphicon glyphicon-pencil">&nbsp;</span>' + usr.name; 
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html( htmlString );
+	$('#annote-nav-button').removeClass('hide');
 	toggleModeSelector();
 }
 
 /*
 * titleReader
 *
-* modifica il navbar-brand e la scritta del mode
+* modifica il navbar-brand e la scritta del mode 
+* nasconde il pulsante annote della navbar
 */
 
 function titleReader() {
@@ -118,6 +121,7 @@ function titleReader() {
 	var htmlString = $('#sel_reader').html();
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html(htmlString);
+	$('#annote-nav-button').addClass('hide');
 	toggleModeSelector();
 }
 
@@ -146,6 +150,29 @@ function resetProvenance() {
 	titleReader();	
 }
 
+function selection() {
+	if (window.getSelection) {
+		return window.getSelection();
+	} else if (document.getSelection) {
+		return document.getSelection();
+	} else if (document.selection) {
+		return document.selection.createRange().text;
+	}
+}
+
+/*
+* switchAnnotationType
+*
+* cambia la select da visualizzare in base al tipo di annotazione da effettuare (documento/frammento)
+* le annnotazioni sul documento possono essere effettuate solo se e' selezionato del testo
+*/
+function switchAnnotationType() {
+	if(selection()){ /* <---- */
+		$('#documentAnnotationForm').toggleClass('hide');
+		$('#fraqmentAnnotationForm').toggleClass('hide');
+	}
+}
+
 /*
 * searchDoc 
 *
@@ -161,6 +188,7 @@ function searchDoc() {
 		$("#docList a:not(.found)").hide();
 	}
 }
+
 
 /*
 * loadDocList

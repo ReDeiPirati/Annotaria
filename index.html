@@ -34,6 +34,7 @@
 					<li><a href="#" role="button" data-toggle="modal" data-target="#about">About</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" id="annote-nav-button" class="hide" role="button" data-toggle="modal" data-target="#annote">Annote</a></li>
 					<li class="dropdown">
 						<a id="mode" href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-search">&nbsp;</span>Reader&nbsp;<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
@@ -297,23 +298,52 @@
 		</div>
 	</div>
 	
-	<!-- finestra modale per l'inserimento delle annotazioni	
-	<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="Help Annotaria" aria-hidden="true">
+	<div class="modal fade" id="annote" tabindex="-1" role="dialog" aria-labelledby="Create Annotation" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Help</h4>
+					<h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-refresh" onclick="switchAnnotationType();">&nbsp;</span>Annote</h4>
 				</div>
 				<div class="modal-body">
-					<p>Utilizzata per gli scopi del corso di Tecnologie Web all'Università di Bologna</p>
-					<p>© 2014 Fabio Vitali. All right reserved.</p>
+					<form class="form" role="form">
+						<div class="form-group" id="documentAnnotationForm">
+							<label for="documentAnnotationType">Select document annotation:</label>
+							<select class="form-control" id="documentAnnotationType">
+								<option selected>Select annotation</option>
+								<option>Author</option>
+								<option>Publiscer </option>
+								<option>Publication year </option>
+								<option>Title </option>
+								<option>Abstract </option>
+								<option>Short title </option>
+								<option>Comment </option>
+							</select>
+						</div>
+						<div class="form-group hide" id="fraqmentAnnotationForm">
+							<label for="fraqmentAnnotationType">Select fragment annotation:</label>
+							<select class="form-control" id="fraqmentAnnotationType">
+								<option selected>Select annotation</option>
+								<option>Denote person </option>
+								<option>Denote place </option>
+								<option>Denote disease </option>
+								<option>Subject </option>
+								<option>Release </option>
+								<option>Clarity score </option>
+								<option>Originality score </option>
+								<option>Formatting score </option>
+								<option>Cites </option>
+								<option>Comment </option>
+							</select>
+						</div>
+					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+					<button type="button" class="btn btn-success hide" data-dismiss="modal">Crea</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
-	</div> --> 
+	</div> 
 </body>
 </html>
