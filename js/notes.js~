@@ -117,8 +117,7 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index)
 
 
 function ChangeColor()
-{
-        var i,j=1;
+{       var i,j=1;
 	var tutti , colore = 256225;
 	var vector = new Array();
 	var color= new Array();
