@@ -56,6 +56,30 @@ var PREFIXES = " \
 console.log(PREFIXES);
 
 
+
+
+//dizionario con chiave tipo annotazione e come valore una stringa comprensibile a tutti
+tipoLeggibile = { 
+			hasAuthor: 'Autore', 
+			hasPublisher: 'Editore',
+			hasPublicationYear: 'Anno',
+			hasTitle: 'Titolo', 
+			hasAbstract: 'Sommario', 
+			hasShortTitle: 'Titolo breve', 
+			hasComment: 'Commento', 
+			denotesPerson: 'Persona', 
+			denotesPlace: 'Luogo', 
+			denotesDisease: 'Malattia', 
+			hasSubject: 'Argomento', 
+			relatesTo: 'Si collega a', 
+			hasClarityScore: 'Chiarezza', 
+			hasOriginalityScore: 'Originalita', 
+			hasFormattingScore: 'Giudizio', 
+			cites: 'Cita', 
+			unk: 'Tipo sconosciuto' 
+};
+
+
 var query = function( queryttl , success , error ,  loadimg , timeout )
 {
 	var completeQuery = PREFIXES + queryttl ;
@@ -64,10 +88,7 @@ var query = function( queryttl , success , error ,  loadimg , timeout )
 	var dati = {
 			dataType:"jsonp" , 
 			url:queryUrl , 
-			success:function () 
-			{
-				success(); //da mettere a posto i parametri
-			}
+			success: success
 		};
 
 	if ( error )
@@ -89,50 +110,6 @@ var query = function( queryttl , success , error ,  loadimg , timeout )
 	return req;	
 };
 
-
-
-//funzione che carica tutte le annotazioni su frammento, dato il risultato della query relativa
-function caricaAnn(json) {
-	var head = json.head.vars;
-	var queryResults = json.results.bindings;
-	for (var item in queryResults) {
-		var id, start, end, tipo, nome, mail, data, val, valLeg, ind;
-		if (queryResults[item][head[1]])
-			tipo=queryResults[item][head[1]].value;
-		else
-			tipo=queryResults[item][head[2]].value;
-		if (!tipoLeggibile[tipo])
-			tipo = 'unk' //il tipo dell'annotazione non � tra quelli noti
-		id = queryResults[item][head[3]].value;
-		start = queryResults[item][head[4]].value;
-		end = queryResults[item][head[5]].value;
-		nome = queryResults[item][head[6]].value;
-		mail =queryResults[item][head[7]].value;
-		data = queryResults[item][head[8]].value;
-		val = queryResults[item][head[9]].value;
-
-		data = componiData(dividiData(data));
-		if (queryResults[item][head[10]])
-			valLeg=queryResults[item][head[10]].value;
-		else if (queryResults[item][head[11]])
-			valLeg=queryResults[item][head[11]].value;
-		else if (queryResults[item][head[12]])
-			valLeg=queryResults[item][head[12]].value;
-		else
-			valLeg = val;
-		if ((ind = start.indexOf('^')) != -1)
-			start = start.substr(0,ind);
-		if ((ind = end.indexOf('^')) != -1)
-			end = end.substr(0,ind);
-		start = parseInt(start);
-		end = parseInt(end);
-		var anc = $('#'+$('.tab-pane.active.documento')[0].id+" #"+id)[0];
-		if (end>start && anc && $(anc).text().length>=end) { 
-			notesRem.push({ id: id, type:tipo, autore: nome, mail: mail, data: data, value: val, valueLeg: valLeg });
-			addNoteFromInfo(anc, start, end, tipo, notesRem.length-1);
-		}
-	}
-}
 
 
 

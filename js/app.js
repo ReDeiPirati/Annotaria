@@ -1,4 +1,5 @@
 var activeDoc = 1;
+var nSpanAnnotazioni = 0;
 var usr = {};
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
 /*
@@ -94,7 +95,7 @@ function openDoc( title, itemId ) {
 					OPTIONAL { ?a ao:type ?tp . } \
 					OPTIONAL { ?val foaf:name ?v1 . } \
 					OPTIONAL { ?val rdfs:label ?v2 . } \
-					OPTIONAL { ?b rdfs:label ?v3 . } }', function (data) { console.log(data); } , function () { alert("Impossibile caricare le annotazioni, il triple store non \u00E8 raggiungibile")}, undefined , 1000 );
+					OPTIONAL { ?b rdfs:label ?v3 . } }', caricaAnn , function () { alert("Impossibile caricare le annotazioni, il triple store non \u00E8 raggiungibile")}, undefined , 1000 );
 			},
 			error: function(a,b,c) {
 				alert('Error on load ' + docs + title + '.html');
