@@ -1,5 +1,6 @@
 var activeDoc = 1;
 var usr = {};
+var lastAnnotationSel= "";
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
 /*
 * checkTab
@@ -149,7 +150,11 @@ function resetProvenance() {
 	$('#usr_email').val('');
 	titleReader();	
 }
-
+/*
+*	selection()
+*
+* funzione che restituisce il testo selezionato
+*/
 function selection() {
 	if (window.getSelection) {
 		return window.getSelection();
@@ -160,6 +165,20 @@ function selection() {
 	}
 }
 
+function validSelection(sel) {
+	if (!sel.collapsed) {
+		var anc = sel.commonAncestorContainer;
+		if (anc.nodeType == 3) { /* e' un nodo solo di testo quindi prendo il padre */
+			anc = anc.parentNode;
+		}
+		
+		var docContent = document.getElementById('documentTabContent');
+		var defaultdoc = document.getElementById('doc1'); 
+		return ((anc == docContent || anc.isDescendantOf(docContent)) && anc != defaultdoc && !anc.isDescendantOf(defaultdoc));
+	}
+	else return false;
+}
+
 /*
 * switchAnnotationType
 *
@@ -167,12 +186,32 @@ function selection() {
 * le annnotazioni sul documento possono essere effettuate solo se e' selezionato del testo
 */
 function switchAnnotationType() {
-	if(selection()){ /* <---- */
+//	if (validSelection(selection())){ 
 		$('#documentAnnotationForm').toggleClass('hide');
 		$('#fraqmentAnnotationForm').toggleClass('hide');
-	}
+//	}
+//	else
+//		alert("Non e' stato selezionato alcun testo o il testo selezionato non e' corretto");
 }
 
+/*
+* showDocumentAnnotationForm
+*
+* mostra i campi del form dell'annotazione sul documento selezionata
+*/
+function showDocumentAnnotationForm() {
+	if (lastAnnotationSel != "")
+		$('#' + lastAnnotationSel +'Form').addClass('hide');
+	
+	lastAnnotationSel = $('select#documentAnnotationType option:selected').attr("value");
+	$('#' + lastAnnotationSel +'Form').removeClass('hide');
+}
+
+function inputFade( idShow, idHide) {
+	$('#' + idShow).fadeIn("slow");
+	$('#' + idHide).fadeOut("slow");
+}
+	
 /*
 * searchDoc 
 *
@@ -289,6 +328,13 @@ $(document).ready(function () {
 	$('#sel_reader').click(resetProvenance);
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
+	
+	/* init per i form delle annotazioni */
+	$('#publisherText, #authorText').fadeOut();
+	
+	var currentYear = new Date().getFullYear();
+	for (var i = currentYear; i <= 1900; i--)
+		$("#publicationSelect").append('<option value="' + i +'">' + i + '</option>');
 });
 
 

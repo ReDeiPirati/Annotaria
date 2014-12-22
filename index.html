@@ -309,17 +309,59 @@
 					<form class="form" role="form">
 						<div class="form-group" id="documentAnnotationForm">
 							<label for="documentAnnotationType">Select document annotation:</label>
-							<select class="form-control" id="documentAnnotationType">
+							<select class="form-control" id="documentAnnotationType" onclick="showDocumentAnnotationForm();">
 								<option selected>Select annotation</option>
-								<option>Author</option>
-								<option>Publiscer </option>
-								<option>Publication year </option>
-								<option>Title </option>
-								<option>Abstract </option>
-								<option>Short title </option>
-								<option>Comment </option>
+								<option value="hasAuthor">Author</option>
+								<option value="hasPublisher">Publisher </option>
+								<option value="hasPublicationYear">Publication year </option>
+								<option value="hasTitle">Title </option>
+								<option value="hasAbstract">Abstract </option>
+								<option value="hasShortTitle">Short title </option>
+								<option value="hasComment">Comment </option>
 							</select>
 						</div>
+						<div class="form-group hide" id="hasAuthorForm">
+							<div class="radio">
+								<label><input type="radio" checked name="authorRadio" onclick="inputFade('authorSelect','authorText');">Select existent author</label>
+							</div>
+							<select class="form-control" id="authorSelect">
+								<option></option>
+							</select>
+							<div class="radio">
+								<label><input type="radio" name="authorRadio" onclick="inputFade('authorText','authorSelect');">Add new author</label>
+							</div>
+							<input type="text" class="form-control" id="authorText">
+						</div>
+						<div class="form-group hide" id="hasPublisherForm">
+							<div class="radio">
+								<label><input type="radio" checked name="publischerRadio" onclick="inputFade('publisherSelect','publisherText');">Select existent editor</label>
+							</div>
+							<select class="form-control" id="publisherSelect">
+								<option></option>
+							</select>
+							<div class="radio">
+								<label><input type="radio" name="publischerRadio" onclick="inputFade('publisherText','publisherSelect');">Add new editor</label>
+							</div>
+							<input type="text" class="form-control" id="publisherText">
+						</div>
+						<div class="form-group hide" id="hasPublicationYearForm">
+							<label>Select year</label>
+							<select class="form-control" id="publicationSelect">
+							</select>
+						</div>
+						<div class="form-group hide" id="hasTitleForm">
+							<textarea></textarea>
+						</div>
+						<div class="form-group hide" id="hasAbstractForm">
+							<textarea></textarea>
+						</div>
+						<div class="form-group hide" id="hasShortTitleForm">
+							<input type="text" class="form-control">
+						</div>
+						<div class="form-group hide" id="hasCommentForm">
+							<textarea></textarea>
+						</div>
+						
 						<div class="form-group hide" id="fraqmentAnnotationForm">
 							<label for="fraqmentAnnotationType">Select fragment annotation:</label>
 							<select class="form-control" id="fraqmentAnnotationType">
