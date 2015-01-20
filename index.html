@@ -320,6 +320,53 @@
 								<option value="hasComment">Comment </option>
 							</select>
 						</div>
+                        <div class="form-group hide" id="fraqmentAnnotationForm">
+							<label for="fraqmentAnnotationType">Select fragment annotation:</label>
+							<select class="form-control" id="fraqmentAnnotationType">
+								<option selected>Select annotation</option>
+								<option>Denote person </option>
+								<option>Denote place </option>
+								<option>Denote disease </option>
+								<option>Subject </option>
+								<option>Release </option>
+								<option>Clarity score </option>
+								<option>Originality score </option>
+								<option>Formatting score </option>
+								<option>Cites </option>
+								<option>Comment </option>
+							</select>
+						</div>
+                        
+                        <!-- Widget -->
+                        <div class="form-group hide" id="widShortText">
+                            <textarea id="valShortText"  maxlenght="80"></textarea>
+                        </div>
+                        <div class="form-group hide" id="widLongText">
+                            <textarea id="valLongText" ></textarea>  
+                        </div>
+                        <div class="form-group hide" id="widDate">
+                            <label>Select year</label>
+							<select class="form-control" id="valDate">
+							</select>
+                        </div>
+                        <div class="form-group hide" id="widNumber">
+                            <label>Select number</label>
+							<select class="form-control" id="valNumber">
+							</select>
+                        </div>
+                        <div class="form-group hide" id="widChoice">
+                            <label>Select choice</label>
+							<select class="form-control" id="valChoice">
+							</select>
+                        </div>
+                        <div class="form-group hide" id="widInstance">
+                        </div>
+                        <div class="form-group hide" id="widDbpedia">
+                        </div>
+                        <div class="form-group hide" id="widCitation">
+                        </div>
+                        
+                        <!--
 						<div class="form-group hide" id="hasAuthorForm">
 							<div class="radio">
 								<label><input type="radio" checked name="authorRadio" onclick="inputFade('authorSelect','authorText');">Select existent author</label>
@@ -362,22 +409,8 @@
 							<textarea></textarea>
 						</div>
 						
-						<div class="form-group hide" id="fraqmentAnnotationForm">
-							<label for="fraqmentAnnotationType">Select fragment annotation:</label>
-							<select class="form-control" id="fraqmentAnnotationType">
-								<option selected>Select annotation</option>
-								<option>Denote person </option>
-								<option>Denote place </option>
-								<option>Denote disease </option>
-								<option>Subject </option>
-								<option>Release </option>
-								<option>Clarity score </option>
-								<option>Originality score </option>
-								<option>Formatting score </option>
-								<option>Cites </option>
-								<option>Comment </option>
-							</select>
-						</div>
+						
+                        -->
 					</form>
 				</div>
 				<div class="modal-footer">
