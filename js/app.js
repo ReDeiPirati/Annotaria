@@ -1,6 +1,7 @@
 var activeDoc = 1;
 var usr = {};
-var lastAnnotationSel= "";
+var annotationSel= "";
+var widgetShow = "";
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
 /*
 * checkTab
@@ -200,11 +201,42 @@ function switchAnnotationType() {
 * mostra i campi del form dell'annotazione sul documento selezionata
 */
 function showDocumentAnnotationForm() {
-	if (lastAnnotationSel != "")
-		$('#' + lastAnnotationSel +'Form').addClass('hide');
+	if (widgetShow != "")
+		$('#' + widgetShow).addClass('hide');
 	
-	lastAnnotationSel = $('select#documentAnnotationType option:selected').attr("value");
-	$('#' + lastAnnotationSel +'Form').removeClass('hide');
+	annotationSel = $('select#documentAnnotationType option:selected').attr("value");
+	//$('#' + lastAnnotationSel +'Form').removeClass('hide');
+	switch(annotationSel) {
+    	case "hasAuthor":
+			widgetShow = "widInstance";
+			$('#widInstance').removeClass("hide");
+        	break;
+		case "hasPublisher":
+			widgetShow = "widInstance";
+			$('#widInstance').removeClass("hide");
+        	break;
+		case "hasPublicationYear":
+			widgetShow = "widDate";
+			$('#widDate').removeClass("hide");
+        	break;
+		case "hasTitle":
+        	widgetShow = "widLongText";
+			$('#widLongText').removeClass("hide");
+        	break;
+		case "hasAbstract":
+        	widgetShow = "widLongText";
+			$('#widLongText').removeClass("hide");
+        	break;
+		case "hasShortTitle":
+        	widgetShow = "widShortText";
+			$('#widShortText').removeClass("hide");
+        	break;
+		case "hasComment":
+        	widgetShow = "widLongText";
+			$('#widLongText').removeClass("hide");
+        	break;
+    	default:
+    } 
 }
 
 function inputFade( idShow, idHide) {
@@ -330,11 +362,11 @@ $(document).ready(function () {
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
 	/* init per i form delle annotazioni */
-	$('#publisherText, #authorText').fadeOut();
+	$('#InstanceText').fadeOut();
 	
 	var currentYear = new Date().getFullYear();
-	for (var i = currentYear; i <= 1900; i--)
-		$("#publicationSelect").append('<option value="' + i +'">' + i + '</option>');
+	for (var i = currentYear; i >= 1900; i--)
+		$("#valDate").append('<option value="' + i +'">' + i + '</option>');
 });
 
 
