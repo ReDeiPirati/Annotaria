@@ -235,7 +235,42 @@ function showDocumentAnnotationForm() {
         	widgetShow = "widLongText";
 			$('#widLongText').removeClass("hide");
         	break;
-    	default:
+		case "denotesPerson":
+			widgetShow = "widInstance";
+			$('#widInstance').removeClass("hide");
+        	break;
+		case "denotesPlace":
+			widgetShow = "widInstance";
+			$('#widInstance').removeClass("hide");
+        	break;
+		case "denotesDisease":
+			widgetShow = "widInstance";
+			$('#widInstance').removeClass("hide");
+        	break;
+		case "hasSubject":
+			widgetShow = "widInstance";
+			$('#widInstance').removeClass("hide");
+        	break;
+		case "relatesTo":
+			widgetShow = "widDbpedia";
+			$('#widDbpedia').removeClass("hide");
+        	break;
+		case "hasClarityScore":
+			widgetShow = "widChoice";
+			$('#widChoice').removeClass("hide");
+        	break;
+		case "hasOriginalityScore":
+			widgetShow = "widChoice";
+			$('#widChoice').removeClass("hide");
+        	break;
+		case "hasFormattingScore":
+			widgetShow = "widChoice";
+			$('#widChoice').removeClass("hide");
+        	break;
+		case "cites":
+			widgetShow = "widCitation";
+			$('#widCitation').removeClass("hide");
+        	break;
     } 
 }
 
@@ -363,6 +398,7 @@ $(document).ready(function () {
 	
 	/* init per i form delle annotazioni */
 	$('#InstanceText').fadeOut();
+	$('#valShortText, #valLongText').elastic();
 	
 	var currentYear = new Date().getFullYear();
 	for (var i = currentYear; i >= 1900; i--)
