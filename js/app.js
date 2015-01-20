@@ -205,7 +205,7 @@ function showDocumentAnnotationForm() {
 		$('#' + widgetShow).addClass('hide');
 	
 	annotationSel = $('select#documentAnnotationType option:selected').attr("value");
-	//$('#' + lastAnnotationSel +'Form').removeClass('hide');
+	
 	switch(annotationSel) {
     	case "hasAuthor":
 			widgetShow = "widInstance";
