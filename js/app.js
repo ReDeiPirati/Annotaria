@@ -2,6 +2,7 @@ var activeDoc = 1;
 var usr = {};
 var annotationSel= "";
 var widgetShow = "";
+var FragAnnotation = false;
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
 /*
 * checkTab
@@ -168,13 +169,14 @@ function selection() {
 
 function validSelection(sel) {
 	if (!sel.collapsed) {
-		var anc = sel.commonAncestorContainer;
+		var selRange = sel.getRangeAt(0);
+		var anc = selRange.commonAncestorContainer;
 		if (anc.nodeType == 3) { /* e' un nodo solo di testo quindi prendo il padre */
 			anc = anc.parentNode;
 		}
 		
 		var docContent = document.getElementById('documentTabContent');
-		var defaultdoc = document.getElementById('doc1'); 
+		var defaultdoc = document.getElementById('Doc1'); 
 		return ((anc == docContent || anc.isDescendantOf(docContent)) && anc != defaultdoc && !anc.isDescendantOf(defaultdoc));
 	}
 	else return false;
@@ -187,24 +189,28 @@ function validSelection(sel) {
 * le annnotazioni sul documento possono essere effettuate solo se e' selezionato del testo
 */
 function switchAnnotationType() {
-//	if (validSelection(selection())){ 
+	if (FragAnnotation || validSelection(selection())){ 
 		$('#documentAnnotationForm').toggleClass('hide');
 		$('#fraqmentAnnotationForm').toggleClass('hide');
-//	}
-//	else
-//		alert("Non e' stato selezionato alcun testo o il testo selezionato non e' corretto");
+		if (FragAnnotation)
+			FragAnnotation = false;
+		else
+			FragAnnotation = true;
+	}
 }
 
 /*
-* showDocumentAnnotationForm
+* showAnnotationForm
 *
-* mostra i campi del form dell'annotazione sul documento selezionata
+* mostra i campi del form dell'annotazione selezionata
 */
-function showDocumentAnnotationForm() {
+function showAnnotationForm() {
 	if (widgetShow != "")
 		$('#' + widgetShow).addClass('hide');
-	
-	annotationSel = $('select#documentAnnotationType option:selected').attr("value");
+	if(!FragAnnotation)
+		annotationSel = $('select#documentAnnotationType option:selected').attr("value");
+	else
+		annotationSel = $('select#fraqmentAnnotationType option:selected').attr("value");
 	
 	switch(annotationSel) {
     	case "hasAuthor":
@@ -380,6 +386,24 @@ function docListMaxHeight () {
 	
 	var docListHeight = $(window).height() - margin;
 	$('#docList').css('max-height', docListHeight);
+}
+
+/*
+*		isDescendantOf
+*
+*		funzione che restituisce true se il chiamante e' discendente del parametro, false altrimenti
+*/
+Node.prototype.isDescendantOf = function(padre) {
+	
+	var tmp = this.parentNode;
+	
+	while (tmp) {
+		if (tmp == padre)
+			return true;
+		else
+			tmp=tmp.parentNode;
+	}
+	return false;
 }
 
 $(document).ready(function () {

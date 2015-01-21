@@ -164,3 +164,17 @@ div .tab-pane {
 	background: rgb(151, 189, 240);
 	border-bottom: 2px dashed black
 }
+
+.switch {
+	font-size: 21px;
+	line-height: 1;
+	text-shadow: 0 1px 0 #fff;	
+}
+
+button.switch {
+	-webkit-appearance: none;
+	padding: 0;
+	cursor: pointer;
+	background: 0 0;
+	border: 0;
+}
