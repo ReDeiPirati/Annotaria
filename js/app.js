@@ -3,6 +3,7 @@ var usr = {};
 var annotationSel= "";
 var widgetShow = "";
 var FragAnnotation = false;
+var currentSelection;
 var docs = 'http://annotaria.web.cs.unibo.it/documents/';
 /*
 * checkTab
@@ -183,13 +184,22 @@ function validSelection(sel) {
 }
 
 /*
+*	saveSelection
+*
+*	salva il frammento di testo selezionato al momento della chiamata
+*/
+function saveSelection() {
+	currentSelection = selection();
+}
+
+/*
 * switchAnnotationType
 *
 * cambia la select da visualizzare in base al tipo di annotazione da effettuare (documento/frammento)
 * le annnotazioni sul documento possono essere effettuate solo se e' selezionato del testo
 */
 function switchAnnotationType() {
-	if (FragAnnotation || validSelection(selection())){ 
+	if (FragAnnotation || validSelection(currentSelection)){ 
 		$('#documentAnnotationForm').toggleClass('hide');
 		$('#fraqmentAnnotationForm').toggleClass('hide');
 		if (FragAnnotation)
@@ -422,11 +432,12 @@ $(document).ready(function () {
 	
 	/* init per i form delle annotazioni */
 	$('#InstanceText').fadeOut();
-	$('#valShortText, #valLongText').elastic();
-	
+		
 	var currentYear = new Date().getFullYear();
 	for (var i = currentYear; i >= 1900; i--)
 		$("#valDate").append('<option value="' + i +'">' + i + '</option>');
+	
+	$('#valShortText, #valLongText').elastic;
 });
 
 
