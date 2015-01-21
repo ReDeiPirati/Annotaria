@@ -170,8 +170,9 @@ function selection() {
 
 function validSelection(sel) {
 	if (!sel.collapsed) {
-		var selRange = sel.getRangeAt(0);
-		var anc = selRange.commonAncestorContainer;
+		//var selRange = sel.getRangeAt(0);
+		//var anc = selRange.commonAncestorContainer;
+		var anc = sel.commonAncestorContainer;
 		if (anc.nodeType == 3) { /* e' un nodo solo di testo quindi prendo il padre */
 			anc = anc.parentNode;
 		}
@@ -189,7 +190,7 @@ function validSelection(sel) {
 *	salva il frammento di testo selezionato al momento della chiamata
 */
 function saveSelection() {
-	currentSelection = selection();
+	currentSelection = selection().getRangeAt(0);
 }
 
 /*
