@@ -34,7 +34,7 @@
 					<li><a href="#" role="button" data-toggle="modal" data-target="#about">About</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#" id="annote-nav-button" class="hide" role="button" data-toggle="modal" data-target="#annote" onclick="saveSelection();">Annote</a></li>
+					<li><a href="#" id="annote-nav-button" class="hide" role="button" data-toggle="modal" data-target="#annote" onclick="saveSelection(); resetAnnoteModalWindow();">Annote</a></li>
 					<li class="dropdown">
 						<a id="mode" href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-search">&nbsp;</span>Reader&nbsp;<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
@@ -320,7 +320,7 @@
 								<option value="hasComment">Comment </option>
 							</select>
 						</div>
-            <div class="form-group hide" id="fragmentAnnotationForm">
+            			<div class="form-group hide" id="fragmentAnnotationForm">
 							<label for="fragmentAnnotationType">Select fragment annotation:</label>
 							<select class="form-control" id="fragmentAnnotationType" onclick="showAnnotationForm();">
 								<option selected>Select annotation</option>

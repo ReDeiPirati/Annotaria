@@ -196,6 +196,19 @@ function saveSelection() {
 function resetSelect( id ) {
 	$('select#' + id).find("option:selected").prop("selected", false);
 }
+
+function resetAnnoteModalWindow() {
+	if (widgetShow != "")
+			$('#' + widgetShow).addClass('hide');
+		
+	resetSelect("documentAnnotationType");
+	resetSelect("fragmentAnnotationType");
+	
+	FragAnnotation = false;
+	$('#documentAnnotationForm').removeClass('hide');
+	$('#fragmentAnnotationForm').addClass('hide');
+}
+
 /*
 * switchAnnotationType
 *
@@ -220,6 +233,34 @@ function switchAnnotationType() {
 	}
 }
 
+function clearWidget( type ) {
+	switch( type ) {
+		case "widInstance":
+			resetSelect("InstanceSelect");
+			$('#InstanceText').val("");
+			$($('#widInstance input')[0]).trigger("click");
+			break;
+		case "widDate":
+			resetSelect("valDate");
+			break;
+		case "widLongText":
+			$('#valLongText').val("");
+			break;
+		case "widShortText":
+			$('#valShortText').val("");
+		case "widDbpedia":
+			break;
+		case "widChoice":
+			resetSelect("valChoice");
+			break;
+		case "hasFormattingScore":
+			resetSelect("valNumber");
+			break;
+		case "widCitation":
+			break;
+	}	
+}
+
 /*
 * showAnnotationForm
 *
@@ -232,70 +273,86 @@ function showAnnotationForm() {
 		annotationSel = $('select#documentAnnotationType').find("option:selected").attr("value");
 	else
 		annotationSel = $('select#fragmentAnnotationType').find("option:selected").attr("value");
-	
+		
 	switch(annotationSel) {
     	case "hasAuthor":
 			widgetShow = "widInstance";
+			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
         	break;
 		case "hasPublisher":
 			widgetShow = "widInstance";
+			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
         	break;
 		case "hasPublicationYear":
 			widgetShow = "widDate";
+			clearWidget("widDate");
 			$('#widDate').removeClass("hide");
         	break;
 		case "hasTitle":
         	widgetShow = "widLongText";
+			clearWidget("widLongText");
 			$('#widLongText').removeClass("hide");
         	break;
 		case "hasAbstract":
         	widgetShow = "widLongText";
+			clearWidget("widLongText");
 			$('#widLongText').removeClass("hide");
         	break;
 		case "hasShortTitle":
         	widgetShow = "widShortText";
+			clearWidget("widShortText");
 			$('#widShortText').removeClass("hide");
         	break;
 		case "hasComment":
         	widgetShow = "widLongText";
+			clearWidget("widLongText");
 			$('#widLongText').removeClass("hide");
         	break;
 		case "denotesPerson":
 			widgetShow = "widInstance";
+			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
         	break;
 		case "denotesPlace":
 			widgetShow = "widInstance";
+			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
         	break;
 		case "denotesDisease":
 			widgetShow = "widInstance";
+			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
         	break;
 		case "hasSubject":
 			widgetShow = "widInstance";
+			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
         	break;
 		case "relatesTo":
 			widgetShow = "widDbpedia";
+			clearWidget("widDbpedia");
 			$('#widDbpedia').removeClass("hide");
         	break;
 		case "hasClarityScore":
 			widgetShow = "widChoice";
+			clearWidget("widChoice");
 			$('#widChoice').removeClass("hide");
         	break;
 		case "hasOriginalityScore":
 			widgetShow = "widChoice";
+			clearWidget("widChoice");
 			$('#widChoice').removeClass("hide");
         	break;
 		case "hasFormattingScore":
 			widgetShow = "widChoice";
+			clearWidget("widChoice");
 			$('#widChoice').removeClass("hide");
         	break;
 		case "cites":
 			widgetShow = "widCitation";
+			clearWidget("widCitation");
 			$('#widCitation').removeClass("hide");
         	break;
     } 
@@ -440,7 +497,7 @@ $(document).ready(function () {
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
 	/* init per i form delle annotazioni */
-	$('#InstanceText').fadeOut();
+	//$('#InstanceText').fadeOut();
 		
 	var currentYear = new Date().getFullYear();
 	for (var i = currentYear; i >= 1900; i--)
