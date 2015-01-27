@@ -193,6 +193,9 @@ function saveSelection() {
 	currentSelection = selection().getRangeAt(0);
 }
 
+function resetSelect( id ) {
+	$('select#' + id).find("option:selected").prop("selected", false);
+}
 /*
 * switchAnnotationType
 *
@@ -200,9 +203,16 @@ function saveSelection() {
 * le annnotazioni sul documento possono essere effettuate solo se e' selezionato del testo
 */
 function switchAnnotationType() {
+	
 	if (FragAnnotation || validSelection(currentSelection)){ 
+		if (widgetShow != "")
+			$('#' + widgetShow).addClass('hide');
+		
+		resetSelect("documentAnnotationType");
+		resetSelect("fragmentAnnotationType");
+		
 		$('#documentAnnotationForm').toggleClass('hide');
-		$('#fraqmentAnnotationForm').toggleClass('hide');
+		$('#fragmentAnnotationForm').toggleClass('hide');
 		if (FragAnnotation)
 			FragAnnotation = false;
 		else
@@ -219,9 +229,9 @@ function showAnnotationForm() {
 	if (widgetShow != "")
 		$('#' + widgetShow).addClass('hide');
 	if(!FragAnnotation)
-		annotationSel = $('select#documentAnnotationType option:selected').attr("value");
+		annotationSel = $('select#documentAnnotationType').find("option:selected").attr("value");
 	else
-		annotationSel = $('select#fraqmentAnnotationType option:selected').attr("value");
+		annotationSel = $('select#fragmentAnnotationType').find("option:selected").attr("value");
 	
 	switch(annotationSel) {
     	case "hasAuthor":
@@ -424,9 +434,7 @@ $(document).ready(function () {
 	loadDocList();
 	
 	$('#sel_reader').toggle();
-	//$('#submitProvenance').click(setProvenance);
-	
-	
+		
 	$('#sel_reader').click(resetProvenance);
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
