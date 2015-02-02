@@ -415,8 +415,7 @@ function searchDoc() {
 
 function preparaAnnotazioni(tag) {
 	if ($(tag).attr('pittura')) {
-		dove = '#mostraAnn';			/*Non c'è il modale su cui mostrare le annotazioni nel nostro progetto quindi non si vede , in più bisogna creare
-							il modale dinamicamente per ogni finestra di documento aperto*/
+		dove = '#mostraAnn';
 		if (primo) {
 			$(dove+' div').remove();
 			var anc, ann;
