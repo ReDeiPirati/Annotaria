@@ -1,0 +1,176 @@
+
+//funzione che data una stringa rappresentante una data in formato consono al semantic web la rende leggibile a tutti gli utenti
+function dataLeggibile(data) {
+	return data.replace('T', ', ');
+}
+
+
+
+/* funzione che date informazioni su un'annotazione su frammento presa dal triple store prepara i dati necessari a insertNote per renderla visibile
+- il parametro "ancestor" e' una stringa con l'id dell'antenato comune ai nodi di inizio e fine dell'annotazione
+- "start" e "end" sono gli offset dell'annotazione in base ad "ancestor"
+- "tipo" e' il tipo dell'annotazione
+- "ind" e' la posizione di questa annotazione nel vettore notesRem, da inserire come attributo degli span
+*/
+function addNoteFromInfo(ancestor, start, end, tipo, ind) {
+	var alltext = [], selez = [], i, cont=0,  offs, offe;
+	ancestor.descendantTextNodes(alltext);
+	for (i=0; i<alltext.length && start>=cont; i++)
+		cont += $(alltext[i]).text().length;
+	selez.push(alltext[i-1]);
+	offs = start - cont + $(alltext[i-1]).text().length;
+	for( ; i<alltext.length && cont<end; i++) {
+		cont += $(alltext[i]).text().length;
+		selez.push(alltext[i]);
+	}
+	offe = end - cont + $(alltext[i-1]).text().length;
+	insertNote(selez, offs, offe, tipo, false, ind);
+}
+
+
+/* funzione che inserisce gli span di un'annotazione su frammento e chiama ChangeColor per renderla visibile o meno in base ai filtri.
+- il parametro "nodi" e' un vettore con tutti i nodi di testo dell'annotazione
+- "offStart" e "offEnd" sono gli offset relativi rispettivamente al primo e all'ultimo nodo
+- "tipo" e' il tipo dell'annotazione
+- "temp" e' un valore booleano che e' true se l'annotazione e' ancora non salvata, false altrimenti
+- "index" l'indice dell'annotazione nel vettore corrispondente, identificato tramite "temp"
+*/
+function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
+	for (var i=0; i<nodi.length; i++) {
+		var r = document.createRange();
+		if (i==0 && offStart>0)
+			r.setStart(nodi[i],offStart);
+		else
+			r.setStartBefore(nodi[i]);
+		if (i==nodi.length-1 && offEnd<nodi[i].textContent.length)
+			r.setEnd(nodi[i],offEnd);
+		else
+			r.setEndAfter(nodi[i]);
+		var span = document.createElement('span');
+		span.setAttribute('class',tipo);
+		span.setAttribute('id', 'span-ann-'+ nSpanAnnotazioni);
+		span.setAttribute('onclick', 'preparaAnnotazioni(this)');
+		span.setAttribute('data-ann',index);
+		span.setAttribute('data-temp', temp);
+		var vet = getRightNotes(temp);
+		span.setAttribute('data-autore', vet[index].autore);
+		span.setAttribute('data-data', vet[index].data);
+		if (i<nodi.length-1) 
+			span.setAttribute('data-next', nSpanAnnotazioni+1);
+		else
+			span.setAttribute('data-next', 'none');		
+		nSpanAnnotazioni++;
+		r.surroundContents(span);
+	}
+	ChangeColor();
+}
+
+
+//funzione che in base ai filtri scelti dall'utente nasconde o mostra le annotazioni
+function ChangeColor()
+{       var i,j=1;
+	var tutti , colore = 256225;
+	var vector = new Array();
+	var color= new Array();
+	var element = document.getElementsByClassName("colori");
+	$("[pittura]").removeAttr("pittura");
+
+	for(i = 0; i< element.length ; i++)
+	{
+		if(element[i].checked)
+		{
+			vector.push(element[i].value);
+		}
+	}
+	for(i = 0; i < vector.length ; i++)
+	{
+		var vet = $("."+vector[i]);
+		for (var k=0; k<vet.length; k++) {
+			var dataok = true, data;
+			if ($('#filDat').prop('checked')) {
+				data = $('.dato-anno')[2].value + '-' + dammizero(parseInt($('.dato-anno')[1].value)) +'-'+dammizero(parseInt($('.dato-anno')[0].value));
+				if ($(vet[k]).attr('data-data').indexOf(data) != 0)
+					dataok=false;
+			}
+			if ((!$('#filAut').prop('checked') || $(vet[k]).attr('data-autore').indexOf($('.dato-autore').val()) != -1) && dataok)
+				$(vet[k]).attr("pittura",vector[i]);
+		}
+	}
+}
+
+
+//funzione che restituisce il riferimento al vettore delle annotazioni non salvate se il parametro passato e' una striga uguale a "true", altrimenti al vettore delle annotazioni salvate su triple store
+function getRightNotes(temp) {
+	if (temp === "true" || temp === true )
+		return notes;
+	else
+		return notesRem;
+}
+
+
+
+//funzione che ordina per data le annotazoni in una lista con le caratteristiche descritte nella funzione getMax
+function ordinaPerData(ann) {
+	for (var i=0; i<ann.length; i++) {
+		vet = getRightNotes(ann[i].temp);
+		var j=getMax(ann, i);
+		var tmp=ann[i];
+		ann[i]=ann[j];
+		ann[j]=tmp;
+	}
+}
+
+
+//funzione che passata un'annotazione compone una stringa con le sue informazioni in html. Il parametro "last" e' un booleano che indica se e' l'ultima annotazione, usato per mettere o no il separatore delle annotazioni
+function annToHtml(ann, last) {
+	str = '<div>';
+	str += '<p>Autore: '+ann.autore+'</p>';
+	str += '<p>E-mail: '+ann.mail+'</p>';
+	str += '<p>Data: '+dataLeggibile(ann.data)+'</p>';
+	str += '<p>'+tipoLeggibile[ann.type]+': '+ann.valueLeg+'</p>';
+	if (!last)
+		str += '<hr>';
+	str += '</div>';
+	return str;
+}
+
+
+
+
+//funzione chiamata quando si clicca su un'annotazione su frammento, prende come parametro il nodo cliccato, prepara la lista di tutte le annotazioni sul testo cliccato e infine la rende visibile. Le variabili primo e ultimo servono per evitare che in caso di annotazioni sovrapposte tutte quante preparino l'elenco con le annotazioni. Soltanto l'annotazione dello span piu' in profondita' prepara effettivamente le annotazioni
+
+function preparaAnnotazioni(tag) {
+	if ($(tag).attr('pittura')) {
+		dove = '#mostraAnn';			/*Non c'è il modale su cui mostrare le annotazioni nel nostro progetto quindi non si vede , in più bisogna creare
+							il modale dinamicamente per ogni finestra di documento aperto*/
+		if (primo) {
+			$(dove+' div').remove();
+			var anc, ann;
+			primo=false;
+			ultimo=tag.id;
+			anc = tag;
+			ann = [];
+			while (anc.id != 'file') {
+				if (anc.id.indexOf('span-ann')==0 && $(anc).attr('pittura')) {
+					ann.push({ind: $(anc).attr('data-ann'), temp: $(anc).attr('data-temp')});
+					ultimo=anc.id;
+				}
+				anc=anc.parentNode;
+			}
+			ordinaPerData(ann);
+			var vet;
+			for (var i=0; i<ann.length; i++) {
+				vet = getRightNotes(ann[i].temp);
+				$(dove).append(annToHtml(vet[ann[i].ind], i==ann.length-1));
+			}
+			$(dove).show();
+		}
+		if (ultimo==tag.id) {
+			primo=true;
+			ultimo=undefined;
+		}
+	}
+}
+
+
+
