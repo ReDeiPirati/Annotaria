@@ -5,6 +5,72 @@ function dataLeggibile(data) {
 }
 
 
+//funzione che restituisce il nodo non di testo che sia il primo antenato comune agli estremi del range passato come parametro
+function getRangeContainerElement(range) {
+    var container = range.commonAncestorContainer;
+    if (container.nodeType == 3) { //nodo di testo
+        container = container.parentNode;
+    }
+    return container;
+}
+
+//funzione che restituisce un vettore con tutti i nodi di testo in ordine da sinistra a destra contenuti (del tutto o in parte) nel range passato come parametro
+function getRangeTextNodes(range) {
+	var anc = getRangeContainerElement(range), alltext = [], st, end;
+	anc.descendantTextNodes(alltext);
+	st = alltext.indexOf(range.startContainer);
+	alltext.splice(0, st);
+	end = alltext.indexOf(range.endContainer)+1;
+	alltext.splice(end, alltext.length - end);
+	return alltext;
+}
+
+
+
+/* funzione che aggiunge un'annotazione su frammento tra quelle non salvate e chiama insertNote per inserirla visivamente nel documento
+- il parametro "type" rappresenta il tipo di annotazione da creare
+- "val" e' un vettore di due elementi in cui il primo e' il corpo dell'annotazione in formato consono al semantic web (ad es. un URI) mentre il secondo e' un valore leggibile all'utente
+- "tripla" e' un vettore di 3 elementi con le informazioni necessarie per salvare l'annotazione sul triple store con le proprieta' giuste
+*/
+function addNote(type, val,tripla) {
+	var nTestoSelezionati = getRangeTextNodes(selezioneUtente);	
+	var offs = selezioneUtente.startOffset;
+	var offe = selezioneUtente.endOffset;
+	var ancestor = getRangeContainerElement(selezioneUtente);
+	if (ancestor.id.indexOf("span-ann") != -1)
+		ancestor = ancestor.nonAnnAncestor();
+	var alltext = [];
+	ancestor.descendantTextNodes(alltext);
+	for (var i=0; i<alltext.indexOf(nTestoSelezionati[0]); i++) {
+		offs += $(alltext[i]).text().length
+		offe += $(alltext[i]).text().length;
+	}
+	for (var i=alltext.indexOf(nTestoSelezionati[0]); i<alltext.indexOf(nTestoSelezionati[nTestoSelezionati.length-1]); i++)
+		offe += $(alltext[i]).text().length;
+
+	n = {
+		type: type,
+		value: val[0],
+		valueLeg: val[1],
+		id: ancestor.id,
+		offStart: offs,
+		offEnd: offe,
+		primoSpan: nSpanAnnotazioni,
+		data: currtime(),
+		tripla: tripla,
+		autore: nomeAnnotatore,
+		mail: mailAnnotatore
+	};
+	notes.push(n);
+	$('#pulsAnn input').removeAttr('disabled');    //controllare i pulsanti
+	insertNote(nTestoSelezionati, selezioneUtente.startOffset, selezioneUtente.endOffset, type, true, notes.length-1);
+}
+
+
+
+
+
+
 
 /* funzione che date informazioni su un'annotazione su frammento presa dal triple store prepara i dati necessari a insertNote per renderla visibile
 - il parametro "ancestor" e' una stringa con l'id dell'antenato comune ai nodi di inizio e fine dell'annotazione
