@@ -1,0 +1,359 @@
+MAPPA CONCETTUALE Annotaria
+
+
+Flusso di chiamate e attributi del js di Annotaria
+
+INIT.JS
+
+main:
+	listload()-> DOCS.js	//carica la lista di documenti
+	
+			
+			function listload() {	//funzione che si occupa di caricare la lista dei documenti	
+
+		fa una chiamata ajax per ottenere il json con la lista di documenti e la mostra il listadoc,ogni documento ha una funnzione js associata: loaddoc che prende in input : -link al 			documento, -nome del documento , -numero del documento
+
+			
+			function loaddoc(file, name, id) {	//funzione chiamata per rendere attivo un documento, controlla se ci sono annotazioni non salvate e se il documento e' gia' stato 									caricato, in caso contrario lo carica
+								//il parametro "file" prende l'URL del documento, "name" il nome da visualizzare tra i documenti attivi, "id" prende l'identificativo di 									tale documento (ognuno ha come id la lettera p seguita da un numero)
+
+				load()-> DOCS.JS
+
+					function load(file, name, id) { 	//funzione che esegue una richiesta ajax per caricare il documento passato come parametro "file". I parametri hanno lo 											stesso significato della funzione loaddoc 
+
+
+						chiudi()->DOCS.JS
+
+
+								//funzione che chiude il documento il cui id e' passato come parametro
+								function chiudi(id) {
+
+
+						caricaAnn()->QUERY.JS
+
+	
+							//funzione che carica tutte le annotazioni su frammento, dato il risultato della query relativa
+							function caricaAnn(json) {							
+							
+								componiData()diviData()
+
+								addNoteFromInfo()->ANN.JS
+
+
+										/* funzione che date informazioni su un'annotazione su frammento presa dal triple store prepara i dati necessari a 											insertNote per renderla visibile
+										- il parametro "ancestor" e' una stringa con l'id dell'antenato comune ai nodi di inizio e fine dell'annotazione
+										- "start" e "end" sono gli offset dell'annotazione in base ad "ancestor"
+										- "tipo" e' il tipo dell'annotazione
+										- "ind" e' la posizione di questa annotazione nel vettore notesRem, da inserire come attributo degli span
+										*/
+
+										function addNoteFromInfo(ancestor, start, end, tipo, ind) {
+
+											insertNote()->ANN.JS
+
+												/* funzione che inserisce gli span di un'annotazione su frammento e chiama ChangeColor per renderla 													visibile o meno in base ai filtri.
+												- il parametro "nodi" e' un vettore con tutti i nodi di testo dell'annotazione
+												- "offStart" e "offEnd" sono gli offset relativi rispettivamente al primo e all'ultimo nodo
+												- "tipo" e' il tipo dell'annotazione
+												- "temp" e' un valore booleano che e' true se l'annotazione e' ancora non salvata, false altrimenti
+												- "index" l'indice dell'annotazione nel vettore corrispondente, identificato tramite "temp"
+												*/
+
+												function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
+
+												
+																getRightNotes()->ANN.JS		
+												
+																	//funzione che restituisce il riferimento al vettore delle 																		annotazioni non salvate se il parametro passato e' una striga 																		uguale a "true", altrimenti al vettore delle annotazioni salvate 																		su triple store
+
+																	function getRightNotes(temp) {
+
+
+
+																ChangeColor()->ANN.JS
+
+																	//funzione che in base ai filtri scelti dall'utente nasconde o 																		mostra le annotazioni
+																	function ChangeColor()
+
+
+
+																preparaAnnotazioni()->ANN.JS
+															
+																	//funzione chiamata quando si clicca su un'annotazione su 																		frammento, prende come parametro il nodo cliccato, prepara la 																		lista di tutte le annotazioni sul testo cliccato e infine la 																		rende visibile. Le variabili primo e ultimo servono per evitare 																	che in caso di annotazioni sovrapposte tutte quante preparino 																		l'elenco con le annotazioni. Soltanto l'annotazione dello span 																		piu' in profondita' prepara effettivamente le annotazioni
+																	var primo=true, ultimo;
+
+																	function preparaAnnotazioni(tag) {
+
+					
+				caricaAnnDoc()-> DOCS.JS					
+			
+					function caricaAnnDoc() {		//funzione che fa una query per ogni tipo di annotazione sul documento
+
+						getAnnDoc()-> QUERY.JS
+			
+											
+							function getAnnDoc(json, tipo) {	//funzione che carica le annotazioni sul documento intero di un certo tipo
+
+									
+									
+									dividiData()->QUERY.JS
+
+									
+											//funzione che trasforma la stringa relativa alla data di un'annotazione presa dal triple store in una uguale 												alle nostre
+											function dividiData(data) {
+
+
+
+									componiData()->ANN.JS
+
+											//funzione che passato un vettore del tipo [anno, mese, giorno, ora, minuto] 
+											restituisce una stringa con la data 												nel formato corretto per le annotazioni
+
+											function componiData(giorno) {
+
+									
+
+	
+	document.onselectionchange = function(){ //metodo per far funzionare correttamente la rilevazione della selezione sui browser che non supportano getRangeAt se non c'e' alcuna selezione
+
+
+
+	$('.wmodal').on('hidden.bs.modal', function () { //quando si chiudono i modali per le annotazioni "puliamo" tutto quello che e' stato scritto
+
+	
+
+	$($('[href=#pabout]')[0]).click(function (e) {	//"Nessun documento aperto" corrisponde alla pagina iniziale, a cui corrisponde un pulsante per aprirlo come per i documenti, ma e' nascosto in 							modo che non sia cliccabile, ma quando vengono chiusi tutti i documenti riapriamo la pagina iniziale attraverso questa funzione
+
+
+	
+	$("#mode").click(function () {	//funzione chiamata al click del pulsante "annotator/reader"
+		
+		cambiaModalità-> MOD.JS	
+						
+				function cambiaModalita() {	//funzione che fa passare da lettore ad annotatore e viceversa, associata al pulsante relativo nella pagina web
+					se sei un lettore ti apre la finestra modale per registrarsi
+					altrimenti(sei un annotatore)
+						chiama noAnn()->DOC.JS 
+								function noAnn() { //funzione che controlla se ci sono annotazioni dell'utente non salvate e nel caso chiede all'utente se vuole 												cancellarle. Restituisce true se non ce n'erano o se sono state cancellate, false altrimenti
+
+									ritorna true in 2 casi:	-o se non ci sono annotazione
+												-o se dopo conferma vuoi cancellare le tue annotazioni temporanee
+
+									ritorna false solo nel caso hai a cuore delle annotazioni									
+	
+						se ritorna true allora chiude le finestre modali riguardati widget sui doc , sui frammenti e i bottoni per salvare/mdificare
+							e risetta ad annotator il pulsante per cambiare modalità 
+
+
+	
+	$('#confermaNome').click(function() {	//funzione chiamata al click del pulsante di conferma delle credenziali per diventare annotatore
+
+		diventaAnnotator-> MOD.JS
+					
+				function diventaAnnotator(nome, mail) {	//funzione che fa diventare annotatori a tutti gli effetti, impostando come nome e mail i parametri passati. Fa un controllo sul 										triple store per vedere se esiste gia' un annotatore con la stessa mail
+
+					nomeCorretto-> MOD.JS
+
+							function nomeCorretto(nome) 	//nome diverso dalla stringa vuota
+							{
+									return (nome != "");
+							}
+
+					mailCorretta-> MOD.JS
+
+							function mailCorretta(mail) //cerca se c'è la at
+							{
+								return (mail != "" && mail.indexOf('@') !== -1);
+							}
+					
+					query-> QUERY.JS
+						
+						/* funzione generica per effettuare una query sul triple store
+						- il parametro "query" e' una stringa contenente la query da eseguire, senza prefissi
+						- "succfunz" e' la funzione da eseguire se la query ha successo
+						- "id" e "tag" sono variabili passate come parametro a succfunz, insieme al json della risposta alla query
+						- "errfunz" e' la funzione da eseguire se la richiesta non ha successo
+						- "loadId" e' l'id dell'immagine da mostrare mentre la richiesta e' in corso
+						- "timeout" e' il tempo massimo di attesa oltre il quale si presume che la richesta sia fallita
+						- "initial" e' un ulteriore parametro per "succfunz", usato per la modifica delle annotazioni per riprstinare il menu dell'annotazone com'era al momento 							del salvataggio
+						*/
+						
+						function query(query, succfunz, id, tag, errfunz, loadId, timeout, initial) {
+
+
+	
+	$('.closeModal').click(function() { 	//funzione per nascondere gli alert di errore nome/mail quando si chiude il modale delle credenziali
+
+		
+
+	
+	//funzione che riempie con le date selezionabili il widget per annotare la data del documento
+	function dataD(){
+
+	//chiamiamo la funzione per riempire il widget per la scelta della data
+WTF!!!	dataD(); 
+
+	//funzione generica di errore quando il timeout di una richiesta ajax scade
+	function timeoutStore() {alert("Errore: triple store non raggiungibile");}
+
+
+	//funzioni associate al click dei pulsanti per creare annotazioni, aprono il widget corrispondente chimando la funzione dsplayWidget (vedere la definizione in ann.js per i parametri) e per le 	annotazioni come quelle di tipo persona viene chiamata la funzione query (vedere query.js per i parametri) per riempire l'elenco delle possibili scelte
+	$('#annData').click(function() {  
+
+		displayWidget()-> ANN.JS
+
+				/* funzione che in base ai parametri apre il modale relativo al widget di una certa annotazione e prepara le informazioni per il salvataggio sul triple store
+				- il parametro "titolo" e'il titolo che deve mostrare il widget
+				- "tipo" e' il tipo dell'annotazione
+				- "fram" un valore booleano che indica se e' un'annotazione su frammento o no
+				- "wg" indica quale modale mostrare, uno tra bigModal o littleModal
+				- "id" indica quale parte del mostrare
+				- "input" indica dove andare a ricavare il corpo dell'annotazione inserita dall'utente
+				- "tripla" e' un vettore con le informazioni per il salvataggio su triple store
+				- "addinfo" e' un vettore di 3 elementi con le informazioni per l'inserimento di una nuva istanza di una classe accessoria nel triple store. Il primo elemento contiene 				il prefisso da preporre al nome inserito dall'utente, il secondo l'rdf:type e il terzo il tipo di etichetta da usare per il nome (ad es. foaf:Person per le persone). 					Questo parametro puo' anche non essere passato
+				*/
+
+				function displayWidget(titolo, tipo,fram, wg, id, input, tripla, addinfo) {
+
+							selection()->ANN.JS
+
+								//funzione che restituisce la selezione dell'utente
+								function selection() {
+
+
+
+	
+							selezioneValida()->ANN.JS
+						
+
+									//funzione che passato un range rappresentante la selezione dell'utente controlla se e' in una posizione del documento valida 										per un'annotazione su frammento
+									function selezioneValida(sel) {
+
+
+
+											getRangeContainerElement()->ANN.JS
+
+													//funzione che restituisce il nodo non di testo che sia il primo antenato comune agli estremi 														del range passato come parametro
+													function getRangeContainerElement(range) {
+
+
+
+
+							salvaTempAnn()->ANN.JS
+
+
+									//funzione che inserisce un'annotazione su documento tra quelle non salvate e la rende visibile chiamando insertAnnDoc. I 										parametri sono gli stessi di addNote
+									function salvaTempAnn(tipo, val,tripla) {
+
+
+											currtime()->ANN.JS
+
+
+													//funzione che restituisce una stringa con la data attuale nel formato corretto per le 														annotazioni
+													function currtime(){
+										
+
+														
+													/* funzione che inserisce visivamente un'annotazione su documento dell'utente o dal triple store 														aggiungendo il div corrispondente nel riquadro delle proprieta' del documento.
+													- il parametro "tipo" e' il tipo dell'annotazione
+													- "ann" e' un vettore dove ann[0] e' il corpo dell'annotazione, ann[1] il nome dell'autore												ann [2] la sua mail e ann[3] la data dell'annotazione
+													- "id" e' l'identificativo delle annotazioni dell'utente, dato dal numero progressivo nAnnDoc. 														Se questo parametro non e' passato allora l'annotazione viene dal triple store
+													*/
+													function insertAnnDoc(tipo, ann, id) {
+
+
+
+
+
+
+							addNote()->ANN.JS
+
+
+									/* funzione che aggiunge un'annotazione su frammento tra quelle non salvate e chiama insertNote per inserirla visivamente nel 										documento
+									- il parametro "type" rappresenta il tipo di annotazione da creare
+									- "val" e' un vettore di due elementi in cui il primo e' il corpo dell'annotazione in formato consono al semantic web (ad es. un 										URI) mentre il secondo e' un valore leggibile all'utente								
+									- "tripla" e' un vettore di 3 elementi con le informazioni necessarie per salvare l'annotazione sul triple store con le 									proprieta' giuste
+									*/
+
+									function addNote(type, val,tripla) {
+
+											getRangeTextNodes()->ANN.JS
+
+													
+													//funzione che restituisce un vettore con tutti i nodi di testo in ordine da sinistra a destra 														contenuti (del tutto o in parte) nel range passato come parametro
+													function getRangeTextNodes(range) {
+												
+											
+											getRangeContainerElement()
+
+
+
+
+
+	from annData to siCollega é quasi tutto uguale
+
+	le diversità sono sulle funzioni elenco(elenco,elencoDoc,elencoDp):
+
+		//funzione che aggiunge tanti tag di tipo "tag" all'interno del nodo con id "id" quanti sono i risultati contenuti in "json". Se "initial" e' passato, viene selezionato il tag con 			attributo value pari a "initial"
+		function elenco(json, id, tag, initial) {
+
+		//funzione che crea l'elenco dei documenti citabili per l'annotazione di tipo citazione. I parametri sono gli stessi della funzione elenco
+		function elencoDocs(json, id, tag, initial) {				
+
+		//funzione che crea l'elenco dei risultati di una query su dbpedia. Il significato dei parametri e' lo stesso della funzione elenco.
+		function elencoDbp(json, id, tag) {
+
+
+
+	//funzione per effettuare la ricerca su dbpedia premendo il relativo pulsante, vedere query.js per la definizione
+	$("#cercadb").click( function() {
+
+			querydbp()->QUERY.JS
+						//funzione per effettuare una query su dbpedia, il significato dei parametri e' lo stesso della funzione query
+					function querydbp(query, succfunz, id, tag, loadId, timeout) {
+
+
+		
+	/funzione associata al pulsante "Aggiungi" nei widget delle annotazioni che lo permettono, si occupa di inserire nel triple store ciò che e' stato appena aggiunto
+	$("#aggiungi").click( function () {
+
+			insClasse()->ANN.JS
+
+
+					/* funzione che inserisce 2 o 3 statement nel triple store relativi allo stesso soggetto
+					- "sog", "pre" e "ogg" sono soggetto, predicato e oggetto del primo statement
+					- "pre2" e "ogg2" predicato e oggetto del secondo
+					- "ogg3" viene usato solo per le annotazioni di tipo citazione, per cui il predicato e' noto a priori
+					*/
+					function insClasse(sog, pre, ogg,pre2,ogg2,ogg3) {
+
+						POST->/cgi-bin/insertTriple.py /*SERVER*/
+
+
+	//associa ai pulsanti per filtrare le annotazioni la funzione che effettivamente nasconde le annotazioni da non mostrare
+	$( '.colori' ).on( 'click' , ChangeColor);
+
+		
+
+	//facciamo in modo di rendere visibili tutti i tipi di annotazione simulando il click sui pulsanti corrispondenti
+	$('#annche input').trigger('click');
+			
+
+	//al click del checkbox di un filtro, l'input di tipo text viene abilitato o disabilitat
+	$('#ann > p input').click(function () {
+
+	
+	//funzione per ingrandire il riquadro delle proprieta' del documento per agevolarne la lettura
+	$("#metarea").hover(function()
+
+
+
+	//funzione che chiude la finestra con le informazioni sull'annotazione cliccata
+	function chiudiMostraAnn () {
+
+
+
+	mancano due/tre funzioni che provvederò a mappare il più presto
+			
+
+

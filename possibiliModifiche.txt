@@ -1,0 +1,26 @@
+
+
+-	app -> init !!!
+
+
+-	Rimpicciolire lollo
+
+
+-	Server da py a php
+
+
+-	In generale definire le funzioni in anticipo piuttosto che definirle al momento della chiamata passate come parametro
+
+
+-	caricaAnnDoc() -> DOCS.JS 
+					migliorare la leggibiltà SE POSSIBILE con un for
+
+
+-	scrivere i commenti in EN
+
+
+
+-	in ANN.JS inserAnn é possibile unire i due if riguardanti (primoSpam > -1)
+
+
+-	in ANN.JS insertSingleNote funzioni che non hanno senso -> possibile modifica
