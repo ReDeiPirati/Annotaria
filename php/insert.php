@@ -1,6 +1,23 @@
-
 <?php
 	
+# questo script inserisce un'annotazione su frammento o su documento sul triple store utilizzando le informazioni passate come parametri CGI:
+# - "endpoint" e' l'URL del server fuseki in cui inserire le triple
+# - "anntype" e' il tipo dell'annotazione
+# - "labelann" e' l'etichetta dell'annotazione
+# - "target" e' una stringa che se equivale a "frammento" indica che l'annotazione e' su frammento, altrimenti e' su documento
+# - "doc" e' l'URI completo del documento su cui e' fatta l'annotazione
+# - "val" e' l'id del tag piu' interno che contiene entrambi gli estremi dell'annotazione
+# - "start" e "end" sono gli offset di inizio e fine relativamente al tag il cui id e' "val"
+# - "subject", "predicate" e "object" sono le 3 parti dello statement da associare all'annotazione
+# - "labelstat" e' l'etichetta relativa allo statement, puo' anche non essere passata
+# - "uriann" e' l'URI che identifica l'autore dell'annotazione
+# - "oraann" e' una stringa contenente la data dell'annotazione
+# - "nomeann" e' una stringa contenente il nome dell'annotatore
+# - "emailann" e' una stringa contenente la mail dell'annotatore
+# lo script restituisce sempre un dizionario con due chiavi, se viene eseguito con successo alla chiave "success" corrisponde il valore "true", altrimenti "false"
+
+
+
 	require 'vendor/autoload.php';
 
 	
@@ -99,14 +116,14 @@ try
 
 	$OAAnn = new EasyRdf_Resource( $namespacelist -> get( "OAAnnotation" ) );
 
-	$graph -> add( $annotation , $namespacelist -> get("RDFtype") ,  $OAAnn );	//http://www.w3.org/ns/oa#Annotation
-	$graph -> add( $annotation , $namespacelist -> get("AOtype") ,  $litanntype );		//rdf.add((annotation,AO.type,Literal(args["anntype"].value))) 
-	$graph -> add( $annotation , $namespacelist -> get("RDFSLabel") ,  $litlabelann );		//rdf.add((annotation,RDFS.label,Literal(args["labelann"].value)))
+	$graph -> add( $annotation , $namespacelist -> get("RDFtype") ,  $OAAnn );	
+	$graph -> add( $annotation , $namespacelist -> get("AOtype") ,  $litanntype );		 
+	$graph -> add( $annotation , $namespacelist -> get("RDFSLabel") ,  $litlabelann );		
 
 	array_push( $data['message'] , $_POST["target"] ); 
 
 	if ( $_POST["target"] != "frammento" )
-		$graph -> add( $annotation , $namespacelist -> get("OAhasTarget") , $uritarget  );	//rdf.add((annotation,OA.hasTarget,URIRef(args["target"].value))) !!!
+		$graph -> add( $annotation , $namespacelist -> get("OAhasTarget") , $uritarget  );	
 	else
 		{
 
@@ -121,52 +138,52 @@ try
 			$tar = $graph ->  newBNode();
 			$frag = $graph ->  newBNode();
 
-			$graph -> add( $annotation , $namespacelist -> get("OAhasTarget") ,  $tar );	//rdf.add((annotation,OA.hasTarget,tar))
+			$graph -> add( $annotation , $namespacelist -> get("OAhasTarget") ,  $tar );	
 
 			$OASpe = new EasyRdf_Resource( $namespacelist -> get( "OASpecificResource" ) );
 		
-			$graph -> add( $tar , $namespacelist -> get("RDFtype") , $OASpe );	//rdf.add((tar,RDF.type,OA.SpecificResource))
+			$graph -> add( $tar , $namespacelist -> get("RDFtype") , $OASpe );	
 
 			
 
-			$graph -> add( $tar , $namespacelist -> get("OAhasSource") , $doc  );	//rdf.add((tar,OA.hasSource,URIRef(args["doc"].value))) !!!
-			$graph -> add( $tar , $namespacelist -> get("OAhasSelector") ,  $frag );	//rdf.add((tar,OA.hasSelector,frag))
+			$graph -> add( $tar , $namespacelist -> get("OAhasSource") , $doc  );	
+			$graph -> add( $tar , $namespacelist -> get("OAhasSelector") ,  $frag );	
 
 			$OAFrag = new EasyRdf_Resource( $namespacelist -> get( "OAFragmentSelector" ) );
 
-			$graph -> add( $frag , $namespacelist -> get("RDFtype") ,  $OAFrag );	//rdf.add((frag,RDF.type,OA.FragmentSelector))
-			$graph -> add( $frag , $namespacelist -> get("RDFvalue") , $litval );	//rdf.add((frag,RDF.value,Literal(args["val"].value)))
-			$graph -> add( $frag , $namespacelist -> get("OAstart") ,  $litstart );	//rdf.add((frag,OA.start,Literal(args["start"].value)))
-			$graph -> add( $frag , $namespacelist -> get("OAend") ,  $litend );	//rdf.add((frag,OA.end,Literal(args["end"].value)))
+			$graph -> add( $frag , $namespacelist -> get("RDFtype") ,  $OAFrag );	
+			$graph -> add( $frag , $namespacelist -> get("RDFvalue") , $litval );	
+			$graph -> add( $frag , $namespacelist -> get("OAstart") ,  $litstart );	
+			$graph -> add( $frag , $namespacelist -> get("OAend") ,  $litend );	
 		}
 
-	$graph -> add( $annotation , $namespacelist -> get("OAhasBody") , $stat  );	//rdf.add((annotation,OA.hasBody,stat))
-	$graph -> add( $annotation , $namespacelist -> get("OAannotedBy") , $uriann );	//rdf.add((annotation,OA.annotatedBy,URIRef(args["uriann"].value)))
-	$graph -> add( $annotation , $namespacelist -> get("OAannotedAt") , $litaoraann  );	//rdf.add((annotation,OA.annotatedAt,Literal(args["oraann"].value)))
+	$graph -> add( $annotation , $namespacelist -> get("OAhasBody") , $stat  );	
+	$graph -> add( $annotation , $namespacelist -> get("OAannotedBy") , $uriann );	
+	$graph -> add( $annotation , $namespacelist -> get("OAannotedAt") , $litaoraann  );	
 
 	//statement
 
 
 	$RDFSta = new EasyRdf_Resource( $namespacelist -> get( "RDFStatement" ) );
 
-	$graph -> add( $stat , $namespacelist -> get("RDFtype") ,  $RDFSta  );	//rdf.add((stat,RDF.type,RDF.Statement))
+	$graph -> add( $stat , $namespacelist -> get("RDFtype") ,  $RDFSta  );	
 
 	if ( array_key_exists( "labelstat" , $_POST ) )
-			$graph -> add( $stat , $namespacelist -> get("RDFSLabel") ,  $litlabelstat  );	//rdf.add((stat,RDFS.label,Literal(args["labelstat"].value)))
+			$graph -> add( $stat , $namespacelist -> get("RDFSLabel") ,  $litlabelstat  );	
 
 
 	
 
-	$graph -> add( $stat , $namespacelist -> get("RDFsubject") ,  $urisub  );	//rdf.add((stat,RDF.subject,URIRef(args["subject"].value)))
+	$graph -> add( $stat , $namespacelist -> get("RDFsubject") ,  $urisub  );	
 
 	
 
-	$graph -> add( $stat , $namespacelist -> get("RDFpredicate") ,  $pred  );	//rdf.add((stat,RDF.predicate,URIRef(args["predicate"].value)))
+	$graph -> add( $stat , $namespacelist -> get("RDFpredicate") ,  $pred  );	
 
 	//is an annotation on a Uri or a literal
 	if( in_array( $_POST["anntype"] , $sonoUri ) )
 	{
-		$uriobj = new EasyRdf_ParsedUri($_POST["object"]);	//rdf.add((stat,RDF.object,tipoObj(args["object"].value)))
+		$uriobj = new EasyRdf_ParsedUri($_POST["object"]);	
 		$graph -> add( $stat , $namespacelist -> get("RDFobject") ,  $uriobj  );
 	}
 	else
@@ -180,9 +197,9 @@ try
 
 	$FOAFPerson = new EasyRdf_Resource( $namespacelist -> get( "FOAFPerson" ) );
 
-	$graph -> add( $uriann , $namespacelist -> get("RDFtype") ,  $FOAFPerson  );//rdf.add((URIRef(args["uriann"].value),RDF.type,FOAF.Person))
-	$graph -> add( $uriann , $namespacelist -> get("FOAFname") ,  $litnomeann  );//rdf.add((URIRef(args["uriann"].value),FOAF.name,Literal(args["nomeann"].value)))
-	$graph -> add( $uriann , $namespacelist -> get("SCHEMAemail") ,  $litemailann  );//rdf.add((URIRef(args["uriann"].value),SCHEMA.email,Literal(args["emailann"].value)))
+	$graph -> add( $uriann , $namespacelist -> get("RDFtype") ,  $FOAFPerson  );
+	$graph -> add( $uriann , $namespacelist -> get("FOAFname") ,  $litnomeann  );
+	$graph -> add( $uriann , $namespacelist -> get("SCHEMAemail") ,  $litemailann  );
 
 	
 	//load the graph in the triplestore
