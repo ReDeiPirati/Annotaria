@@ -268,6 +268,20 @@ function preparaAnnotazioni(tag) {
 	}
 }
 
+/* funzione che inserisce 2 o 3 statement nel triple store relativi allo stesso soggetto
+- "sog", "pre" e "ogg" sono soggetto, predicato e oggetto del primo statement
+- "pre2" e "ogg2" predicato e oggetto del secondo
+- "ogg3" viene usato solo per le annotazioni di tipo citazione, per cui il predicato e' noto a priori
+*/
+function insClasse(sog, pre, ogg,pre2,ogg2,ogg3) {
+	return $.ajax({
+		data: {endpoint: endpointURL.slice(0,-6), sog:sog, pre:pre, ogg:ogg, pre2:pre2, ogg2:ogg2, ogg3:ogg3},
+		url: '/cgi-bin/insertTriple.php', 
+		method: 'POST',
+		//success: function (d) { for (x in d.message) {alert(d.message[x]); } }
+	});
+}
+
 function addInstanceSelectOption (citType, addinfo ) {
 	
 	var nome = $("#InstanceText").val().trim();
@@ -295,8 +309,7 @@ function addInstanceSelectOption (citType, addinfo ) {
 					ogg3 = dpref['fabio']+'Item';
 
 				$.when( insClasse(newel, dpref['rdf']+'type', tipo, label, nome, ogg3 ) ).then(function (data) { 
-					if (data.success == "true") {
-						//$('#vuoto').remove();
+					if (data.success == "true") { 
 						$("#InstanceSelect").prepend("<option value='"+newel+"'>"+nome+"</option>");
 						$('#InstanceSelect option:selected').prop('selected',false);
 						$($('#InstanceSelect option')[0]).prop('selected',true);
@@ -307,7 +320,7 @@ function addInstanceSelectOption (citType, addinfo ) {
 				},
 				 function () {
 					 alert("Errore nello script di inserimento");
-				});
+				}); 
 			}
 		}
 		else {

@@ -72,7 +72,7 @@ var dbpediaURL = "http://dbpedia.org/sparql"
 					/*EDIT*/
 
 //dizionario con chiave tipo annotazione e valore id del pulsante corrispondente nella pagina html
-var cliccato = {hasAbstract: '#sommario', denotesPerson: '#annPers', hasPublicationYear: '#annData', hasTitle: '#annTitolo', hasAuthor: '#autore', hasPublisher: '#editore', hasComment: '#commento', hasShortTitle: '#titolo-breve', denotesPlace: '#annLuogo', denotesDisease: '#annMalattia', hasSubject: '#annArgomento', hasClarityScore: '#annChiaro', hasOriginalityScore: '#annOriginale', hasFormattingScore: '#annGiudizio', cites: '#annCita', relatesTo: '#siCollega'}
+//var cliccato = {hasAbstract: '#sommario', denotesPerson: '#annPers', hasPublicationYear: '#annData', hasTitle: '#annTitolo', hasAuthor: '#autore', hasPublisher: '#editore', hasComment: '#commento', hasShortTitle: '#titolo-breve', denotesPlace: '#annLuogo', denotesDisease: '#annMalattia', hasSubject: '#annArgomento', hasClarityScore: '#annChiaro', hasOriginalityScore: '#annOriginale', hasFormattingScore: '#annGiudizio', cites: '#annCita', relatesTo: '#siCollega'}
 
 
 

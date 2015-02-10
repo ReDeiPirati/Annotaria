@@ -25,6 +25,16 @@ function query(query, succfunz, id, tag, errfunz, loadId, timeout, initial) {
 }
 
 
+//funzione che crea l'elenco dei risultati di una query su dbpedia. Il significato dei parametri e' lo stesso della funzione elenco.
+function elencoDbp(json, id, tag) {
+	$('#'+id+' '+tag).remove();
+	var head = json.head.vars;
+	var queryResults = json.results.bindings;
+	for (var item in queryResults) {
+		$('#'+id).append('<'+tag+' value="'+ queryResults[item]["a"].value +'">'+queryResults[item]["a"].value+'</'+tag+'>');
+	}
+}
+
 
 //funzione per effettuare una query su dbpedia, il significato dei parametri e' lo stesso della funzione query
 function querydbp(query, succfunz, id, tag, timeout) {
@@ -43,16 +53,6 @@ function querydbp(query, succfunz, id, tag, timeout) {
 	}
 	return req;
 
-}
-
-//funzione che crea l'elenco dei risultati di una query su dbpedia. Il significato dei parametri e' lo stesso della funzione elenco.
-function elencoDbp(json, id, tag) {
-	$('#'+id+' '+tag).remove();
-	var head = json.head.vars;
-	var queryResults = json.results.bindings;
-	for (var item in queryResults) {
-		$('#'+id).append('<'+tag+' value="'+ queryResults[item]["a"].value +'">'+queryResults[item]["a"].value+'</'+tag+'>');
-	}
 }
 
 
