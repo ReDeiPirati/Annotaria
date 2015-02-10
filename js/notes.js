@@ -14,6 +14,17 @@ function getRangeContainerElement(range) {
     return container;
 }
 
+//funzione che restituisce una stringa con la data attuale nel formato corretto per le annotazioni
+function currtime(){
+	var data = new Date();
+	var dato = new Array(data.getFullYear() ,data.getMonth()+1 ,data.getDate() , data.getHours() ,data.getMinutes());
+	for(i=0;i<=4;i++)
+	{
+		dato[i] = dammizero(dato[i]);			
+	}
+	return componiData(dato);
+}
+
 //funzione che restituisce un vettore con tutti i nodi di testo in ordine da sinistra a destra contenuti (del tutto o in parte) nel range passato come parametro
 function getRangeTextNodes(range) {
 	var anc = getRangeContainerElement(range), alltext = [], st, end;
@@ -33,10 +44,10 @@ function getRangeTextNodes(range) {
 - "tripla" e' un vettore di 3 elementi con le informazioni necessarie per salvare l'annotazione sul triple store con le proprieta' giuste
 */
 function addNote(type, val,tripla) {
-	var nTestoSelezionati = getRangeTextNodes(selezioneUtente);	
-	var offs = selezioneUtente.startOffset;
-	var offe = selezioneUtente.endOffset;
-	var ancestor = getRangeContainerElement(selezioneUtente);
+	var nTestoSelezionati = getRangeTextNodes(currentSelection);	
+	var offs = currentSelection.startOffset;
+	var offe = currentSelection.endOffset;
+	var ancestor = getRangeContainerElement(currentSelection);
 	if (ancestor.id.indexOf("span-ann") != -1)
 		ancestor = ancestor.nonAnnAncestor();
 	var alltext = [];
@@ -58,19 +69,13 @@ function addNote(type, val,tripla) {
 		primoSpan: nSpanAnnotazioni,
 		data: currtime(),
 		tripla: tripla,
-		autore: nomeAnnotatore,
-		mail: mailAnnotatore
+		autore: usr.name,
+		mail: usr.email
 	};
 	notes.push(n);
-	$('#pulsAnn input').removeAttr('disabled');    //controllare i pulsanti
+	//abilitare pulsanti per modificare e salvare le annotazioni
 	insertNote(nTestoSelezionati, selezioneUtente.startOffset, selezioneUtente.endOffset, type, true, notes.length-1);
 }
-
-
-
-
-
-
 
 /* funzione che date informazioni su un'annotazione su frammento presa dal triple store prepara i dati necessari a insertNote per renderla visibile
 - il parametro "ancestor" e' una stringa con l'id dell'antenato comune ai nodi di inizio e fine dell'annotazione
@@ -79,7 +84,12 @@ function addNote(type, val,tripla) {
 - "ind" e' la posizione di questa annotazione nel vettore notesRem, da inserire come attributo degli span
 */
 function addNoteFromInfo(ancestor, start, end, tipo, ind) {
-	var alltext = [], selez = [], i, cont=0,  offs, offe;
+	var alltext = [];
+	var selez = [];
+	var i;
+	var cont=0;
+	var offs;
+	var offe;
 	ancestor.descendantTextNodes(alltext);
 	for (i=0; i<alltext.length && start>=cont; i++)
 		cont += $(alltext[i]).text().length;
@@ -92,6 +102,59 @@ function addNoteFromInfo(ancestor, start, end, tipo, ind) {
 	offe = end - cont + $(alltext[i-1]).text().length;
 	insertNote(selez, offs, offe, tipo, false, ind);
 }
+
+
+//funzione che inserisce un'annotazione su documento tra quelle non salvate e la rende visibile chiamando insertAnnDoc. I parametri sono gli stessi di addNote
+function salvaTempAnn(tipo, val,tripla) {
+	var n;
+	n = {
+		type: tipo,
+		value: val[0],
+		valueLeg: val[1],
+		primoSpan: -1,
+		num: nAnnDoc,
+		data: currtime(),
+		tripla: tripla,
+	};
+	notes.push(n);
+	//insertAnnDoc(tipo, [n.valueLeg, usr.name, usr.email, n.data], n.num); inserisce l'annotazione tra i metadati
+	nAnnDoc++;
+	// attivare pulsanti per modifica e salvataggio annotazioni
+}
+
+
+//funzione che in base ai filtri scelti dall'utente nasconde o mostra le annotazioni
+function ChangeColor()
+{       var i,j=1;
+ var tutti , colore = 256225;
+ var vector = new Array();
+ var color= new Array();
+ var element = document.getElementsByClassName("colori");
+ $("[pittura]").removeAttr("pittura");
+
+ for(i = 0; i< element.length ; i++)
+ {
+	 if(element[i].checked)
+	 {
+		 vector.push(element[i].value);
+	 }
+ }
+ for(i = 0; i < vector.length ; i++)
+ {
+	 var vet = $("."+vector[i]);
+	 for (var k=0; k<vet.length; k++) {
+		 var dataok = true, data;
+		 if ($('#filDat').prop('checked')) {
+			 data = $('.dato-anno')[2].value + '-' + dammizero(parseInt($('.dato-anno')[1].value)) +'-'+dammizero(parseInt($('.dato-anno')[0].value));
+			 if ($(vet[k]).attr('data-data').indexOf(data) != 0)
+				 dataok=false;
+		 }
+		 if ((!$('#filAut').prop('checked') || $(vet[k]).attr('data-autore').indexOf($('.dato-autore').val()) != -1) && dataok)
+			 $(vet[k]).attr("pittura",vector[i]);
+	 }
+ }
+}
+
 
 
 /* funzione che inserisce gli span di un'annotazione su frammento e chiama ChangeColor per renderla visibile o meno in base ai filtri.
@@ -129,39 +192,6 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 		r.surroundContents(span);
 	}
 	ChangeColor();
-}
-
-
-//funzione che in base ai filtri scelti dall'utente nasconde o mostra le annotazioni
-function ChangeColor()
-{       var i,j=1;
-	var tutti , colore = 256225;
-	var vector = new Array();
-	var color= new Array();
-	var element = document.getElementsByClassName("colori");
-	$("[pittura]").removeAttr("pittura");
-
-	for(i = 0; i< element.length ; i++)
-	{
-		if(element[i].checked)
-		{
-			vector.push(element[i].value);
-		}
-	}
-	for(i = 0; i < vector.length ; i++)
-	{
-		var vet = $("."+vector[i]);
-		for (var k=0; k<vet.length; k++) {
-			var dataok = true, data;
-			if ($('#filDat').prop('checked')) {
-				data = $('.dato-anno')[2].value + '-' + dammizero(parseInt($('.dato-anno')[1].value)) +'-'+dammizero(parseInt($('.dato-anno')[0].value));
-				if ($(vet[k]).attr('data-data').indexOf(data) != 0)
-					dataok=false;
-			}
-			if ((!$('#filAut').prop('checked') || $(vet[k]).attr('data-autore').indexOf($('.dato-autore').val()) != -1) && dataok)
-				$(vet[k]).attr("pittura",vector[i]);
-		}
-	}
 }
 
 
@@ -238,7 +268,84 @@ function preparaAnnotazioni(tag) {
 	}
 }
 
+function addInstanceSelectOption (citType, addinfo ) {
+	
+	var nome = $("#InstanceText").val().trim();
+	if(nome != "") {
+		var newel = '';
+		var giusto = false;
+		var citaz = false;
+		
+		if(citType == 'cites')
+			citaz = true;
+		if(!citaz){			//case non cit
+			newel = addinfo[0]+nome.replace(/ /g,'_').replace(/\./g,'');
+			giusto = true;
+		}
+		else if (nome.substr(0,7) == 'http://' && nome.indexOf(' ') == -1) { //case cit
+			newel = nome;
+			giusto = true;
+		}
+		if (giusto) {
+			if (confirm("L'aggiunta non potr\u00E1 essere annullata. Procedere?")) {
+				var tipo = addinfo[1];
+				var label = addinfo[2];
+				var ogg3 = '';
+				if (citaz) 
+					ogg3 = dpref['fabio']+'Item';
 
+				$.when( insClasse(newel, dpref['rdf']+'type', tipo, label, nome, ogg3 ) ).then(function (data) { 
+					if (data.success == "true") {
+						//$('#vuoto').remove();
+						$("#InstanceSelect").prepend("<option value='"+newel+"'>"+nome+"</option>");
+						$('#InstanceSelect option:selected').prop('selected',false);
+						$($('#InstanceSelect option')[0]).prop('selected',true);
+					}
+					else {
+						alert("Errore nell'inserimento: "+data.message[data.message.length-1]);
+					}
+				},
+				 function () {
+					 alert("Errore nello script di inserimento");
+				});
+			}
+		}
+		else {
+			alert("l'uri inserito contiene errori");
+		}
+		return true;
+	}
+	else
+		return false;
+}
+
+
+function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
+	var funz = null;
+	
+	if (fragment)
+		funz = addNote;
+	else
+		funz = salvaTempAnn;
+	
+	if ($('#'+idData).val() != '') {
+		if ($("input[type='radio'][name='InstanceRadio']:checked").val() == 'add') {
+			if (!addInstanceSelectOption (citType, addinfo)) {
+				alert("ricontrolla il form");	
+			}
+		}			
+		var vet;
+		if (idData == 'InstanceSelect')
+			vet = [$('#'+idData).val(), $('#InstanceSelect option:selected').text()];
+		else
+			vet = [$('#'+idData).val(), $('#'+idData).val()];
+		funz(citType, vet, tripla);
+		$('#annote').modal('hide');
+	}
+	else {
+		alert('Non hai compilato bene i dati!!!');
+	}
+}
 
 
 

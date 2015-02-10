@@ -373,13 +373,13 @@
 						</div>
 						<div class="form-group hide" id="widInstance">
 							<div class="radio">
-								<label><input type="radio" checked name="InstanceRadio" onclick="inputFade('InstanceSelect','InstanceText');" >Select existent </label>
+								<label><input type="radio" checked name="InstanceRadio" value="existent" onclick="inputFade('InstanceSelect','InstanceText');" >Select existent </label>
 							</div>
 							<select class="form-control" id="InstanceSelect">
 								<option></option>
 							</select>
 							<div class="radio">
-								<label><input type="radio" name="InstanceRadio"  onclick="inputFade('InstanceText','InstanceSelect');">Add new </label>
+								<label><input type="radio" name="InstanceRadio" value="add" onclick="inputFade('InstanceText','InstanceSelect');">Add new </label>
 							</div>
 							<input type="text" class="form-control" id="InstanceText">
 						</div>
@@ -390,7 +390,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success hide" data-dismiss="modal">Crea</button>
+					<button type="button" class="btn btn-success" >Crea</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 			</div>

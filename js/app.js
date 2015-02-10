@@ -1,9 +1,6 @@
 var activeDoc = 1;
 var usr = {};
-var annotationSel= "";
-var widgetShow = "";
-var FragAnnotation = false;
-var currentSelection;
+
 
 					/*INIT*/
 
@@ -30,13 +27,18 @@ var docs = 'http://annotaria.web.cs.unibo.it/documents/'
 
 
 					/*MOD*/
+var annotationSel= "";			//annotazione scelta
+var widgetShow = "";				// widget visualizzato
+var FragAnnotation = false;	// boolean per dire se e' una annotazione sul documento o sul testo
+var currentSelection;				// selezione corrente
 
-/* modalita annotatore-lettore */
+//gia presenti in usr
+/* modalita annotatore-lettore
 modalita = 0; //0 == lettore, 1 == annotatore
 nomeAnnotatore = "nome non inserito";
 mailAnnotatore = "mail non inserita";
 
-
+*/
 
 					/*ANN*/
 
@@ -347,126 +349,141 @@ function showAnnotationForm() {
 		annotationSel = $('select#fragmentAnnotationType').find("option:selected").attr("value");
 		
 	switch(annotationSel) {
-    	case "hasAuthor":
+    case "hasAuthor":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");	
-
 			var tripla=['fabio:Work',dpref['dcterms']+'creator','foaf:Person'];
-
-			query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option', timeoutStore, null , defTimeout ,  null);//param da mettere a posto
-
-			//displayWidget("Aggiungi autore:", "hasAuthor",false,"bigModal","instance", 'selinst',tripla, [dpref['aop'],dpref['foaf']+'Person', dpref['foaf']+'name']);
-
-        	break;
+			query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option', timeoutStore, null , defTimeout ,  null);
+			$('#annote button.btn-success').unbind("click").click(function( event ) { event.stopPropagation(); } ,insertLocalAnnotation ("hasAuthor", FragAnnotation, "InstanceSelect", tripla, [dpref['aop'],dpref['foaf']+'Person', dpref['foaf']+'name']));
+			break;
+		
 		case "hasPublisher":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
-			
 			var tripla=['fabio:Expression',dpref['dcterms']+'publisher','foaf:Organization'];
 			query('select ?n ?p where {  ?p a foaf:Organization ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore, null ,defTimeout, null);
-
-
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasPublisher", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'organization/', dpref['foaf']+'Organization', dpref['foaf']+'name']));
+     	break;
+		
 		case "hasPublicationYear":
 			widgetShow = "widDate";
 			clearWidget("widDate");
 			$('#widDate').removeClass("hide");
-        	break;
+			var tripla=['fabio:Expression',dpref['fabio']+'hasPublicationYear','foaf:Person'];
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasPublicationYear", FragAnnotation, "valDate", tripla));
+     	break;
+
 		case "hasTitle":
-        		widgetShow = "widLongText";
+    	widgetShow = "widLongText";
 			clearWidget("widLongText");
 			$('#widLongText').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['dcterms']+'title','xs:string'];
-
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("widLongText", FragAnnotation, "valLongText", tripla));
+    	break;
+		
 		case "hasAbstract":
-        		widgetShow = "widLongText";
+      widgetShow = "widLongText";
 			clearWidget("widLongText");
 			$('#widLongText').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['dcterms']+'abstract','xs:string'];
-        	break;
-
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasAbstract", FragAnnotation, "valLongText", tripla));
+			break;
+		
 		case "hasShortTitle":
-        		widgetShow = "widShortText";
+      widgetShow = "widShortText";
 			clearWidget("widShortText");
 			$('#widShortText').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['fabio']+'hasShortTitle','xs:string'];
-
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasShortTitle", FragAnnotation, "valShortText", tripla));
+			break;
 
 		case "hasComment":
-        		widgetShow = "widLongText";
+      widgetShow = "widLongText";
 			clearWidget("widLongText");
 			$('#widLongText').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['schema']+'comment','xs:string'];
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasComment", FragAnnotation, "valLongText", tripla));
+			break;
+		
 		case "denotesPerson":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['sem']+'denotes','foaf:Person'];
 			query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore, null ,defTimeout,  null);
-
-
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("denotesPerson", FragAnnotation, "InstanceSelect", tripla, [dpref['aop'], dpref['foaf']+'Person', dpref['foaf']+'name']));
+			break;
+		
 		case "denotesPlace":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['sem']+'denotes','dbpedia:Place'];
 			query('select ?n ?p where { ?p a dbpedia:Place ; rdfs:label ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null)
-
-
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("denotesPlace", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'place/', dpref['dbpedia']+'Place', dpref['rdfs']+'label']));
+			break;
+		
 		case "denotesDisease":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['sem']+'denotes','skos:Concept'];
 			query('select distinct ?n ?p where { { ?p a skos:Concept ; rdfs:label ?n . ?st rdf:predicate sem:denotes ; rdf:object ?p . } UNION {?p a skos:Concept ; rdfs:label ?n . FILTER contains(str(?p), "/annotaria/disease/") }}', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null);
-
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("denotesDisease", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'disease/', dpref['skos']+'Concept', dpref['rdfs']+'label']));
+			break;
+			
 		case "hasSubject":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['fabio']+'hasSubjectTerm','skos:Concept'];
 			query('select ?n ?p where { ?p a skos:Concept ; rdfs:label ?n .  }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,null);
-
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasSubject", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'subject/', dpref['skos']+'Concept', dpref['rdfs']+'label']));
+			break;
+// -----------------------------da guardare ---------------------------------------------------------------	
 		case "relatesTo":
 			widgetShow = "widDbpedia";
 			clearWidget("widDbpedia");
 			$('#widDbpedia').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['skos']+'related','skos:Concept'];
-        	break;
+			//$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("relatesTo", FragAnnotation, "", tripla));
+			break;
+// ----------------------------------------------------------------------------------------------------------------			
+
 		case "hasClarityScore":
 			widgetShow = "widChoice";
 			clearWidget("widChoice");
 			$('#widChoice').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['ao']+'hasClarityScore','skos:Concept'];
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasClarityScore", FragAnnotation, "valChoice", tripla));
+			break;
+			
 		case "hasOriginalityScore":
 			widgetShow = "widChoice";
 			clearWidget("widChoice");
 			$('#widChoice').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['ao']+'hasOriginalityScore','skos:Concept'];
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasOriginalityScore", FragAnnotation, "valChoice", tripla));
+			break;
+			
 		case "hasFormattingScore":
 			widgetShow = "widChoice";
 			clearWidget("widChoice");
 			$('#widChoice').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['ao']+'hasFormattingScore','skos:Concept'];
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("hasFormattingScore", FragAnnotation, "valChoice", tripla));
+			break;
+			
 		case "cites":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
-			$('#widCitation').removeClass("hide");
+			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['cito']+'cites','fabio:Expression'];
 			query('select ?p where {?p a fabio:Expression . }', elencoDocs, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null);
-        	break;
+			$('#annote button.btn-success').unbind("click").click(insertLocalAnnotation ("cites", FragAnnotation, "InstanceSelect", tripla, [dpref['ao'], dpref['fabio']+'Expression', dpref['fabio']+'hasRepresentation']));
+			break;
     } 
 }
 

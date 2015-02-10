@@ -13,11 +13,10 @@
 
 
 -	caricaAnnDoc() -> DOCS.JS 
-					migliorare la leggibiltà SE POSSIBILE con un for
+		migliorare la leggibiltà SE POSSIBILE con un for
 
 
 -	scrivere i commenti in EN
-
 
 
 -	in ANN.JS inserAnn é possibile unire i due if riguardanti (primoSpam > -1)
