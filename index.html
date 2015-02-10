@@ -384,14 +384,28 @@
 							<input type="text" class="form-control" id="InstanceText">
 						</div>
 						<div class="form-group hide" id="widDbpedia">
-						</div>
-						<div class="form-group hide" id="widCitation">
+							<div class="row">
+								<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+									<input type="text" class="form-control" id="DbpediaText" placeholder="Cosa vuoi cercare?">
+								</div>
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<button type="button" class="btn btn-default" id="DbpediaSearch">cerca</button>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<select class="form-control " id="DbpediaSelect">
+										<option></option>
+									</select>
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success" >Crea</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-success" >Crea</button>
 				</div>
 			</div>
 		</div>

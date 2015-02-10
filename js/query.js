@@ -26,6 +26,36 @@ function query(query, succfunz, id, tag, errfunz, loadId, timeout, initial) {
 
 
 
+//funzione per effettuare una query su dbpedia, il significato dei parametri e' lo stesso della funzione query
+function querydbp(query, succfunz, id, tag, timeout) {
+	var myquery = query;
+	var encodedquery = encodeURIComponent(myquery);
+	var encodedgraph = encodeURIComponent("http://dbpedia.org");
+	var queryUrl = dbpediaURL + "?default-graph-uri=" + encodedgraph + "&query=" + encodedquery + "&format=json";
+	$('#'+id+' '+tag).remove();
+	$('#'+id).append('<'+tag+'>sto caricando i documenti...</'+tag+'>');
+	var req = $.ajax({dataType:"jsonp" , url:queryUrl , success:function (d) {
+		succfunz(d,id,tag)
+	}});
+	if (timeout) {
+		if (timeout>0)
+			setTimeout(function(){ if (req.readyState == 1) req.abort();}, timeout);
+	}
+	return req;
+
+}
+
+//funzione che crea l'elenco dei risultati di una query su dbpedia. Il significato dei parametri e' lo stesso della funzione elenco.
+function elencoDbp(json, id, tag) {
+	$('#'+id+' '+tag).remove();
+	var head = json.head.vars;
+	var queryResults = json.results.bindings;
+	for (var item in queryResults) {
+		$('#'+id).append('<'+tag+' value="'+ queryResults[item]["a"].value +'">'+queryResults[item]["a"].value+'</'+tag+'>');
+	}
+}
+
+
 //funzione che aggiunge tanti tag di tipo "tag" all'interno del nodo con id "id" quanti sono i risultati contenuti in "json". Se "initial" e' passato, viene selezionato il tag con attributo value pari a "initial"
 function elenco(json, id, tag, initial) {
 	$('#'+id+' '+tag).remove();
