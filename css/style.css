@@ -94,6 +94,10 @@ div .tab-pane {
 	margin-bottom: 60px;
 }
 
+div .tab-pane div.tab-pane {
+	padding-top: 0px;
+}
+
 #cerca span, #cerca input {
 	border-bottom-right-radius: 0px !important;
 	border-bottom-left-radius: 0px !important;
@@ -176,4 +180,8 @@ button.switch {
 	cursor: pointer;
 	background: 0 0;
 	border: 0;
+}
+
+#documentAnnotation {
+	padding-top: 0px;
 }

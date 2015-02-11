@@ -50,12 +50,12 @@ function openDoc( title, itemId ) {
 				$('.doc-area #documentTab li.active').removeClass('active');
 				$('.doc-area #documentTabContent div.active').removeClass('active');
 
-				$('.doc-area #documentTab').append('<li role="presentation" class="active doc-tabs"><a href="#Doc-' + itemId +'" id="' + itemId +'-tab" role="tab" data-toggle="tab" aria-controls="Doc-' + itemId +'" aria-expanded="true"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&nbsp;&times;</button>' + title +'</a></li>');
+				$('.doc-area #documentTab').append('<li role="presentation" class="active doc-tabs"><a href="#Doc-' + itemId +'" id="' + itemId +'-tab" role="tab" data-toggle="tab" aria-controls="Doc-' + itemId +'" aria-expanded="true" onclick="$(\'#MetaTab-' + itemId + '\').trigger(\'click\');"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&nbsp;&times;</button>' + title +'</a></li>');
 
 				$('.doc-area #documentTabContent').append('<div role="tabpanel" class="tab-pane fade in active docStyle" id="Doc-' + itemId +'" aria-labelledBy="' + itemId +'-tab">');
-
+				
 				$('#Doc-' + itemId).html(d);
-								
+				
 				/* aggiorno i link delle immagini */
 				var imgs = $('#Doc-' + itemId + ' img');			
 				for (var i=0; i<imgs.length; i++) {
@@ -65,7 +65,12 @@ function openDoc( title, itemId ) {
 
 				$('#' + itemId + '-tab button.close').click(deleteTab);
 				checkTab();
-
+				
+				$('#metaTab li.active').removeClass('active');
+				$('#documentAnnotation div.active').removeClass('active');
+				
+				$('#metaTab').append('<li role="presentation" class="active doc-tabs"><a href="#Meta-' + itemId +'" id="MetaTab-' + itemId + '" role="tab" data-toggle="tab" aria-controls="Meta-' + itemId +'" aria-expanded="true"></a></li>');
+				$('#documentAnnotation').append('<div role="tabpanel" class="tab-pane fade in active" id="Meta-' + itemId +'" aria-labelledBy="MetaTab-' + itemId + '"><div class="list-group"></div></div>');
 				
 				//chiamata per chiedere tutte le annotazioni sull'intero documento
 				caricaAnnDoc();
@@ -93,8 +98,16 @@ function openDoc( title, itemId ) {
 
 //funzione che fa una query per ogni tipo di annotazione sul documento
 function caricaAnnDoc() {
-	var doc = $('#docList a.active').text(); + '.html';
-	//$('#caricaAnnDoc').removeClass('hide');
+	
+	/*
+	//rimuovo i metadati presenti
+	$('#documentAnnotation .list-group a').remove();
+	*/
+	
+	//carico i nuovi metadati
+	var doc = $('.active.doc-tabs a').text() + '.html';
+	doc = doc.substr(2);
+	
 	$.when( 
 		query('select ?txt ?nm ?ml ?dt where { ?ann a oa:Annotation ; oa:hasTarget <'+dpref['ao']+doc+'> ; oa:hasBody ?b ; oa:annotatedBy ?aut ; oa:annotatedAt ?dt . ?aut schema:email ?ml ; foaf:name ?nm . ?b rdf:predicate dcterms:creator ; rdf:object ?cr . ?cr a foaf:Person ; foaf:name ?txt . } order by ?dt ', getAnnDoc, 'hasAuthor', undefined, undefined, undefined, defTimeout ),
 		query('select ?txt ?nm ?ml ?dt where { ?ann a oa:Annotation ; oa:hasTarget <'+dpref['ao']+doc+'> ; oa:hasBody ?b ; oa:annotatedBy ?aut ; oa:annotatedAt ?dt . ?aut schema:email ?ml ; foaf:name ?nm . ?b rdf:predicate dcterms:publisher; rdf:object ?p . ?p a foaf:Organization ; foaf:name ?txt . } order by ?dt ', getAnnDoc, 'hasPublisher', undefined, undefined, undefined, defTimeout ),
@@ -103,7 +116,7 @@ function caricaAnnDoc() {
 		query('select ?txt ?nm ?ml ?dt where { ?ann a oa:Annotation ; oa:hasTarget <'+dpref['ao']+doc+'> ; oa:hasBody ?b ; oa:annotatedBy ?aut ; oa:annotatedAt ?dt . ?aut schema:email ?ml ; foaf:name ?nm . ?b rdf:predicate dcterms:abstract; rdf:object ?txt .  } order by ?dt ', getAnnDoc, 'hasAbstract', undefined, undefined, undefined, defTimeout ),
 		query('select ?txt ?nm ?ml ?dt where { ?ann a oa:Annotation ; oa:hasTarget <'+dpref['ao']+doc+'> ; oa:hasBody ?b ; oa:annotatedBy ?aut ; oa:annotatedAt ?dt . ?aut schema:email ?ml ; foaf:name ?nm . ?b rdf:predicate fabio:hasShortTitle; rdf:object ?txt .  } order by ?dt ', getAnnDoc, 'hasShortTitle', undefined, undefined, undefined, defTimeout ),
 		query('select ?txt ?nm ?ml ?dt where { ?ann a oa:Annotation ; oa:hasTarget <'+dpref['ao']+doc+'> ; oa:hasBody ?b ; oa:annotatedBy ?aut ; oa:annotatedAt ?dt . ?aut schema:email ?ml ; foaf:name ?nm . ?b rdf:predicate schema:comment ; rdf:object ?txt .  } order by ?dt ', getAnnDoc, 'hasComment', undefined, undefined, undefined, defTimeout )
-	)/*.always(function () {$('#caricaAnnDoc').addClass('hide');})*/;
+	);
 }
 
 

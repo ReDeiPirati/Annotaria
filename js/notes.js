@@ -274,15 +274,15 @@ function preparaAnnotazioni(tag) {
 - "id" e' l'identificativo delle annotazioni dell'utente, dato dal numero progressivo nAnnDoc. Se questo parametro non e' passato allora l'annotazione viene dal triple store
 */
 function insertAnnDoc(tipo, ann, id) {
-	if ($('#documentAnnotation .list-group a#docAnn' + tipo).length == 0) {
-		$('#documentAnnotation .list-group').append('<a href="#" class="list-group-item disabled" id="docAnn' + tipo + '">' + tipo + '<span class="badge">0</span></a>');
+	if ($('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo).length == 0) {
+		$('#documentAnnotation .tab-pane.active .list-group').append('<a href="#" class="list-group-item disabled" id="docAnn' + tipo + '">' + tipo + '<span class="badge">0</span></a>');
 	}
 	
 	var eventualeId = ""; //id per annotazioni temporanee
 	if (id != undefined)
 		eventualeId = 'a-doc-' + id;
-	$('#documentAnnotation .list-group a#docAnn' + tipo).after('<a href="#" class="list-group-item" id="' + eventualeId + '"><div class="aut">Autore: '+ann[1]+'</div><div class="mail">Mail: '+ann[2]+'</div><div class="data">Data: '+dataLeggibile(ann[3])+'</div><div class="cont">Annotazione: '+ann[0]+'</div></a>');
-	$('#documentAnnotation .list-group a#docAnn' + tipo + ' span.badge').html( parseInt( $('#documentAnnotation .list-group a#docAnn' + tipo + ' span.badge').text()) + 1);
+	$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo).after('<a href="#" class="list-group-item" id="' + eventualeId + '"><div class="aut">Autore: '+ann[1]+'</div><div class="mail">Mail: '+ann[2]+'</div><div class="data">Data: '+dataLeggibile(ann[3])+'</div><div class="cont">Annotazione: '+ann[0]+'</div></a>');
+	$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').text()) + 1);
 }
 
 /* funzione che inserisce 2 o 3 statement nel triple store relativi allo stesso soggetto

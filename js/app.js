@@ -148,10 +148,15 @@ function deleteTab() {
 	$(this).parent().parent().remove();
 	$('#' + listId[1]).removeClass('active');
 	
+	$('#MetaTab-' + listId[1]).parent().remove();
+	$('#Meta-' + listId[1]).remove();
+	
+	
 	activeDoc --;
 	
 	if(activeDoc && !$('.doc-area #documentTab li.active').length) { // activeDoc != 0 && tabs.active == 0
 		$('.doc-area #documentTab li a').first().trigger("click");
+		$('#metaTab li a').first().trigger("click");
 	}
 	checkTab();
 }
