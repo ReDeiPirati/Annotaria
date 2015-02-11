@@ -225,12 +225,21 @@ function setProvenance() {
 	titleAnnotator();	
 }
 
+function deleteLocalAnnotation() {
+	nSpanAnnotazioni = 0; 
+	nAnnDoc = 0; 
+	notes = []; 
+}
+
 function resetProvenance() {
-	usr.name = "";
-	$('#usr_name').val('');
-	usr.email = "";
-	$('#usr_email').val('');
-	titleReader();	
+	if (confirm("continuando tutte le annotazioni non salvate andranno perse")) {
+		usr.name = "";
+		$('#usr_name').val('');
+		usr.email = "";
+		$('#usr_email').val('');
+		titleReader();	
+		deleteLocalAnnotation();
+	}
 }
 /*
 *	selection()
