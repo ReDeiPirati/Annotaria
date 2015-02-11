@@ -117,7 +117,7 @@ function salvaTempAnn(tipo, val,tripla) {
 		tripla: tripla,
 	};
 	notes.push(n);
-	//insertAnnDoc(tipo, [n.valueLeg, usr.name, usr.email, n.data], n.num); inserisce l'annotazione tra i metadati
+	insertAnnDoc(tipo, [n.valueLeg, usr.name, usr.email, n.data], n.num); //inserisce l'annotazione tra i metadati
 	nAnnDoc++;
 	// attivare pulsanti per modifica e salvataggio annotazioni
 }
@@ -266,6 +266,23 @@ function preparaAnnotazioni(tag) {
 			ultimo=undefined;
 		}
 	}
+}
+
+/* funzione che inserisce visivamente un'annotazione su documento dell'utente o dal triple store aggiungendo il div corrispondente nel riquadro delle proprieta' del documento.
+- il parametro "tipo" e' il tipo dell'annotazione
+- "ann" e' un vettore dove ann[0] e' il corpo dell'annotazione, ann[1] il nome dell'autore, ann[2] la sua mail e ann[3] la data dell'annotazione
+- "id" e' l'identificativo delle annotazioni dell'utente, dato dal numero progressivo nAnnDoc. Se questo parametro non e' passato allora l'annotazione viene dal triple store
+*/
+function insertAnnDoc(tipo, ann, id) {
+	if ($('#documentAnnotation .list-group a#docAnn' + tipo).length == 0) {
+		$('#documentAnnotation .list-group').append('<a href="#" class="list-group-item disabled" id="docAnn' + tipo + '">' + tipo + '<span class="badge">0</span></a>');
+	}
+	
+	var eventualeId = ""; //id per annotazioni temporanee
+	if (id != undefined)
+		eventualeId = 'a-doc-' + id;
+	$('#documentAnnotation .list-group a#docAnn' + tipo).after('<a href="#" class="list-group-item" id="' + eventualeId + '"><div class="aut">Autore: '+ann[1]+'</div><div class="mail">Mail: '+ann[2]+'</div><div class="data">Data: '+dataLeggibile(ann[3])+'</div><div class="cont">Annotazione: '+ann[0]+'</div></a>');
+	$('#documentAnnotation .list-group a#docAnn' + tipo + ' span.badge').html( parseInt( $('#documentAnnotation .list-group a#docAnn' + tipo + ' span.badge').text()) + 1);
 }
 
 /* funzione che inserisce 2 o 3 statement nel triple store relativi allo stesso soggetto

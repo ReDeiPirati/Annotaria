@@ -140,7 +140,7 @@ function getAnnDoc(json, tipo) {
 		var aut = queryResults[item]['nm'].value;
 		var mail = queryResults[item]['ml'].value;	
 		var data = componiData(dividiData(queryResults[item]['dt'].value));
-		//insertAnnDoc(tipo, [cont, aut, mail, data]); inserisce l'annotazione tra i metadati
+		insertAnnDoc(tipo, [cont, aut, mail, data]); 		// inserisce l'annotazione tra i metadati
 	}
 }
 

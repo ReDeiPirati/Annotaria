@@ -99,8 +99,7 @@ div .tab-pane {
 	border-bottom-left-radius: 0px !important;
 }
 
-#docList {
-	/* max-height: 400px;	*/
+#docList, #documentAnnotation{
 	overflow-y: auto;
 }
 

@@ -383,7 +383,7 @@ function showAnnotationForm() {
 			clearWidget("widLongText");
 			$('#widLongText').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['dcterms']+'title','xs:string'];
-			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("widLongText", FragAnnotation, "valLongText", tripla);});
+			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("hasTitle", FragAnnotation, "valLongText", tripla);});
     	break;
 		
 		case "hasAbstract":
@@ -547,11 +547,11 @@ function disableFilter () {
 }
 
 /*
-* docListMaxHeight
+* listMaxHeight
 *
-* ridimensiona la max-height dell'elemento doc-list in proporzione alla wiewport
+* ridimensiona la max-height dell'elemento id passato in proporzione alla wiewport
 */
-function docListMaxHeight () {
+function listMaxHeight (id) {
 	var wpWidth = $(window).width();
 	var margin;
 	if ( wpWidth > 992) {
@@ -562,15 +562,19 @@ function docListMaxHeight () {
 	}
 	
 	var docListHeight = $(window).height() - margin;
-	$('#docList').css('max-height', docListHeight);
+	$('#' + id).css('max-height', docListHeight);
 }
 
 
 
 $(document).ready(function () {
 	
-	docListMaxHeight();
-	$(window).resize(docListMaxHeight); // ridemensiona l'altezza della doc list ogni volta che il documento cambia dimensione
+	listMaxHeight("docList");
+	listMaxHeight("documentAnnotation");
+	$(window).resize(function () {
+		listMaxHeight("docList");
+		listMaxHeight("documentAnnotation");
+	}); // ridemensiona l'altezza della doc list ogni volta che il documento cambia dimensione
 	loadDocList();
 	
 	$('#sel_reader').toggle();
