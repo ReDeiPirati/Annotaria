@@ -404,6 +404,34 @@ function deleteLocalAnnotation ( ann ) {
 		$('#manage-nav-button').parent().addClass('disabled');
 }
 
+function updateLocalAnnotation (ann){
+	$('#manage-local-annotation').modal('hide');
+	deleteLocalAnnotation(ann);
+	resetAnnoteModalWindow();
+	$('#annote-nav-button').trigger('click');
+	// imposto current selection con i valori della vecchia selezione
+	$('#documentAnnotationForm').addClass('hide');
+	
+	selectWid(ann.type);
+	
+	//$('manage-nav-button').trigger('click');
+	
+}
+
+function confirmLocalAnnotation(){
+	$.when( /*funzione per mandare le annotazioni al server*/ ).then(function (data) { 
+		if (data.success == "true") { 
+			$('#manage-local-annotation').modal('hide');
+			resetLocalAnnotation();
+		}
+		else {
+			alert("Errore nell'inserimento: "+data.message[data.message.length-1]);
+		}
+	},
+	function () {
+		alert("Errore nello script di inserimento");
+	});	
+}
 
 function listLocalNotes() {
 	$('#manage-local-annotation div.modal-body .list-group a').remove();
@@ -415,8 +443,10 @@ function listLocalNotes() {
 			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
 		}
 
-		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id=""><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage" onclick="deleteLocalAnnotation(' + notes[i] + ')"><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div></div></a>');
-																																													 
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="annlocal' + i +'"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage"><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div></div></a>');
+		
+		$('#manage-local-annotation div.modal-body .list-group #annlocal' + i + ' span.glyphicon-trash').parent().click( function() { deleteLocalAnnotation( notes[i]);});
+		
 		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').text()) + 1);
 	}
 }
