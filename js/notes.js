@@ -388,6 +388,22 @@ function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 	}
 }
 
+function deleteLocalAnnotation ( ann ) {
+	$(this).parent().parent().remove();
+	
+	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
+	
+	notes = $.grep(notes, function( n, i) {
+		return  n != ann;
+	});
+	
+	nAnnDoc --;
+	if (ann.primoSpan != -1)
+		nSpanAnnotazioni--;
+	if (nAnnDoc == 0)
+		$('#manage-nav-button').parent().addClass('disabled');
+}
+
 
 function listLocalNotes() {
 	$('#manage-local-annotation div.modal-body .list-group a').remove();
@@ -399,19 +415,8 @@ function listLocalNotes() {
 			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
 		}
 
-		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id=""><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div></div></a>');
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id=""><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage" onclick="deleteLocalAnnotation(' + notes[i] + ')"><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div></div></a>');
 																																													 
 		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').text()) + 1);
 	}
 }
-
-/*
-		$('#manage-local-annotation div.modal-body').append('<div class="row .' + notes[i].doc +'">');
-		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-6 col-sm-12 col-md-9 col-lg-6">' + notes[i].doc + '</div>');
-		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-2 col-sm-3 col-md-3 col-lg-2">' + notes[i].type + '</div>');
-		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">' + value + '</div>');
-		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div>');
-		*/
-
-
-

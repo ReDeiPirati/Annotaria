@@ -226,7 +226,7 @@ function setProvenance() {
 	titleAnnotator();	
 }
 
-function deleteLocalAnnotation() {
+function resetLocalAnnotation() {
 	nSpanAnnotazioni = 0; 
 	nAnnDoc = 0; 
 	notes = []; 
@@ -239,7 +239,7 @@ function resetProvenance() {
 		usr.email = "";
 		$('#usr_email').val('');
 		titleReader();	
-		deleteLocalAnnotation();
+		resetLocalAnnotation();
 	}
 }
 /*
