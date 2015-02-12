@@ -189,6 +189,7 @@ function titleAnnotator() {
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html( htmlString );
 	$('#annote-nav-button').removeClass('hide');
+	$('#manage-nav-button').removeClass('hide');
 	toggleModeSelector();
 }
 

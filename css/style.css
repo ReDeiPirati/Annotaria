@@ -39,6 +39,12 @@ body {
 	}
 }
 
+@media (min-width: 768px) {
+	.manage-span {
+		display: none;
+	}
+}
+
 /*
 * Sidebar
 */
@@ -168,13 +174,16 @@ div .tab-pane div.tab-pane {
 	border-bottom: 2px dashed black
 }
 
+.manage {
+	
+}
 .switch {
 	font-size: 21px;
 	line-height: 1;
 	text-shadow: 0 1px 0 #fff;	
 }
 
-button.switch {
+button.switch, button.manage{
 	-webkit-appearance: none;
 	padding: 0;
 	cursor: pointer;

@@ -59,6 +59,9 @@ function addNote(type, val,tripla) {
 	for (var i=alltext.indexOf(nTestoSelezionati[0]); i<alltext.indexOf(nTestoSelezionati[nTestoSelezionati.length-1]); i++)
 		offe += $(alltext[i]).text().length;
 
+	var docName = $('.active.doc-tabs a').text();
+	docName = docName.substr(2);
+	
 	n = {
 		type: type,
 		value: val[0],
@@ -69,11 +72,14 @@ function addNote(type, val,tripla) {
 		primoSpan: nSpanAnnotazioni,
 		data: currtime(),
 		tripla: tripla,
+		doc: docName,
 		autore: usr.name,
 		mail: usr.email
 	};
 	notes.push(n);
-	//abilitare pulsanti per modificare e salvare le annotazioni
+	
+	$('#manage-nav-button').parent().removeClass('disabled');
+	
 	insertNote(nTestoSelezionati, selezioneUtente.startOffset, selezioneUtente.endOffset, type, true, notes.length-1);
 }
 
@@ -107,6 +113,9 @@ function addNoteFromInfo(ancestor, start, end, tipo, ind) {
 //funzione che inserisce un'annotazione su documento tra quelle non salvate e la rende visibile chiamando insertAnnDoc. I parametri sono gli stessi di addNote
 function salvaTempAnn(tipo, val,tripla) {
 	var n;
+	var docName = $('.active.doc-tabs a').text();
+	docName = docName.substr(2);
+	
 	n = {
 		type: tipo,
 		value: val[0],
@@ -115,11 +124,13 @@ function salvaTempAnn(tipo, val,tripla) {
 		num: nAnnDoc,
 		data: currtime(),
 		tripla: tripla,
+		doc: docName,
 	};
 	notes.push(n);
 	insertAnnDoc(tipo, [n.valueLeg, usr.name, usr.email, n.data], n.num); //inserisce l'annotazione tra i metadati
 	nAnnDoc++;
-	// attivare pulsanti per modifica e salvataggio annotazioni
+	
+	$('#manage-nav-button').parent().removeClass('disabled');
 }
 
 
@@ -378,8 +389,29 @@ function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 }
 
 
+function listLocalNotes() {
+	$('#manage-local-annotation div.modal-body .list-group a').remove();
+	for (var i =0; i < notes.length; i++) {
+		var value = notes[i].value.split('/');
+		value  = value[value.length -1];
+		
+		if ($('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').length == 0) {
+			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
+		}
 
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id=""><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div></div></a>');
+																																													 
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').text()) + 1);
+	}
+}
 
+/*
+		$('#manage-local-annotation div.modal-body').append('<div class="row .' + notes[i].doc +'">');
+		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-6 col-sm-12 col-md-9 col-lg-6">' + notes[i].doc + '</div>');
+		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-2 col-sm-3 col-md-3 col-lg-2">' + notes[i].type + '</div>');
+		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">' + value + '</div>');
+		$('#manage-local-annotation div.modal-body div.row').append('<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div>');
+		*/
 
 
 
