@@ -388,9 +388,19 @@ function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 	}
 }
 
+//funzione che dato il numero progressivo del primo span di un'annotazione ne rimuove tutti gli span
+function cancSpanAnn(n) {
+	var span,  next = n;
+	do {
+		span = $('#span-ann-'+next);
+		next = span.attr('data-next');
+		span.contents().unwrap();
+	} while (next!='none');
+}
+
 function deleteLocalAnnotation ( ann ) {
 	$(this).parent().parent().remove();
-	
+	alert(ann);
 	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
 	
 	notes = $.grep(notes, function( n, i) {
@@ -399,13 +409,18 @@ function deleteLocalAnnotation ( ann ) {
 	
 	nAnnDoc --;
 	if (ann.primoSpan != -1)
-		nSpanAnnotazioni--;
+		cancSpanAnn(ann.primoSpan);
+	else {
+		$('#a-doc-'+ann.num).remove();
+		$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').text()) - 1);
+	}
+	
 	if (nAnnDoc == 0)
 		$('#manage-nav-button').parent().addClass('disabled');
 }
 
 function updateLocalAnnotation (ann){
-	$('#manage-local-annotation').modal('hide');
+	//$('#manage-local-annotation').modal('hide');
 	deleteLocalAnnotation(ann);
 	resetAnnoteModalWindow();
 	$('#annote-nav-button').trigger('click');
@@ -418,11 +433,112 @@ function updateLocalAnnotation (ann){
 	
 }
 
+//funzione che data un'annotazione la inserisce nel triple store
+function inserAnn(n) {
+	var sub = dpref['ao'] + ann.doc;
+	var tar= dpref['ao'] + ann.doc + '.html';
+	if (n.type == 'hasAuthor')
+		sub = dpref['ao'] + ann.doc.substr(0, ann.doc.length-5);
+	if (n.primoSpan > -1)
+		sub += '#' + n.id + '-' + n.offStart + '-' + n.offEnd;
+	dati = { 
+		endpoint: endpointURL.slice(0,-6),
+		labelann: tipoLeggibile[n.type], 
+		target:tar,  
+		anntype: n.type,
+		uriann: 'mailto:' + usr.email, 
+		oraann: n.data /*+'^^'+dpref['xs']+'date'*/, 
+		labelstat: n.valueLeg, 
+		subject: sub, 
+		predicate: n.tripla[1], 
+		object: n.value, 
+		nomeann: usr.name, 
+		emailann: usr.email  
+	};
+	if (n.primoSpan > -1) {
+		dati.target = 'frammento';
+		dati.doc = tar;
+		dati.val = n.id;
+		dati.start = n.offStart /*+'^^'+dpref['xs']+'nonNegativeInteger'*/;
+		dati.end = n.offEnd /*+'^^'+dpref['xs']+'nonNegativeInteger'*/;
+	}
+	return $.ajax({
+		data: dati,
+		datatype: "json",
+		url: '/cgi-bin/insert.php', 
+		method: 'POST',
+	});
+}
+
+//funzione che fa partire la richiesta di inserimento nel triple store dell'annotazione passata e ne registra l'esito
+function insertSingleNote(ann) {
+	return $.when(inserAnn(ann)).then(function (data, textStatus, jqXHR) {
+		if (data.success == "true")
+			ann.successo = true;
+		else
+			ann.successo = false;
+	}, function () {
+		ann.successo = false;
+	});
+}
+
+
+/* funzione che cambia l'attributo data-ann di tutti gli span di un'annotazione, che indica l'indice di tale annotazione nel vettore relativo.
+- il parametro "n" e' il numero progressivo del primo span
+- "ind" il nuovo indice dell'annotazione nel proprio vettore
+- "cambiaTemp" e' un booleano che indica se impostare a false l'attributo data-temp, che indica se l'annotazione e' tra quelle non salvate o no
+*/
+function cambiaIndSpanAnn(n, ind, cambiaTemp) {
+	var span,  next = n;
+	do {
+		span = $('#span-ann-'+next);
+		span.attr('data-ann',ind);
+		if (cambiaTemp)
+			span.attr('data-temp','false');
+		next = span.attr('data-next');
+	} while (next!='none');
+}
+
+//funzione che tenta di salvare tutte le annotazioni temporanee nel triple store e da messaggi di successo o errore in base all'esito
+function insertTripleStore() {
+	if (confirm("Vuoi procedere a salvare in modo permanente le annotazioni?")) {
+		var aspetta = [];
+		var fallite = [];
+		
+		for (var i=0;i<notes.length;i++) 
+			aspetta.push(insertSingleNote(notes[i]));
+		$.when.apply($,aspetta).always(function() {
+			for (var i=0;i<notes.length;i++) {
+				var index;
+				if (notes[i].successo) {
+					notesRem.push(notes[i]);
+					index = notesRem.length-1;
+				}
+				else {
+					fallite.push(notes[i]);
+					index = fallite.length-1;
+				}
+				if (notes[i].primoSpan > -1)
+					cambiaIndSpanAnn(notes[i].primoSpan, index, notes[i].successo);
+			}
+			
+			if (fallite.length == 0) {
+				alert("Annotazioni caricate!!!");
+				$('#manage-nav-button').parent().addClass('disabled');
+				notes = [];
+			}
+			else {
+				alert(fallite.length + " annotazioni non sono state salvate.");
+				notes = fallite;
+			}
+		});
+	}
+}
+
 function confirmLocalAnnotation(){
-	$.when( /*funzione per mandare le annotazioni al server*/ ).then(function (data) { 
+	$.when( insertTripleStore() ).then(function (data) { 
 		if (data.success == "true") { 
 			$('#manage-local-annotation').modal('hide');
-			resetLocalAnnotation();
 		}
 		else {
 			alert("Errore nell'inserimento: "+data.message[data.message.length-1]);
@@ -443,9 +559,35 @@ function listLocalNotes() {
 			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
 		}
 
-		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="annlocal' + i +'"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"><button type="button" class="manage" onclick=""><span class="glyphicon glyphicon-cog">&nbsp;<span></button><button type="button" class="manage"><span class="glyphicon glyphicon-trash">&nbsp;<span></button></div></div></a>');
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="annlocal' + i +'"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"></div></div></a>');
 		
-		$('#manage-local-annotation div.modal-body .list-group #annlocal' + i + ' span.glyphicon-trash').parent().click( function() { deleteLocalAnnotation( notes[i]);});
+		var buttondiv = document.createElement("div");
+		$(buttondiv).addClass('col-xs-12 col-sm-2 col-md-2');
+		
+		var updatebutton = document.createElement("button");
+		$(updatebutton).attr('type','button');
+		$(updatebutton).addClass('manage');
+		updatebutton.onclick = function() {
+			alert("chiamata l'update");
+			//updateLocalAnnotation(notes[i]);
+		}
+		updatebutton.innerHTML = '<span class="glyphicon glyphicon-cog">&nbsp;<span>';
+		
+		var deletebutton = document.createElement("button");
+		$(deletebutton).attr('type','button');
+		$(deletebutton).addClass('manage');
+		deletebutton.onclick = function() {
+			alert("chiamata la delete");
+			deleteLocalAnnotation( notes[i]);
+		}
+		deletebutton.innerHTML = '<span class="glyphicon glyphicon-trash">&nbsp;<span>';
+		
+		buttondiv.appendChild(updatebutton);
+		buttondiv.appendChild(deletebutton);
+		
+		$($('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').next().children()[0]).append(buttondiv);
+		
+		//$('#manage-local-annotation div.modal-body .list-group #annlocal' + i + ' span.glyphicon-trash').parent().click( function() { deleteLocalAnnotation( notes[i]);});
 		
 		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"] span.badge').text()) + 1);
 	}
