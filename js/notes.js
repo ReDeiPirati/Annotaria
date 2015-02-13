@@ -398,14 +398,18 @@ function cancSpanAnn(n) {
 	} while (next!='none');
 }
 
+function findAnn( ann) {
+	for( var i=0; i< notes.length; i++)
+		if( notes[i] == ann )
+			return i;
+}
+
 function deleteLocalAnnotation ( ann ) {
 	$(this).parent().parent().parent().remove();
 	
 	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
 	
-	notes = $.grep(notes, function( n, i) {
-		return  n != ann;
-	});
+	notes.splice( findAnn(ann), 1);
 	
 	if (ann.primoSpan > -1)
 		cancSpanAnn(ann.primoSpan); //questa chiamata da loop
@@ -414,7 +418,7 @@ function deleteLocalAnnotation ( ann ) {
 		$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').text()) - 1);
 	}
 	
-	if (nAnnDoc == 0)
+	if (notes.length == 0)
 		$('#manage-nav-button').parent().addClass('disabled');
 }
 
@@ -566,7 +570,7 @@ function listLocalNotes() {
 		var updatebutton = document.createElement("button");
 		$(updatebutton).attr('type','button');
 		$(updatebutton).addClass('manage');
-		//$(deletebutton).click({param1: notes[i]}, updateLocalAnnotation);
+		//$(updatebutton).click({param1: notes[i]}, updateLocalAnnotation);
 		updatebutton.innerHTML = '<span class="glyphicon glyphicon-cog">&nbsp;<span>';
 		
 		var deletebutton = document.createElement("button");
