@@ -1,4 +1,5 @@
 var activeDoc = 1;
+var openfirst = false;
 var usr = {};
 
 
@@ -596,6 +597,9 @@ $(document).ready(function () {
 		listMaxHeight("docList");
 		listMaxHeight("documentAnnotation");
 	}); // ridemensiona l'altezza della doc list ogni volta che il documento cambia dimensione
+	
+	$('#annote-nav-button').parent().addClass('disabled');
+	
 	loadDocList();
 	
 	$('#sel_reader').toggle();

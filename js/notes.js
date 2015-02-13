@@ -344,7 +344,7 @@ function addInstanceSelectOption (citType, addinfo ) {
 			giusto = true;
 		}
 		if (giusto) {
-			if (confirm("L'aggiunta non potr\u00E1 essere annullata. Procedere?")) {
+			if (confirm("questo passaggio non si potra cancellare. Procedere?")) {
 				var tipo = addinfo[1];
 				var label = addinfo[2];
 				var ogg3 = '';
@@ -354,7 +354,7 @@ function addInstanceSelectOption (citType, addinfo ) {
 				$.when( insClasse(newel, dpref['rdf']+'type', tipo, label, nome, ogg3 ) ).then(function (data) { 
 					if (data.success == "true") { 
 						$("#InstanceSelect").prepend("<option value='"+newel+"'>"+nome+"</option>");
-						$('#InstanceSelect option:selected').prop('selected',false);
+						$('#InstanceSelect').find('option:selected').prop('selected',false);
 						$($('#InstanceSelect option')[0]).prop('selected',true);
 					}
 					else {
@@ -387,7 +387,8 @@ function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 	if ($('#'+idData).val() != '') {
 		if ($("input[type='radio'][name='InstanceRadio']:checked").val() == 'add') {
 			if (!addInstanceSelectOption (citType, addinfo)) {
-				alert("ricontrolla il form");	
+				alert("ricontrolla il form");
+				return ;
 			}
 		}			
 		var vet;
