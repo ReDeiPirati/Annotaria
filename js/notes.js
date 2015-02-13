@@ -562,7 +562,7 @@ function listLocalNotes() {
 			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
 		}
 
-		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div><div class="col-xs-12 col-sm-2 col-md-2"></div></div></a>');
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div></div></a>');
 
 		var buttondiv = document.createElement("div");
 		$(buttondiv).addClass('col-xs-12 col-sm-2 col-md-2');
@@ -576,7 +576,7 @@ function listLocalNotes() {
 		var deletebutton = document.createElement("button");
 		$(deletebutton).attr('type','button');
 		$(deletebutton).addClass('manage');
-		$(deletebutton).click({param1: notes[i]}, deleteLocalAnnotation);
+		$(deletebutton).click({param1: notes[i]},deleteLocalAnnotation);
 		deletebutton.innerHTML = '<span class="glyphicon glyphicon-trash">&nbsp;<span>';
 		
 		buttondiv.appendChild(updatebutton);
