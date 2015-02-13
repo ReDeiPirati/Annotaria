@@ -214,7 +214,20 @@ function getRightNotes(temp) {
 		return notesRem;
 }
 
-
+/* funzione che restituisce l'indice dell'annotazione che ha la data piu' recente dalla lista "ann" a partire dall'indice "from"
+"ann" e' un vettore di oggetti composti dai campi temp e ind, che indicano rispettivamente se l'annotazione e' non salvata e l'indice di tale annotazione nel suo vettore
+*/
+function getMax(ann, from) {
+	var max, data = '0';
+	for (var i=from; i<ann.length; i++) {
+		vet = getRightNotes(ann[i].temp);
+		if (vet[ann[i].ind].data > data) {
+			max = i
+			data = vet[ann[i].ind].data;
+		}
+	}
+	return max;
+}
 
 //funzione che ordina per data le annotazoni in una lista con le caratteristiche descritte nella funzione getMax
 function ordinaPerData(ann) {
@@ -230,7 +243,7 @@ function ordinaPerData(ann) {
 
 //funzione che passata un'annotazione compone una stringa con le sue informazioni in html. Il parametro "last" e' un booleano che indica se e' l'ultima annotazione, usato per mettere o no il separatore delle annotazioni
 function annToHtml(ann, last) {
-	str = '<div>';
+	str = '<div >';
 	str += '<p>Autore: '+ann.autore+'</p>';
 	str += '<p>E-mail: '+ann.mail+'</p>';
 	str += '<p>Data: '+dataLeggibile(ann.data)+'</p>';
@@ -248,16 +261,18 @@ function annToHtml(ann, last) {
 
 function preparaAnnotazioni(tag) {
 	if ($(tag).attr('pittura')) {
-		dove = '#mostraAnn';			/*Non c'è il modale su cui mostrare le annotazioni nel nostro progetto quindi non si vede , in più bisogna creare
-							il modale dinamicamente per ogni finestra di documento aperto*/
+		
 		if (primo) {
-			$(dove+' div').remove();
-			var anc, ann;
+			$('#Annotation-show div.modal-body div').remove();
+			var anc;
+			var ann;
+			
 			primo=false;
 			ultimo=tag.id;
+			
 			anc = tag;
 			ann = [];
-			while (anc.id != 'file') {
+			while (anc.id != 'Doc1') {
 				if (anc.id.indexOf('span-ann')==0 && $(anc).attr('pittura')) {
 					ann.push({ind: $(anc).attr('data-ann'), temp: $(anc).attr('data-temp')});
 					ultimo=anc.id;
@@ -268,9 +283,9 @@ function preparaAnnotazioni(tag) {
 			var vet;
 			for (var i=0; i<ann.length; i++) {
 				vet = getRightNotes(ann[i].temp);
-				$(dove).append(annToHtml(vet[ann[i].ind], i==ann.length-1));
+				$('#Annotation-show div.modal-body').append(annToHtml(vet[ann[i].ind], i==ann.length-1));
 			}
-			$(dove).show();
+			$('#Annotation-show div.modal-body').show();
 		}
 		if (ultimo==tag.id) {
 			primo=true;
@@ -404,8 +419,8 @@ function findAnn( ann) {
 			return i;
 }
 
-function deleteLocalAnnotation ( ann ) {
-	$(this).parent().parent().parent().remove();
+function deleteLocalAnnotation ( ann, tag ) {
+	$('#' + tag).remove();
 	
 	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
 	
@@ -552,6 +567,18 @@ function confirmLocalAnnotation(){
 	});	
 }
 
+function createDeleteButton(obj, tag){
+	var but = document.createElement("button");
+	$(but).attr('type','button');
+	$(but).addClass('manage');
+	
+	$(but).click(function() {
+							 deleteLocalAnnotation(obj, tag);
+	});
+	but.innerHTML = '<span class="glyphicon glyphicon-trash">&nbsp;<span>';
+	return but;
+}
+
 function listLocalNotes() {
 	$('#manage-local-annotation div.modal-body .list-group a').remove();
 	for (var i =0; i < notes.length; i++) {
@@ -561,9 +588,10 @@ function listLocalNotes() {
 		if ($('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').length == 0) {
 			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
 		}
+		var aId = "a-ann-" +i;
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="' + aId + '"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div></div></a>');
 
-		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div></div></a>');
-
+		
 		var buttondiv = document.createElement("div");
 		$(buttondiv).addClass('col-xs-12 col-sm-2 col-md-2');
 		
@@ -573,11 +601,7 @@ function listLocalNotes() {
 		//$(updatebutton).click({param1: notes[i]}, updateLocalAnnotation);
 		updatebutton.innerHTML = '<span class="glyphicon glyphicon-cog">&nbsp;<span>';
 		
-		var deletebutton = document.createElement("button");
-		$(deletebutton).attr('type','button');
-		$(deletebutton).addClass('manage');
-		$(deletebutton).click({param1: notes[i]},deleteLocalAnnotation);
-		deletebutton.innerHTML = '<span class="glyphicon glyphicon-trash">&nbsp;<span>';
+		var deletebutton = createDeleteButton( notes[i], aId);
 		
 		buttondiv.appendChild(updatebutton);
 		buttondiv.appendChild(deletebutton);
