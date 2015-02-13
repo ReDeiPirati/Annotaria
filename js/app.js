@@ -430,7 +430,7 @@ function selectWid (annotaionSel) {
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['sem']+'denotes','dbpedia:Place'];
-			query('select ?n ?p where { ?p a dbpedia:Place ; rdfs:label ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null)
+			query('select ?n ?p where { ?p a dbpedia:Place ; rdfs:label ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null);
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("denotesPlace", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'place/', dpref['dbpedia']+'Place', dpref['rdfs']+'label']);});
 			break;
 

@@ -437,17 +437,126 @@ function deleteLocalAnnotation ( ann, tag ) {
 		$('#manage-nav-button').parent().addClass('disabled');
 }
 
-function updateLocalAnnotation (ann){
-	//$('#manage-local-annotation').modal('hide');
-	deleteLocalAnnotation(ann);
+function updateAnn (ann, tag, newval, newvalLeg, frag) {
+	$('#annote').modal('hide');
+	ann.value = newval;
+	ann.valueLeg = newvalLeg;
+	ann.data = currtime();
+	$($('#' + tag + ' div.row div')[1]).text(newvalLeg);
+	
+	//elimino l'annotazione sul documento
+	if (ann.primoSpan == -1) {
+		$('#a-doc-'+ann.num).remove();
+		$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').text()) - 1);
+	}
+	//riaggiungo l'annotazione sul documento e aggiorno le altre
+	if(frag)
+		$('span-ann-' + ann.primoSpan).attr('data-data', ann.data);
+	else
+		insertAnnDoc(ann.type, [ann.valueLeg, usr.name, usr.email, ann.data], ann.num);
+		
+}
+
+function updateLocalAnnotation (ann, tag){
+	
 	resetAnnoteModalWindow();
 	$('#annote-nav-button').trigger('click');
 	// imposto current selection con i valori della vecchia selezione
 	$('#documentAnnotationForm').addClass('hide');
-	
 	selectWid(ann.type);
-	
-	//$('manage-nav-button').trigger('click');
+	// carico il value della annotazione
+	switch(ann.type) {
+		case "hasAuthor":
+			$('#InstanceSelect').find("option:selected").prop("selected", false);
+			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);			
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), false);});
+			break;
+
+		case "hasPublisher":
+			$('#InstanceSelect').find("option:selected").prop("selected", false);
+			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), false);});
+			break;
+
+		case "hasPublicationYear":
+			$('#valDate').find("option:selected").prop("selected", false);
+			$('#valDate option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valDate').val(), $('#valDate').val(), false);});
+			break;
+
+		case "hasTitle":
+			$('#valLongText').val( ann.value);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valLongText').val(), $('#valLongText').val(), false);});
+			break;
+
+		case "hasAbstract":
+			$('#valLongText').val( ann.value);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valLongText').val(), $('#valLongText').val(), false);});
+			break;
+
+		case "hasShortTitle":
+			$('#valShortText').val( ann.value);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valLongText').val(), $('#valShortText').val(), false);});
+			break;
+
+		case "hasComment":
+			$('#valLongText').val( ann.value);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valLongText').val(), $('#valLongText').val(), false);});
+			break;
+
+		case "denotesPerson":
+		$('#InstanceSelect').find("option:selected").prop("selected", false);
+			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
+			break;
+
+		case "denotesPlace":
+			$('#InstanceSelect').find("option:selected").prop("selected", false);
+			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
+			break;
+
+		case "denotesDisease":
+			$('#InstanceSelect').find("option:selected").prop("selected", false);
+			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
+			break;
+
+		case "hasSubject":
+			$('#InstanceSelect').find("option:selected").prop("selected", false);
+			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
+			break;
+
+		case "relatesTo":
+			$('#DbpediaSelect').append($('<option>').addClass('selcted').value(ann.value).text(ann.valueLeg));
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#DbpediaSelect').val(), $('#DbpediaSelect option:selected').text(), true);});
+			break;
+
+		case "hasClarityScore":
+			$('#valChoice').find("option:selected").prop("selected", false);
+			$('#valChoice option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valChoice').val(), $('#valChoice option:selected').text(), true);});
+			break;
+
+		case "hasOriginalityScore":
+			$('#valChoice').find("option:selected").prop("selected", false);
+			$('#valChoice option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valChoice').val(), $('#valChoice option:selected').text(), true);});
+			break;
+
+		case "hasFormattingScore":
+			$('#valChoice').find("option:selected").prop("selected", false);
+			$('#valChoice option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#valChoice').val(), $('#valChoice option:selected').text(), true);});
+			break;
+
+		case "cites":
+			$('#InstanceSelect').find("option:selected").prop("selected", false);
+			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
+			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
+			break;
+	} 
 	
 }
 
@@ -579,6 +688,17 @@ function createDeleteButton(obj, tag){
 	return but;
 }
 
+function createUpdateButton( obj, tag) {
+	var but = document.createElement("button");
+	$(but).attr('type','button');
+	$(but).addClass('manage');
+	$(but).click( function() {
+							 updateLocalAnnotation(obj, tag);
+	});
+	but.innerHTML = '<span class="glyphicon glyphicon-cog">&nbsp;<span>';
+	return but;
+}
+
 function listLocalNotes() {
 	$('#manage-local-annotation div.modal-body .list-group a').remove();
 	for (var i =0; i < notes.length; i++) {
@@ -595,12 +715,7 @@ function listLocalNotes() {
 		var buttondiv = document.createElement("div");
 		$(buttondiv).addClass('col-xs-12 col-sm-2 col-md-2');
 		
-		var updatebutton = document.createElement("button");
-		$(updatebutton).attr('type','button');
-		$(updatebutton).addClass('manage');
-		//$(updatebutton).click({param1: notes[i]}, updateLocalAnnotation);
-		updatebutton.innerHTML = '<span class="glyphicon glyphicon-cog">&nbsp;<span>';
-		
+		var updatebutton = createUpdateButton( notes[i], aId);		
 		var deletebutton = createDeleteButton( notes[i], aId);
 		
 		buttondiv.appendChild(updatebutton);

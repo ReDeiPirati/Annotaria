@@ -194,3 +194,7 @@ button.switch, button.manage{
 #documentAnnotation {
 	padding-top: 0px;
 }
+
+#annote {
+	z-index: 100000;
+}
