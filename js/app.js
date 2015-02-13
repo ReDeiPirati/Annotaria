@@ -230,6 +230,8 @@ function resetLocalAnnotation() {
 	nSpanAnnotazioni = 0; 
 	nAnnDoc = 0; 
 	notes = []; 
+	
+	//cancellare annotazioni effettuate visualizzate
 }
 
 function resetProvenance() {
