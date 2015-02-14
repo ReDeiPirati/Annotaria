@@ -464,18 +464,14 @@ function updateAnn (ann, tag, newval, newvalLeg, frag) {
 	ann.valueLeg = newvalLeg;
 	ann.data = currtime();
 	$($('#' + tag + ' div.row div')[1]).text(newvalLeg);
-	
-	//elimino l'annotazione sul documento
-	if (ann.primoSpan == -1) {
-		$('#a-doc-'+ann.num).remove();
-		$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + ann.type + ' span.badge').text()) - 1);
-	}
+
 	//riaggiungo l'annotazione sul documento e aggiorno le altre
 	if(frag)
 		$('span-ann-' + ann.primoSpan).attr('data-data', ann.data);
-	else
-		insertAnnDoc(ann.type, [ann.valueLeg, usr.name, usr.email, ann.data], ann.num);
-		
+	else {
+		$('a-doc-' + ann.num + ' div.cont').text('Annotazione: ' + ann.valueLeg);
+		$('a-doc-' + ann.num + ' div.data').text('Data: ' + ann.data);
+	}
 }
 
 function updateLocalAnnotation (ann, tag){

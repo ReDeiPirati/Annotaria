@@ -357,8 +357,8 @@ function clearWidget( type ) {
 }
 
 
-function selectWid (annotaionSel) {
-	switch(annotationSel) {
+function selectWid (annType) {
+	switch(annType) {
 		case "hasAuthor":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
