@@ -134,6 +134,23 @@ function salvaTempAnn(tipo, val,tripla) {
 }
 
 
+
+function FedeChangeColor()
+{
+
+	var element = document.getElementsByClassName("colori");
+
+	for(i = 0; i< element.length ; i++)
+	{
+		if(!element[i].checked)
+			$('.'+element[i].value).addClass("noneColorFede");
+		else
+			$('.'+element[i].value).removeClass("noneColorFede");
+	}
+}
+
+
+/*
 //funzione che in base ai filtri scelti dall'utente nasconde o mostra le annotazioni
 function ChangeColor()
 {       var i,j=1;
@@ -165,6 +182,8 @@ function ChangeColor()
 	 }
  }
 }
+*/
+
 
 
 
@@ -202,7 +221,8 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 		nSpanAnnotazioni++;
 		r.surroundContents(span);
 	}
-	ChangeColor();
+	//ChangeColor();
+	
 }
 
 

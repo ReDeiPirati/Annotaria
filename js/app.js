@@ -613,6 +613,9 @@ $(document).ready(function () {
 	
 	/* init per i form delle annotazioni */
 	//$('#InstanceText').fadeOut();
+
+	$( '.colori' ).on( 'click' , FedeChangeColor);
+	
 		
 	var currentYear = new Date().getFullYear();
 	for (var i = currentYear; i >= 1900; i--)
