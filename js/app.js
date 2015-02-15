@@ -1,7 +1,7 @@
 var activeDoc = 1;
 var openfirst = false;
 var usr = {};
-
+var filteraut;
 
 					/*INIT*/
 
@@ -549,15 +549,48 @@ function toggleFilterData() {
 		$('#filterDate').prop('disabled', true);
 }
 
-function toggleFilterAuthor() {
-	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))  {
-		query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'filterAuthor', 'option', timeoutStore, null , defTimeout ,  null);
-		$('#filterAuthor').prop('disabled', false);
+
+function controlfilter() {
+
+	var element = document.getElementsByClassName("colori");
+
+	for(i = 0; i< element.length ; i++)	{
+		if(!element[i].checked)
+			$('.'+element[i].value).addClass("noneColor");
+		else
+			$('.'+element[i].value).removeClass("noneColor");
 	}
-	else 
-		$('#filterAuthor').prop('disabled', true);
 }
 
+function toggleFilterAuthor() {
+	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))  {
+		$('#filterAuthor').prop('disabled', false);
+		filterAuthor();
+	}
+	else {
+		$('.docStyle span:not([data-autore="' + filteraut + '"])').removeClass("noneColor");
+		controlfilter();
+		$('#filterAuthor').prop('disabled', true);
+		filteraut = "";
+	}
+}
+
+function filterAuthor() {
+	if( filteraut != undefined) { 
+		$('.docStyle span:not([data-autore="' + filteraut + '"])').removeClass("noneColor");
+		controlfilter();
+	}
+	filteraut = $('#filterAuthor').val();
+	$('.docStyle span:not([data-autore="' + filteraut + '"])').addClass("noneColor");
+}
+
+function filterAnn(){
+	if( $(this).is(':checked')) {
+		$('.' + $(this).val()).removeClass('noneColor');	 
+	}
+	else
+		$('.' + $(this).val()).addClass('noneColor');
+}
 
 /*
 * listMaxHeight
@@ -603,11 +636,9 @@ $(document).ready(function () {
 	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
-	/* init per i form delle annotazioni */
-	//$('#InstanceText').fadeOut();
-
-	$( '.colori' ).on( 'click' , FedeChangeColor);
 	
+	$( '.colori' ).on( 'click' , filterAnn);
+	$('#filterAuthor').on('change', filterAuthor);
 		
 	var currentYear = new Date().getFullYear();
 	for (var i = currentYear; i >= 1900; i--)

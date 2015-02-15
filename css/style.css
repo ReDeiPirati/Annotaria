@@ -21,7 +21,7 @@ body {
 
 
 
-.noneColorFede {
+.noneColor {
 
 background: none !important;
 
@@ -177,10 +177,7 @@ div .tab-pane div.tab-pane {
 .hasComment {
 	background: rgba(224, 72, 137, 0.7);
 }
-.multiple {
-	background: rgb(151, 189, 240);
-	border-bottom: 2px dashed black
-}
+
 
 .manage {
 	
