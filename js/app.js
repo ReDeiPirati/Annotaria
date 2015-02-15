@@ -342,6 +342,8 @@ function clearWidget( type ) {
 		case "widShortText":
 			$('#valShortText').val("");
 		case "widDbpedia":
+			$('#DbpediaText').val("");
+			$("#DbpediaSelect option").remove();
 			break;
 		case "widChoice":
 			resetSelect("valChoice");
@@ -349,21 +351,17 @@ function clearWidget( type ) {
 		case "hasFormattingScore":
 			resetSelect("valNumber");
 			break;
-		case "widCitation":
-			resetSelect("DbpediaSelect");
-			$('#DbpediaText').val("");
-			break;
 	}	
 }
 
 
-function selectWid (annType) {
+function selectWid (annType, selValue) {
 	switch(annType) {
 		case "hasAuthor":
 			widgetShow = "widInstance";
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");	
-			query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option', timeoutStore, null , defTimeout ,  null);
+			query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option', timeoutStore, null , defTimeout ,  selValue);
 			var tripla=['fabio:Work',dpref['dcterms']+'creator','foaf:Person'];
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("hasAuthor", FragAnnotation, "InstanceSelect", tripla, [dpref['aop'],dpref['foaf']+'Person', dpref['foaf']+'name']);});
 			break;
@@ -373,7 +371,7 @@ function selectWid (annType) {
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['dcterms']+'publisher','foaf:Organization'];
-			query('select ?n ?p where {  ?p a foaf:Organization ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore, null ,defTimeout, null);
+			query('select ?n ?p where {  ?p a foaf:Organization ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore, null ,defTimeout, selValue);
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("hasPublisher", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'organization/', dpref['foaf']+'Organization', dpref['foaf']+'name']);});
 			break;
 
@@ -422,7 +420,7 @@ function selectWid (annType) {
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['sem']+'denotes','foaf:Person'];
-			query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore, null ,defTimeout,  null);
+			query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore, null ,defTimeout,  selValue);
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("denotesPerson", FragAnnotation, "InstanceSelect", tripla, [dpref['aop'], dpref['foaf']+'Person', dpref['foaf']+'name']);});
 			break;
 
@@ -431,7 +429,7 @@ function selectWid (annType) {
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['sem']+'denotes','dbpedia:Place'];
-			query('select ?n ?p where { ?p a dbpedia:Place ; rdfs:label ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null);
+			query('select ?n ?p where { ?p a dbpedia:Place ; rdfs:label ?n . }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  selValue);
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("denotesPlace", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'place/', dpref['dbpedia']+'Place', dpref['rdfs']+'label']);});
 			break;
 
@@ -440,7 +438,7 @@ function selectWid (annType) {
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['sem']+'denotes','skos:Concept'];
-			query('select distinct ?n ?p where { { ?p a skos:Concept ; rdfs:label ?n . ?st rdf:predicate sem:denotes ; rdf:object ?p . } UNION {?p a skos:Concept ; rdfs:label ?n . FILTER contains(str(?p), "/annotaria/disease/") }}', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null);
+			query('select distinct ?n ?p where { { ?p a skos:Concept ; rdfs:label ?n . ?st rdf:predicate sem:denotes ; rdf:object ?p . } UNION {?p a skos:Concept ; rdfs:label ?n . FILTER contains(str(?p), "/annotaria/disease/") }}', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  selValue);
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("denotesDisease", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'disease/', dpref['skos']+'Concept', dpref['rdfs']+'label']);});
 			break;
 
@@ -449,7 +447,7 @@ function selectWid (annType) {
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['fabio']+'hasSubjectTerm','skos:Concept'];
-			query('select ?n ?p where { ?p a skos:Concept ; rdfs:label ?n .  }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,null);
+			query('select ?n ?p where { ?p a skos:Concept ; rdfs:label ?n .  }', elenco, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,selValue);
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("hasSubject", FragAnnotation, "InstanceSelect", tripla, [dpref['mod']+'subject/', dpref['skos']+'Concept', dpref['rdfs']+'label']);});
 			break;
 
@@ -490,7 +488,7 @@ function selectWid (annType) {
 			clearWidget("widInstance");
 			$('#widInstance').removeClass("hide");
 			var tripla=['fabio:Expression',dpref['cito']+'cites','fabio:Expression'];
-			query('select ?p where {?p a fabio:Expression . }', elencoDocs, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  null);
+			query('select ?p where {?p a fabio:Expression . }', elencoDocs, 'InstanceSelect', 'option',timeoutStore,null,defTimeout,  selValue);
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("cites", FragAnnotation, "InstanceSelect", tripla, [dpref['ao'], dpref['fabio']+'Expression', dpref['fabio']+'hasRepresentation']);});
 			break;
 	} 
@@ -508,7 +506,7 @@ function showAnnotationForm() {
 	else
 		annotationSel = $('select#fragmentAnnotationType').find("option:selected").attr("value");
 		
-	selectWid(annotationSel);
+	selectWid(annotationSel, null);
 }
 
 function inputFade( idShow, idHide) {
@@ -537,11 +535,11 @@ function searchDoc() {
 
 
 function selectFilterAll () {
-	$('#filter div.row input:checkbox').attr("checked","checked");
+	$('#filter div.row input:not(:checked)').trigger("click");
 }
 
 function selectFilterNone () {
-	$('#filter div.row input:checked').prop('checked', false);
+	$('#filter div.row input:checked').trigger("click");
 }
 
 function toggleFilterData() {

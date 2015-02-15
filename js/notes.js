@@ -480,18 +480,14 @@ function updateLocalAnnotation (ann, tag){
 	$('#annote-nav-button').trigger('click');
 	// imposto current selection con i valori della vecchia selezione
 	$('#documentAnnotationForm').addClass('hide');
-	selectWid(ann.type);
+	selectWid(ann.type, ann.value);
 	// carico il value della annotazione
 	switch(ann.type) {
-		case "hasAuthor":
-			$('#InstanceSelect').find("option:selected").prop("selected", false);
-			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);			
+		case "hasAuthor":			
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), false);});
 			break;
 
 		case "hasPublisher":
-			$('#InstanceSelect').find("option:selected").prop("selected", false);
-			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), false);});
 			break;
 
@@ -522,31 +518,23 @@ function updateLocalAnnotation (ann, tag){
 			break;
 
 		case "denotesPerson":
-		$('#InstanceSelect').find("option:selected").prop("selected", false);
-			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
 			break;
 
 		case "denotesPlace":
-			$('#InstanceSelect').find("option:selected").prop("selected", false);
-			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
 			break;
 
 		case "denotesDisease":
-			$('#InstanceSelect').find("option:selected").prop("selected", false);
-			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
 			break;
 
 		case "hasSubject":
-			$('#InstanceSelect').find("option:selected").prop("selected", false);
-			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
 			break;
 
 		case "relatesTo":
-			$('#DbpediaSelect').append($('<option>').addClass('selcted').value(ann.value).text(ann.valueLeg));
+			$('#DbpediaSelect').append($('<option>').prop("selected", true).value(ann.value).text(ann.valueLeg));
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#DbpediaSelect').val(), $('#DbpediaSelect option:selected').text(), true);});
 			break;
 
@@ -569,8 +557,6 @@ function updateLocalAnnotation (ann, tag){
 			break;
 
 		case "cites":
-			$('#InstanceSelect').find("option:selected").prop("selected", false);
-			$('#InstanceSelect option[value="' + ann.value + '"]').prop("selected", true);
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#InstanceSelect').val(), $('#InstanceSelect option:selected').text(), true);});
 			break;
 	} 
