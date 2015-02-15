@@ -550,21 +550,14 @@ function toggleFilterData() {
 }
 
 function toggleFilterAuthor() {
-	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
+	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))  {
+		query('select ?n ?p where {?p a foaf:Person ; foaf:name ?n . }', elenco, 'filterAuthor', 'option', timeoutStore, null , defTimeout ,  null);
 		$('#filterAuthor').prop('disabled', false);
-	else
+	}
+	else 
 		$('#filterAuthor').prop('disabled', true);
 }
 
-function activeFilter () {
-	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', false);
-}
-
-function disableFilter () {
-	$('#filter div.row input:checkbox, #filter form fieldset').prop('disabled', true);
-	selectFilterAll();
-	$('#filter form fieldset input:checked').prop('checked', false);
-}
 
 /*
 * listMaxHeight
@@ -597,6 +590,7 @@ $(document).ready(function () {
 	}); // ridemensiona l'altezza della doc list ogni volta che il documento cambia dimensione
 	
 	$('#annote-nav-button').parent().addClass('disabled');
+	$('#filter input[type="checkbox"]').prop("disabled","disabled");
 	
 	loadDocList();
 	

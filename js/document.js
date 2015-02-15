@@ -83,6 +83,7 @@ function openDoc( title, itemId ) {
 					openfirst = true;
 					$('#Doc1-tab button.close').trigger('click');
 					$('#annote-nav-button').parent().removeClass('disabled');
+					$('#filter input[type="checkbox"]').prop("disabled","");
 				}
 
 
