@@ -634,6 +634,8 @@ $(document).ready(function () {
 		querydbp("select distinct ?a where {?a rdf:type owl:Thing; foaf:name ?b. FILTER contains(str(?a), \"" + $('#DbpediaText').val() + "\")}", elencoDbp, "DbpediaSelect","option",60000);
 	});
 	
+	$('#annShowSelect').on('change', switchAnnotationInfo );
+	
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
 	

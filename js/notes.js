@@ -195,7 +195,7 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 		var span = document.createElement('span');
 		span.setAttribute('class',tipo);
 		span.setAttribute('id', 'span-ann-'+ nSpanAnnotazioni);
-		span.setAttribute('onclick', 'preparaAnnotazioni(this)');
+		$(span).click(showAnnotationInfo);
 		span.setAttribute('data-ann',index);
 		span.setAttribute('data-temp', temp);
 		var vet = getRightNotes(temp);
@@ -261,9 +261,44 @@ function annToHtml(ann, last) {
 	return str;
 }
 
+function prepareAnnotationInfo(obj, i) {
+	if( $(obj).is('[id~="span-ann-"]').length ) {
+		$('#annShowSelect').append('<option value="' + i + '">Annotazione ' + i + '</option>');
+		var info = document.createElement("div");
+		$(info).addClass('hide');
+		$(info).addClass('annotationInfo');
+		var index = $(obj).attr("data-ann");
+		var ann;
+		
+		if( $(obj).attr("data-temp") === true || $(obj).attr("data-temp") === "true" )
+			ann = notes[index];
+		else
+			ann = notesRem[index];
+		
+		$(info).append('<div>Autore: ' + ann.autore + '<div>');
+		$(info).append('<div>Email: ' + ann.mail + '<div>');
+		$(info).append('<div>Data: ' + ann.data + '<div>');
+		$(info).append('<div>Tipo: ' + ann.type + '<div>');
+		$(info).append('<div>Annotazione: ' + ann.valueLeg + '<div>');
+		$('#annShowSelect').after(info);
+		
+		prepareAnnotationInfo($(obj).parent());
+	}	
+}
 
+function switchAnnotationInfo() {
+	$('.annotationInfo:not(".hide")').addClass('hide');
+	$('.annotationInfo')[$(this).val()].removeClass('hide');
+}
 
+function showAnnotationInfo() {
+	$('#annShowSelect option').remove();
+	$('.annotationInfo').remove();
+	
+	prepareAnnotationInfo(this, 1);	
+}
 
+/*
 //funzione chiamata quando si clicca su un'annotazione su frammento, prende come parametro il nodo cliccato, prepara la lista di tutte le annotazioni sul testo cliccato e infine la rende visibile. Le variabili primo e ultimo servono per evitare che in caso di annotazioni sovrapposte tutte quante preparino l'elenco con le annotazioni. Soltanto l'annotazione dello span piu' in profondita' prepara effettivamente le annotazioni
 
 function preparaAnnotazioni(tag) {
@@ -300,7 +335,7 @@ function preparaAnnotazioni(tag) {
 		}
 	}
 }
-
+/*
 /* funzione che inserisce visivamente un'annotazione su documento dell'utente o dal triple store aggiungendo il div corrispondente nel riquadro delle proprieta' del documento.
 - il parametro "tipo" e' il tipo dell'annotazione
 - "ann" e' un vettore dove ann[0] e' il corpo dell'annotazione, ann[1] il nome dell'autore, ann[2] la sua mail e ann[3] la data dell'annotazione
