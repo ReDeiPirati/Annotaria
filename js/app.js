@@ -535,7 +535,7 @@ function searchDoc() {
 
 
 function selectFilterAll () {
-	$('#filter div.row input:not(:checked)').trigger("click");
+	$('#filter div.row input:not(:checked)').trigger("click");	
 }
 
 function selectFilterNone () {
@@ -543,7 +543,52 @@ function selectFilterNone () {
 }
 
 
+/*
+if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
+		filterAuthor();
+	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
+		filterDate();
+		
+	*/
 
+function restoreFilter(tipo) {
+	switch (tipo) {
+		case "ann":
+			if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
+				$('.docStyle span:not([data-autore="' + $('#filterAuthor').val() + '"])').addClass("noneColor");
+			if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked')) {
+				var data = $( "#filterDate" ).datepicker( "getDate" );
+				var list = $('span[data-data]');
+				for ( var i=0; i< list.length; i++) {
+					var datao = new Date($(list[i]).attr('data-data'));
+					if (datao < data)
+						$(list[i]).addClass('noneColor');
+				}	
+			}
+			break;
+			
+		case "date":
+			$('.noneColor').removeClass('noneColor');
+			controlfilter();
+			if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
+				$('.docStyle span:not([data-autore="' + $('#filterAuthor').val() + '"])').addClass("noneColor");
+			break;
+			
+		case "author":
+			$('.docStyle span:not([data-autore="' + filteraut + '"])').removeClass("noneColor");
+			controlfilter();
+			if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked')) {
+				var data = $( "#filterDate" ).datepicker( "getDate" );
+				var list = $('span[data-data]');
+				for ( var i=0; i< list.length; i++) {
+					var datao = new Date($(list[i]).attr('data-data'));
+					if (datao < data)
+						$(list[i]).addClass('noneColor');
+				}	
+			}
+			break;
+	}
+}
 
 function controlfilter() {
 
@@ -563,17 +608,17 @@ function toggleFilterAuthor() {
 		filterAuthor();
 	}
 	else {
-		$('.docStyle span:not([data-autore="' + filteraut + '"])').removeClass("noneColor");
-		controlfilter();
 		$('#filterAuthor').prop('disabled', true);
+		restoreFilter("author");
 		filteraut = "";
 	}
 }
 
+
+
 function filterAuthor() {
 	if( filteraut != undefined) { 
-		$('.docStyle span:not([data-autore="' + filteraut + '"])').removeClass("noneColor");
-		controlfilter();
+		restoreFilter("author");
 	}
 	filteraut = $('#filterAuthor').val();
 	$('.docStyle span:not([data-autore="' + filteraut + '"])').addClass("noneColor");
@@ -581,7 +626,8 @@ function filterAuthor() {
 
 function filterAnn(){
 	if( $(this).is(':checked')) {
-		$('.' + $(this).val()).removeClass('noneColor');	 
+		$('.' + $(this).val()).removeClass('noneColor');	
+		restoreFilter('ann');
 	}
 	else
 		$('.' + $(this).val()).addClass('noneColor');
@@ -592,22 +638,19 @@ function toggleFilterData() {
 		$('#filterDate').prop('disabled', false);
 	else {
 		$('#filterDate').prop('disabled', true);
-		$('.noneColor').removeClass('noneColor');
-		controlfilter();
+		restoreFilter("date");
 	}
 }
 
 function filterDate() {
-	$('.noneColor').removeClass('noneColor');
-	controlfilter();
+	restoreFilter("date");
 	
-	data = $( "#filterDate" ).datepicker( "getDate" );
-	list = $('span[data-data]');
+	var data = $( "#filterDate" ).datepicker( "getDate" );
+	var list = $('span[data-data]');
 	for ( var i=0; i< list.length; i++) {
 		var datao = new Date($(list[i]).attr('data-data'));
-		if (datao < data) {
+		if (datao < data)
 			$(list[i]).addClass('noneColor');
-		}
 	}	
 }
 
