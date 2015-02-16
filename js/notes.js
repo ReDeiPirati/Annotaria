@@ -281,17 +281,23 @@ function insertAnnDoc(tipo, ann, id) {
 	$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').text()) + 1);
 }
 
+function newListIstance (val, valueLeg) {
+	$("#InstanceSelect").prepend("<option value='" + val + "'>" + valueLeg + "</option>");
+	$('#InstanceSelect').find('option:selected').prop('selected',false);
+	$($('#InstanceSelect option')[0]).prop('selected',true);
+}
+
 /* funzione che inserisce 2 o 3 statement nel triple store relativi allo stesso soggetto
 - "sog", "pre" e "ogg" sono soggetto, predicato e oggetto del primo statement
 - "pre2" e "ogg2" predicato e oggetto del secondo
 - "ogg3" viene usato solo per le annotazioni di tipo citazione, per cui il predicato e' noto a priori
 */
-function insClasse(sog, pre, ogg,pre2,ogg2,ogg3) {
+function insClasse(sog, pre, ogg,pre2,ogg2,ogg3, succFunz) {
 	return $.ajax({
 		data: {endpoint: endpointURL.slice(0,-6), sog:sog, pre:pre, ogg:ogg, pre2:pre2, ogg2:ogg2, ogg3:ogg3},
 		url: '/cgi-bin/insertTriple.php', 
 		method: 'POST',
-		//success: function (d) { for (x in d.message) {alert(d.message[x]); } }
+		success: succFunz(sog, ogg2)
 	});
 }
 
@@ -299,6 +305,7 @@ function addInstanceSelectOption (citType, addinfo ) {
 	
 	var nome = $("#InstanceText").val().trim();
 	if(nome != "") {
+		var err = false;
 		var newel = '';
 		var giusto = false;
 		var citaz = false;
@@ -321,25 +328,25 @@ function addInstanceSelectOption (citType, addinfo ) {
 				if (citaz) 
 					ogg3 = dpref['fabio']+'Item';
 
-				$.when( insClasse(newel, dpref['rdf']+'type', tipo, label, nome, ogg3 ) ).then(function (data) { 
+				$.when( insClasse(newel, dpref['rdf']+'type', tipo, label, nome, ogg3, newListIstance ) ).then(function (data) { 
 					if (data.success == "true") { 
-						$("#InstanceSelect").prepend("<option value='"+newel+"'>"+nome+"</option>");
-						$('#InstanceSelect').find('option:selected').prop('selected',false);
-						$($('#InstanceSelect option')[0]).prop('selected',true);
+						alert("elemento aggiunto");
 					}
 					else {
 						alert("Errore nell'inserimento: "+data.message[data.message.length-1]);
 					}
 				},
 				 function () {
-					 alert("Errore nello script di inserimento");
+						alert("Errore nello script di inserimento");
+						err = true;
 				}); 
 			}
 		}
 		else {
 			alert("l'uri inserito contiene errori");
+			return false;
 		}
-		return true;
+		return !err;
 	}
 	else
 		return false;
@@ -357,7 +364,7 @@ function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 	if ($('#'+idData).val() != '') {
 		if ($("input[type='radio'][name='InstanceRadio']:checked").val() == 'add') {
 			if (!addInstanceSelectOption (citType, addinfo)) {
-				alert("ricontrolla il form");
+				alert("Impossibile creare la nuova istanza");
 				return ;
 			}
 		}			
