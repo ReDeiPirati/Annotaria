@@ -542,12 +542,7 @@ function selectFilterNone () {
 	$('#filter div.row input:checked').trigger("click");
 }
 
-function toggleFilterData() {
-	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
-		$('#filterDate').prop('disabled', false);
-	else
-		$('#filterDate').prop('disabled', true);
-}
+
 
 
 function controlfilter() {
@@ -592,6 +587,30 @@ function filterAnn(){
 		$('.' + $(this).val()).addClass('noneColor');
 }
 
+function toggleFilterData() {
+	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
+		$('#filterDate').prop('disabled', false);
+	else {
+		$('#filterDate').prop('disabled', true);
+		$('.noneColor').removeClass('noneColor');
+		controlfilter();
+	}
+}
+
+function filterDate() {
+	$('.noneColor').removeClass('noneColor');
+	controlfilter();
+	
+	data = $( "#filterDate" ).datepicker( "getDate" );
+	list = $('span[data-data]');
+	for ( var i=0; i< list.length; i++) {
+		var datao = new Date($(list[i]).attr('data-data'));
+		if (datao < data) {
+			$(list[i]).addClass('noneColor');
+		}
+	}	
+}
+
 /*
 * listMaxHeight
 *
@@ -613,6 +632,10 @@ function listMaxHeight (id) {
 
 
 
+
+
+
+
 $(document).ready(function () {
 	
 	listMaxHeight("docList");
@@ -624,6 +647,12 @@ $(document).ready(function () {
 	
 	$('#annote-nav-button').parent().addClass('disabled');
 	$('#filter input[type="checkbox"]').prop("disabled","disabled");
+//	$('#filter input[type="checkbox"]:not("#filterDate, #filterAuthor")').prop("checked", true);
+	$('#filterDate, #filterAuthor').prop("checked", false);
+	$('#filterDate').datepicker({
+	altFormat: "yy-mm-dd",
+	changeYear: true
+	});
 	
 	loadDocList();
 	
@@ -641,6 +670,7 @@ $(document).ready(function () {
 	
 	$( '.colori' ).on( 'click' , filterAnn);
 	$('#filterAuthor').on('change', filterAuthor);
+	$('#filterDate').on('change', filterDate);
 		
 	var currentYear = new Date().getFullYear();
 	for (var i = currentYear; i >= 1900; i--)

@@ -133,47 +133,6 @@ function salvaTempAnn(tipo, val,tripla) {
 	$('#manage-nav-button').parent().removeClass('disabled');
 }
 
-
-
-
-
-/*
-//funzione che in base ai filtri scelti dall'utente nasconde o mostra le annotazioni
-function ChangeColor()
-{       var i,j=1;
- var tutti , colore = 256225;
- var vector = new Array();
- var color= new Array();
- var element = document.getElementsByClassName("colori");
- $("[pittura]").removeAttr("pittura");
-
- for(i = 0; i< element.length ; i++)
- {
-	 if(element[i].checked)
-	 {
-		 vector.push(element[i].value);
-	 }
- }
- for(i = 0; i < vector.length ; i++)
- {
-	 var vet = $("."+vector[i]);
-	 for (var k=0; k<vet.length; k++) {
-		 var dataok = true, data;
-		 if ($('#filDat').prop('checked')) {
-			 data = $('.dato-anno')[2].value + '-' + dammizero(parseInt($('.dato-anno')[1].value)) +'-'+dammizero(parseInt($('.dato-anno')[0].value));
-			 if ($(vet[k]).attr('data-data').indexOf(data) != 0)
-				 dataok=false;
-		 }
-		 if ((!$('#filAut').prop('checked') || $(vet[k]).attr('data-autore').indexOf($('.dato-autore').val()) != -1) && dataok)
-			 $(vet[k]).attr("pittura",vector[i]);
-	 }
- }
-}
-*/
-
-
-
-
 /* funzione che inserisce gli span di un'annotazione su frammento e chiama ChangeColor per renderla visibile o meno in base ai filtri.
 - il parametro "nodi" e' un vettore con tutti i nodi di testo dell'annotazione
 - "offStart" e "offEnd" sono gli offset relativi rispettivamente al primo e all'ultimo nodo
@@ -275,7 +234,7 @@ function prepareAnnotationInfo(obj, i) {
 		
 		$(info).append('<div><strong>Autore:</strong> ' + ann.autore + '<div>');
 		$(info).append('<div><strong>Email:</strong></strong> ' + ann.mail + '<div>');
-		$(info).append('<div><strong>Data:</strong></strong></strong> ' + ann.data + '<div>');
+		$(info).append('<div><strong>Data:</strong></strong></strong> ' + ann.data.replace('T', ', ') + '<div>');
 		$(info).append('<div><strong>Tipo:</strong> ' + ann.type + '<div>');
 		$(info).append('<div><strong>Annotazione:</strong> ' + ann.valueLeg + '<div>');
 		$('.alert.alert-info').append(info);
