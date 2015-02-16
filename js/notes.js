@@ -426,8 +426,8 @@ function updateAnn (ann, tag, newval, newvalLeg, frag) {
 	if(frag)
 		$('span-ann-' + ann.primoSpan).attr('data-data', ann.data);
 	else {
-		$('a-doc-' + ann.num + ' div.cont').text('Annotazione: ' + ann.valueLeg);
-		$('a-doc-' + ann.num + ' div.data').text('Data: ' + ann.data);
+		$('#a-doc-' + ann.num + ' div.cont').text('Annotazione: ' + ann.valueLeg);
+		$('#a-doc-' + ann.num + ' div.data').text('Data: ' + ann.data);
 	}
 }
 
