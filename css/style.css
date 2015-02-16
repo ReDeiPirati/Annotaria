@@ -22,7 +22,7 @@ body {
 
 
 .noneColor {
-cursor: inherit;
+cursor: auto !important;
 background: none !important;
 
 }
@@ -162,10 +162,10 @@ div .tab-pane div.tab-pane {
 .relatesTo {
 	background: rgba(31, 227, 219, 0.7);
 }
-.hasClarityScore ,{
+.hasClarityScore {
 	background: rgba(30, 116, 203, 0.7);
 }
-.hasOriginalityScore,  {
+.hasOriginalityScore {
 	background: rgba(49, 60, 216, 0.7);
 }
 .hasFormattingScore {

@@ -195,7 +195,7 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 		var span = document.createElement('span');
 		span.setAttribute('class',tipo);
 		span.setAttribute('id', 'span-ann-'+ nSpanAnnotazioni);
-		$(span).click(showAnnotationInfo);
+		$(span).dblclick({param1: Event }, showAnnotationInfo);
 		span.setAttribute('data-ann',index);
 		span.setAttribute('data-temp', temp);
 		var vet = getRightNotes(temp);
@@ -207,9 +207,7 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 			span.setAttribute('data-next', 'none');		
 		nSpanAnnotazioni++;
 		r.surroundContents(span);
-	}
-	//ChangeColor();
-	
+	}	
 }
 
 
@@ -262,7 +260,7 @@ function annToHtml(ann, last) {
 }
 
 function prepareAnnotationInfo(obj, i) {
-	if( $(obj).is('[id~="span-ann-"]').length ) {
+	if( $(obj).is('span[id|="span-ann"]') ) {
 		$('#annShowSelect').append('<option value="' + i + '">Annotazione ' + i + '</option>');
 		var info = document.createElement("div");
 		$(info).addClass('hide');
@@ -275,67 +273,33 @@ function prepareAnnotationInfo(obj, i) {
 		else
 			ann = notesRem[index];
 		
-		$(info).append('<div>Autore: ' + ann.autore + '<div>');
-		$(info).append('<div>Email: ' + ann.mail + '<div>');
-		$(info).append('<div>Data: ' + ann.data + '<div>');
-		$(info).append('<div>Tipo: ' + ann.type + '<div>');
-		$(info).append('<div>Annotazione: ' + ann.valueLeg + '<div>');
-		$('#annShowSelect').after(info);
+		$(info).append('<div><strong>Autore:</strong> ' + ann.autore + '<div>');
+		$(info).append('<div><strong>Email:</strong></strong> ' + ann.mail + '<div>');
+		$(info).append('<div><strong>Data:</strong></strong></strong> ' + ann.data + '<div>');
+		$(info).append('<div><strong>Tipo:</strong> ' + ann.type + '<div>');
+		$(info).append('<div><strong>Annotazione:</strong> ' + ann.valueLeg + '<div>');
+		$('.alert.alert-info').append(info);
 		
-		prepareAnnotationInfo($(obj).parent());
+		prepareAnnotationInfo($(obj).parent(), i + 1);
 	}	
 }
 
 function switchAnnotationInfo() {
 	$('.annotationInfo:not(".hide")').addClass('hide');
-	$('.annotationInfo')[$(this).val()].removeClass('hide');
+	$($('.annotationInfo')[$(this).val() -1 ]).removeClass('hide');
 }
 
-function showAnnotationInfo() {
+function showAnnotationInfo(e) {
+	e.stopPropagation();
 	$('#annShowSelect option').remove();
 	$('.annotationInfo').remove();
 	
 	prepareAnnotationInfo(this, 1);	
+	$($('.annotationInfo')[0]).removeClass('hide');
+	$('#Annotation-show').modal('show');
 }
 
-/*
-//funzione chiamata quando si clicca su un'annotazione su frammento, prende come parametro il nodo cliccato, prepara la lista di tutte le annotazioni sul testo cliccato e infine la rende visibile. Le variabili primo e ultimo servono per evitare che in caso di annotazioni sovrapposte tutte quante preparino l'elenco con le annotazioni. Soltanto l'annotazione dello span piu' in profondita' prepara effettivamente le annotazioni
 
-function preparaAnnotazioni(tag) {
-	if ($(tag).attr('pittura')) {
-		
-		if (primo) {
-			$('#Annotation-show div.modal-body div').remove();
-			var anc;
-			var ann;
-			
-			primo=false;
-			ultimo=tag.id;
-			
-			anc = tag;
-			ann = [];
-			while (anc.id != 'Doc1') {
-				if (anc.id.indexOf('span-ann')==0 && $(anc).attr('pittura')) {
-					ann.push({ind: $(anc).attr('data-ann'), temp: $(anc).attr('data-temp')});
-					ultimo=anc.id;
-				}
-				anc=anc.parentNode;
-			}
-			ordinaPerData(ann);
-			var vet;
-			for (var i=0; i<ann.length; i++) {
-				vet = getRightNotes(ann[i].temp);
-				$('#Annotation-show div.modal-body').append(annToHtml(vet[ann[i].ind], i==ann.length-1));
-			}
-			$('#Annotation-show div.modal-body').show();
-		}
-		if (ultimo==tag.id) {
-			primo=true;
-			ultimo=undefined;
-		}
-	}
-}
-/*
 /* funzione che inserisce visivamente un'annotazione su documento dell'utente o dal triple store aggiungendo il div corrispondente nel riquadro delle proprieta' del documento.
 - il parametro "tipo" e' il tipo dell'annotazione
 - "ann" e' un vettore dove ann[0] e' il corpo dell'annotazione, ann[1] il nome dell'autore, ann[2] la sua mail e ann[3] la data dell'annotazione
