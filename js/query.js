@@ -129,6 +129,8 @@ function caricaAnn(json) {
 			addNoteFromInfo(anc, start, end, tipo, notesRem.length-1);
 		}
 	}
+	restoreFilter("ann");
+	controlfilter();
 }
 
 //funzione che carica le annotazioni sul documento intero di un certo tipo

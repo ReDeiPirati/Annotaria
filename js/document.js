@@ -78,7 +78,9 @@ function openDoc( title, itemId ) {
 
 				//query per chiedere tutte le annotazioni su frammento relative al documento in questione
 				query('SELECT ?a ?tp ?lb ?id ?st ?en ?nm ?ml ?dt ?val ?v1 ?v2 ?v3 WHERE { ?a a oa:Annotation ; oa:hasTarget ?t ;  oa:annotatedBy ?aut ; oa:annotatedAt ?dt ; oa:hasBody ?b . ?t a oa:SpecificResource. ?t oa:hasSource <'+dpref['ao'] + title + '.html' + '>. ?t oa:hasSelector ?s . ?s a oa:FragmentSelector ; oa:end ?en ; oa:start ?st ; rdf:value ?id . ?aut foaf:name ?nm ; schema:email ?ml . ?b rdf:object ?val . OPTIONAL { ?a rdfs:label ?lb . } OPTIONAL { ?a ao:type ?tp . } OPTIONAL { ?val foaf:name ?v1 . } OPTIONAL { ?val rdfs:label ?v2 . } OPTIONAL { ?b rdfs:label ?v3 . } }', caricaAnn, undefined, undefined, function () {alert("Impossibile caricare le annotazioni, il triple store non \u00E8 raggiungibile")}, '#caricaDoc',defTimeout);
+				
 
+				
 				if(!openfirst) {
 					openfirst = true;
 					$('#Doc1-tab button.close').trigger('click');

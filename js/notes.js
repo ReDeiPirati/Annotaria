@@ -81,6 +81,8 @@ function addNote(type, val,tripla) {
 	$('#manage-nav-button').parent().removeClass('disabled');
 	
 	insertNote(nTestoSelezionati, currentSelection.startOffset, currentSelection.endOffset, type, true, notes.length-1);
+	restoreFilter("ann");
+	controlfilter();
 }
 
 /* funzione che date informazioni su un'annotazione su frammento presa dal triple store prepara i dati necessari a insertNote per renderla visibile
