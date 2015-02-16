@@ -220,26 +220,29 @@ function annToHtml(ann, last) {
 
 function prepareAnnotationInfo(obj, i) {
 	if( $(obj).is('span[id|="span-ann"]') ) {
-		$('#annShowSelect').append('<option value="' + i + '">Annotazione ' + i + '</option>');
-		var info = document.createElement("div");
-		$(info).addClass('hide');
-		$(info).addClass('annotationInfo');
-		var index = $(obj).attr("data-ann");
-		var ann;
+		if(!$(obj).is('.noneColor')) {
+			$('#annShowSelect').append('<option value="' + i + '">Annotazione ' + i + '</option>');
+			var info = document.createElement("div");
+			$(info).addClass('hide');
+			$(info).addClass('annotationInfo');
+			var index = $(obj).attr("data-ann");
+			var ann;
 		
-		if( $(obj).attr("data-temp") === true || $(obj).attr("data-temp") === "true" )
-			ann = notes[index];
+			if( $(obj).attr("data-temp") === true || $(obj).attr("data-temp") === "true" )
+				ann = notes[index];
+			else
+				ann = notesRem[index];
+		
+			$(info).append('<div><strong>Autore:</strong> ' + ann.autore + '<div>');
+			$(info).append('<div><strong>Email:</strong></strong> ' + ann.mail + '<div>');
+			$(info).append('<div><strong>Data:</strong></strong></strong> ' + ann.data.replace('T', ', ') + '<div>');
+			$(info).append('<div><strong>Tipo:</strong> ' + ann.type + '<div>');
+			$(info).append('<div><strong>Annotazione:</strong> ' + ann.valueLeg + '<div>');
+			$('.alert.alert-info').append(info);
+			prepareAnnotationInfo($(obj).parent(), i + 1);
+		}
 		else
-			ann = notesRem[index];
-		
-		$(info).append('<div><strong>Autore:</strong> ' + ann.autore + '<div>');
-		$(info).append('<div><strong>Email:</strong></strong> ' + ann.mail + '<div>');
-		$(info).append('<div><strong>Data:</strong></strong></strong> ' + ann.data.replace('T', ', ') + '<div>');
-		$(info).append('<div><strong>Tipo:</strong> ' + ann.type + '<div>');
-		$(info).append('<div><strong>Annotazione:</strong> ' + ann.valueLeg + '<div>');
-		$('.alert.alert-info').append(info);
-		
-		prepareAnnotationInfo($(obj).parent(), i + 1);
+			prepareAnnotationInfo($(obj).parent(), i);
 	}	
 }
 
@@ -254,8 +257,10 @@ function showAnnotationInfo(e) {
 	$('.annotationInfo').remove();
 	
 	prepareAnnotationInfo(this, 1);	
-	$($('.annotationInfo')[0]).removeClass('hide');
-	$('#Annotation-show').modal('show');
+	if( $('#annShowSelect option').length) {
+		$($('.annotationInfo')[0]).removeClass('hide');
+		$('#Annotation-show').modal('show');
+	}
 }
 
 
