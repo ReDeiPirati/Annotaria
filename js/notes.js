@@ -154,7 +154,7 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 		var span = document.createElement('span');
 		span.setAttribute('class',tipo);
 		span.setAttribute('id', 'span-ann-'+ nSpanAnnotazioni);
-		$(span).dblclick({param1: Event }, showAnnotationInfo);
+		$(span).click({param1: Event }, showAnnotationInfo);
 		span.setAttribute('data-ann',index);
 		span.setAttribute('data-temp', temp);
 		var vet = getRightNotes(temp);

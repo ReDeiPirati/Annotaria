@@ -207,6 +207,7 @@ function titleReader() {
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html(htmlString);
 	$('#annote-nav-button').addClass('hide');
+	$('#manage-nav-button').parent().addClass('disabled').addClass('hide');
 	toggleModeSelector();
 }
 
