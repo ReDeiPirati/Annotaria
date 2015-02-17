@@ -93,11 +93,14 @@ function addNote(type, val,tripla) {
 	controlfilter();
 }
 
-/* funzione che date informazioni su un'annotazione su frammento presa dal triple store prepara i dati necessari a insertNote per renderla visibile
-- il parametro "ancestor" e' una stringa con l'id dell'antenato comune ai nodi di inizio e fine dell'annotazione
-- "start" e "end" sono gli offset dell'annotazione in base ad "ancestor"
-- "tipo" e' il tipo dell'annotazione
-- "ind" e' la posizione di questa annotazione nel vettore notesRem, da inserire come attributo degli span
+/*
+* addNoteFromInfo
+*
+* prepara una nnotazione sul frammento (del triple store) per essere resa visibile
+* ancestor e' l'id dell'antenato comune agli estremi
+* start e end sono gli offset dell'annotazione in base all'antenato
+* tipo e' il tipo di annotazione
+* ind e' la posizione dell'annnotaizione all'interno del vettore notesRem
 */
 function addNoteFromInfo(ancestor, start, end, tipo, ind) {
 	var alltext = [];
@@ -388,20 +391,20 @@ function cancSpanAnn(n) {
 		span.contents().unwrap();
 	} while (next!='none');
 }
-
+/*
 function findAnn( ann) {
 	for( var i=0; i< notes.length; i++)
 		if( notes[i] == ann )
 			return i;
 }
-
+*/
 function deleteLocalAnnotation ( ann, tag ) {
 	$('#' + tag).remove();
 	
 	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
 	
 	if( tag != "")
-		notes.splice( findAnn(ann), 1);
+		notes.splice( notes.indexOf(ann), 1);
 	
 	if (ann.primoSpan > -1)
 		cancSpanAnn(ann.primoSpan); //questa chiamata da loop
