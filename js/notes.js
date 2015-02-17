@@ -1,11 +1,8 @@
-
-//funzione che data una stringa rappresentante una data in formato consono al semantic web la rende leggibile a tutti gli utenti
-function dataLeggibile(data) {
-	return data.replace('T', ', ');
-}
-
-
-//funzione che restituisce il nodo non di testo che sia il primo antenato comune agli estremi del range passato come parametro
+/*
+* getRangeContainerElement
+*
+* restituisce il primo nodo non di testo, che e; antenato comune degli estremi della selezione passata in range
+*/
 function getRangeContainerElement(range) {
     var container = range.commonAncestorContainer;
     if (container.nodeType == 3) { //nodo di testo
@@ -14,7 +11,11 @@ function getRangeContainerElement(range) {
     return container;
 }
 
-//funzione che restituisce una stringa con la data attuale nel formato corretto per le annotazioni
+/*
+* getRangeContainerElement
+*
+* restituisce una stringa con la data attuale
+*/
 function currtime(){
 	var data = new Date();
 	var dato = new Array(data.getFullYear() ,data.getMonth()+1 ,data.getDate() , data.getHours() ,data.getMinutes());
@@ -25,9 +26,15 @@ function currtime(){
 	return componiData(dato);
 }
 
-//funzione che restituisce un vettore con tutti i nodi di testo in ordine da sinistra a destra contenuti (del tutto o in parte) nel range passato come parametro
+/*
+* getRangeTextNodes
+*
+* restituisce un vettore con tutti i nodi di testo contenuti (anche parzialmente) nel range
+*/
 function getRangeTextNodes(range) {
-	var anc = getRangeContainerElement(range), alltext = [], st, end;
+	var anc = getRangeContainerElement(range);
+	var alltext = [];
+	var st, end;
 	anc.descendantTextNodes(alltext);
 	st = alltext.indexOf(range.startContainer);
 	alltext.splice(0, st);
@@ -36,12 +43,13 @@ function getRangeTextNodes(range) {
 	return alltext;
 }
 
-
-
-/* funzione che aggiunge un'annotazione su frammento tra quelle non salvate e chiama insertNote per inserirla visivamente nel documento
-- il parametro "type" rappresenta il tipo di annotazione da creare
-- "val" e' un vettore di due elementi in cui il primo e' il corpo dell'annotazione in formato consono al semantic web (ad es. un URI) mentre il secondo e' un valore leggibile all'utente
-- "tripla" e' un vettore di 3 elementi con le informazioni necessarie per salvare l'annotazione sul triple store con le proprieta' giuste
+/*
+* addNote
+*
+* inserisce un'annotazione sul frammento fra quelle locali, poi la mostra visivamente
+* type e' il tipo dell'annotazione
+* val e' un vettore di due elementi formato dalla coppia [ valore, valore leggibile]
+* tripla e' un vettore di 3 elementi con le informazioni per il salvataggio sul triple store
 */
 function addNote(type, val,tripla) {
 	var nTestoSelezionati = getRangeTextNodes(currentSelection);	
@@ -267,7 +275,7 @@ function insertAnnDoc(tipo, ann, id) {
 	var eventualeId = ""; //id per annotazioni temporanee
 	if (id != undefined)
 		eventualeId = 'a-doc-' + id;
-	$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo).after('<a href="#" class="list-group-item" id="' + eventualeId + '"><div class="aut">Autore: '+ann[1]+'</div><div class="mail">Mail: '+ann[2]+'</div><div class="data">Data: '+dataLeggibile(ann[3])+'</div><div class="cont">Annotazione: '+ann[0]+'</div></a>');
+	$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo).after('<a href="#" class="list-group-item" id="' + eventualeId + '"><div class="aut">Autore: '+ann[1]+'</div><div class="mail">Mail: '+ann[2]+'</div><div class="data">Data: '+ ann[3].replace('T', ', ') + '</div><div class="cont">Annotazione: '+ann[0]+'</div></a>');
 	$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').text()) + 1);
 }
 
