@@ -207,18 +207,6 @@ function ordinaPerData(ann) {
 }
 
 
-//funzione che passata un'annotazione compone una stringa con le sue informazioni in html. Il parametro "last" e' un booleano che indica se e' l'ultima annotazione, usato per mettere o no il separatore delle annotazioni
-function annToHtml(ann, last) {
-	str = '<div >';
-	str += '<p>Autore: '+ann.autore+'</p>';
-	str += '<p>E-mail: '+ann.mail+'</p>';
-	str += '<p>Data: '+dataLeggibile(ann.data)+'</p>';
-	str += '<p>'+tipoLeggibile[ann.type]+': '+ann.valueLeg+'</p>';
-	if (!last)
-		str += '<hr>';
-	str += '</div>';
-	return str;
-}
 
 function prepareAnnotationInfo(obj, i) {
 	if( $(obj).is('span[id|="span-ann"]') ) {
@@ -548,8 +536,8 @@ function inserAnn(n) {
 		dati.target = 'frammento';
 		dati.doc = tar;
 		dati.val = n.id;
-		dati.start = n.offStart /*+'^^'+dpref['xs']+'nonNegativeInteger'*/;
-		dati.end = n.offEnd /*+'^^'+dpref['xs']+'nonNegativeInteger'*/;
+		dati.start = n.offStart;
+		dati.end = n.offEnd;
 	}
 	return $.ajax({
 		data: dati,

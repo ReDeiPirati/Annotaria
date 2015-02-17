@@ -1,85 +1,69 @@
-var activeDoc = 1;
-var openfirst = false;
-var usr = {};
-var filteraut;
-
 					/*INIT*/
+var dpref = { foaf: "http://xmlns.com/foaf/0.1/", 
+				 fabio: "http://purl.org/spar/fabio/", 
+				 ao: "http://vitali.web.cs.unibo.it/AnnOtaria/",
+				 aop: "http://vitali.web.cs.unibo.it/AnnOtaria/person/", 
+				 dcterms: "http://purl.org/dc/terms/", 
+				 rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#", 
+				 rdfs: "http://www.w3.org/2000/01/rdf-schema#", 
+				 oa: "http://www.w3.org/ns/oa#",
+				 schema: "http://schema.org/", 
+				 dbpedia: "http://dbpedia.org/ontology/", 
+				 skos: "http://www.w3.org/2004/02/skos/core#", 
+				 sem: "http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#", 
+				 cito: "http://purl.org/spar/cito/", 
+				 xs: "http://www.w3.org/2001/XMLSchema#",
+				 mod: "http://modalnodes.cs.unibo.it/annotaria/"
+};	//dizionario contenente gli URI per il semantic web
 
-//dizionario contenente gli URI relativi alla parte di semantic web
-dpref = { foaf: "http://xmlns.com/foaf/0.1/", fabio: "http://purl.org/spar/fabio/", 
-	ao: "http://vitali.web.cs.unibo.it/AnnOtaria/", aop: "http://vitali.web.cs.unibo.it/AnnOtaria/person/", 
-	dcterms: "http://purl.org/dc/terms/", rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#", 
-	rdfs: "http://www.w3.org/2000/01/rdf-schema#", oa: "http://www.w3.org/ns/oa#",
-	schema: "http://schema.org/", dbpedia: "http://dbpedia.org/ontology/", 
-	skos: "http://www.w3.org/2004/02/skos/core#", sem: "http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#", 
-	cito: "http://purl.org/spar/cito/", xs: "http://www.w3.org/2001/XMLSchema#",
-	mod: "http://modalnodes.cs.unibo.it/annotaria/"
-};
 
-//timeout di default per le richieste ajax al server fuseki
-defTimeout = 15000;
+var defTimeout = 15000;	//timeout di default per le richieste ajax al server fuseki
 
 
 					/*DOCS*/
-
-//URL da cui ricavare l'elenco dei documenti
-var docs = 'http://annotaria.web.cs.unibo.it/documents/'
-
+var docs = 'http://annotaria.web.cs.unibo.it/documents/'		//URL da cui ricavare l'elenco dei documenti
+var activeDoc = 1;																					//contatore delle tab di documenti aperti
+var openfirst = false;																			//false se non si ha ancora aperto il primo documento, true altrimenti
 
 
 					/*MOD*/
 var annotationSel= "";			//annotazione scelta
 var widgetShow = "";				// widget visualizzato
-var FragAnnotation = false;	// boolean per dire se e' una annotazione sul documento o sul testo
+var FragAnnotation = false;	// falso se l'annotazione e' sul documento, true altrimenti
 var currentSelection;				// selezione corrente
-
-//gia presenti in usr
-/* modalita annotatore-lettore
-modalita = 0; //0 == lettore, 1 == annotatore
-nomeAnnotatore = "nome non inserito";
-mailAnnotatore = "mail non inserita";
-
-*/
+var usr = {};								// contiene i dati dell'utente {nome, email}
 
 					/*ANN*/
+var nSpanAnnotazioni = 0;		//contatore delle annotazioni sul frammento
+var nAnnDoc = 0;						//contatore delle annotazione sul documento
+var notes = [];							//vettore delle annotazioni temporanee
+var notesRem = []; 					//vettore delle annotazioni scaricate dal triple store
+var filteraut;				// filtro autore
+var tipoLeggibile = { hasAuthor: 'Autore',
+										 hasPublisher: 'Editore', 
+										 hasPublicationYear: 'Anno', 
+										 hasTitle: 'Titolo', hasAbstract: 'Sommario', 
+										 hasShortTitle: 'Titolo breve', 
+										 hasComment: 'Commento', 
+										 denotesPerson: 'Persona', 
+										 denotesPlace: 'Luogo', 
+										 denotesDisease: 'Malattia', 
+										 hasSubject: 'Argomento', 
+										 relatesTo: 'Si collega a', 
+										 hasClarityScore: 'Chiarezza', 
+										 hasOriginalityScore: 'Originalita', 
+										 hasFormattingScore: 'Giudizio', 
+										 cites: 'Cita', 
+										 unk: 'Tipo sconosciuto' 
+}; //dizionario con chiave tipo annotazione e come valore una stringa comprensibile a tutti
 
-//variabili relative alle annotazioni
-var selezioneUtente = document.createRange(); //range relativo all'ultima selezione dell'utente
-selezioneUtente.collapse(false);
-nSpanAnnotazioni = 0; //per rendere unico l'id di ogni span usato per le annotazioni su frammento usiamo questo contatore
-nAnnDoc = 0; //come sopra ma per le annotazioni sul documento
-notes = []; //vettore delle annotazioni non ancora salvate dell'utente
-notesRem = []; //vettore delle annotazioni trovate sul triple store
-
-var primo=true, ultimo;
-
-//dizionario con chiave tipo annotazione e come valore una stringa comprensibile a tutti
-tipoLeggibile = { hasAuthor: 'Autore', hasPublisher: 'Editore', hasPublicationYear: 'Anno', hasTitle: 'Titolo', hasAbstract: 'Sommario', hasShortTitle: 'Titolo breve', hasComment: 'Commento', denotesPerson: 'Persona', denotesPlace: 'Luogo', denotesDisease: 'Malattia', hasSubject: 'Argomento', relatesTo: 'Si collega a', hasClarityScore: 'Chiarezza', hasOriginalityScore: 'Originalita', hasFormattingScore: 'Giudizio', cites: 'Cita', unk: 'Tipo sconosciuto' };
 
 
 					/*QUERY*/
+var endpointURL = "http://giovanna.cs.unibo.it:8181/data/query";	//URL del triplestore
+var PREFIXES = "prefix foaf: <"+dpref['foaf']+"> prefix fabio: <"+dpref['fabio']+"> prefix ao: <"+dpref['ao']+"> prefix aop: <"+dpref['aop']+"> prefix dcterms: <"+dpref['dcterms']+"> PREFIX rdf: <"+dpref['rdf']+"> PREFIX rdfs: <"+dpref['rdfs']+"> prefix oa: <"+dpref['oa']+"> prefix schema: <"+dpref['schema']+"> prefix dbpedia: <"+dpref['dbpedia']+"> prefix skos: <"+dpref['skos']+"> prefix sem: <"+dpref['sem']+"> prefix cito: <"+dpref['cito']+"> prefix xs: <"+dpref['xs']+"> prefix frbr: <"+dpref['frbr']+"> prefix mod: <"+dpref['mod']+"> ";	//stringa con i prefissi usati nelle query rdf
 
-//the triplestore
-var endpointURL = "http://giovanna.cs.unibo.it:8181/data/query";
-
-//variabile contenente tutti i prefissi, usata per le query
-var PREFIXES = "prefix foaf: <"+dpref['foaf']+"> prefix fabio: <"+dpref['fabio']+"> prefix ao: <"+dpref['ao']+"> prefix aop: <"+dpref['aop']+"> prefix dcterms: <"+dpref['dcterms']+"> PREFIX rdf: <"+dpref['rdf']+"> PREFIX rdfs: <"+dpref['rdfs']+"> prefix oa: <"+dpref['oa']+"> prefix schema: <"+dpref['schema']+"> prefix dbpedia: <"+dpref['dbpedia']+"> prefix skos: <"+dpref['skos']+"> prefix sem: <"+dpref['sem']+"> prefix cito: <"+dpref['cito']+"> prefix xs: <"+dpref['xs']+"> prefix frbr: <"+dpref['frbr']+"> prefix mod: <"+dpref['mod']+"> ";
-
-var dbpediaURL = "http://dbpedia.org/sparql"
-
-
-
-
-					/*EDIT*/
-
-//dizionario con chiave tipo annotazione e valore id del pulsante corrispondente nella pagina html
-//var cliccato = {hasAbstract: '#sommario', denotesPerson: '#annPers', hasPublicationYear: '#annData', hasTitle: '#annTitolo', hasAuthor: '#autore', hasPublisher: '#editore', hasComment: '#commento', hasShortTitle: '#titolo-breve', denotesPlace: '#annLuogo', denotesDisease: '#annMalattia', hasSubject: '#annArgomento', hasClarityScore: '#annChiaro', hasOriginalityScore: '#annOriginale', hasFormattingScore: '#annGiudizio', cites: '#annCita', relatesTo: '#siCollega'}
-
-
-
-
-
-
+var dbpediaURL = "http://dbpedia.org/sparql";		//URL di dbpedia
 
 
 //funzione che dato un numero, gli aggiunge uno 0 davanti se e' < 10. Usato per comporre la data delle annotazioni
