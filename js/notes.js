@@ -392,7 +392,8 @@ function deleteLocalAnnotation ( ann, tag ) {
 	
 	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
 	
-	notes.splice( findAnn(ann), 1);
+	if( tag != "")
+		notes.splice( findAnn(ann), 1);
 	
 	if (ann.primoSpan > -1)
 		cancSpanAnn(ann.primoSpan); //questa chiamata da loop

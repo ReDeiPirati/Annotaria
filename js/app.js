@@ -66,7 +66,11 @@ var PREFIXES = "prefix foaf: <"+dpref['foaf']+"> prefix fabio: <"+dpref['fabio']
 var dbpediaURL = "http://dbpedia.org/sparql";		//URL di dbpedia
 
 
-//funzione che dato un numero, gli aggiunge uno 0 davanti se e' < 10. Usato per comporre la data delle annotazioni
+/*
+* dammizero
+*
+* aggiunge uno 0 davanti al parametro passata se e' minore di 10
+*/
 function dammizero(dato)
 {
 	if(dato < 10)
@@ -76,11 +80,11 @@ function dammizero(dato)
 	return dato;
 }
 
-
-
-
-
-//funzione che trasforma la stringa relativa alla data di un'annotazione presa dal triple store in una uguale alle nostre
+/*
+* dividiData
+*
+* adatta le date prese dal triple store al nostro standard
+*/
 function dividiData(data) {
 	var giorno, ora;
 	giorno = data.split('T');
@@ -94,18 +98,23 @@ function dividiData(data) {
 	return giorno.concat(ora);
 }
 
-
-
-
-//funzione che passato un vettore del tipo [anno, mese, giorno, ora, minuto] restituisce una stringa con la data nel formato corretto per le annotazioni
+/*
+* timeoutStore
+*
+* prende un vettore di 4 elementi e restituisce una stringa contenente la data nel formato standard W3C
+*/
 function componiData(giorno) {
 	return giorno[0]+'-'+giorno[1]+'-'+giorno[2]+'T'+giorno[3]+':'+giorno[4];
 }
 
-
-
-//funzione generica di errore quando il timeout di una richiesta ajax scade
-	function timeoutStore() {alert("Errore: triple store non raggiungibile");}
+/*
+* timeoutStore
+*
+* funzione di errore per quando scade il tempo
+*/
+function timeoutStore() {
+	alert("Errore: triple store non raggiungibile");
+}
 
 
 /*
@@ -147,15 +156,10 @@ function deleteTab() {
 }
 
 /*
-*	addTab()
+*	toggleModeSelector()
 *
-* aggiunge una nuova tab e il relativo tabcontent
-* la nuova tab e' aggiunta attiva
-* viene caricato il documento al suo interno e aggiunta la classe active all'elemento della doc-list collegato
+* esegue il toggle sul selettore del reder e annotator
 */
-
-
-
 function toggleModeSelector () {
 	$('#sel_annotator').toggle();
 	$('#sel_reader').toggle();
@@ -165,9 +169,8 @@ function toggleModeSelector () {
 * titleAnnotator
 *
 * modifica il navbar-brand e la scritta del mode
-* mostra il pulsante annote della navbar
+* mostra il pulsante annote e manage della navbar
 */
-
 function titleAnnotator() {
 	$('.navbar-brand').text("Annotaria");
 	var htmlString =  '<span class="glyphicon glyphicon-pencil">&nbsp;</span>' + usr.name; 
@@ -182,20 +185,24 @@ function titleAnnotator() {
 * titleReader
 *
 * modifica il navbar-brand e la scritta del mode 
-* nasconde il pulsante annote della navbar
+* nasconde il pulsante annote e mange della navbar
 */
-
 function titleReader() {
 	$('.navbar-brand').text("Leggotaria");
 	var htmlString = $('#sel_reader').html();
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html(htmlString);
 	$('#annote-nav-button').addClass('hide');
-	$('#manage-nav-button').parent().addClass('disabled').addClass('hide');
+	$('#manage-nav-button').parent().addClass('disabled');
+	$('#manage-nav-button').addClass('hide');
 	toggleModeSelector();
 }
 
-
+/*
+* setProvenance
+*
+* se i campi nome e email sono compilati li salva e passa in modalita' annotator
+*/
 function setProvenance() {
 	if (!$('#usr_name').val()) {
 		$('#usr_name').trigger("focus");
@@ -212,14 +219,23 @@ function setProvenance() {
 	titleAnnotator();	
 }
 
+/*
+* resetLocalAnnotation
+*
+* elimina le annotazioni non salvate e azzera i contatori relativi
+*/
 function resetLocalAnnotation() {
-	nSpanAnnotazioni = 0; 
+	for( var i = 0; i<notes.length; i++)
+		deleteLocalAnnotation( notes[i], "");
 	nAnnDoc = 0; 
 	notes = []; 
-	
-	//cancellare annotazioni effettuate visualizzate
 }
 
+/*
+* resetProvenance
+*
+* resetta i campi nome ed email utente poi torna in modalita lettore
+*/
 function resetProvenance() {
 	if (confirm("continuando tutte le annotazioni non salvate andranno perse")) {
 		usr.name = "";
@@ -230,6 +246,7 @@ function resetProvenance() {
 		resetLocalAnnotation();
 	}
 }
+
 /*
 *	selection()
 *
@@ -245,10 +262,13 @@ function selection() {
 	}
 }
 
+/*
+*	validSelection()
+*
+* restituisce true se la selezione e' considerata valida, false altrimenti
+*/
 function validSelection(sel) {
 	if (!sel.collapsed) {
-		//var selRange = sel.getRangeAt(0);
-		//var anc = selRange.commonAncestorContainer;
 		var anc = sel.commonAncestorContainer;
 		if (anc.nodeType == 3) { /* e' un nodo solo di testo quindi prendo il padre */
 			anc = anc.parentNode;
@@ -270,10 +290,20 @@ function saveSelection() {
 	currentSelection = selection().getRangeAt(0);
 }
 
+/*
+*	resetSelect
+*
+*	riseleziona l'option selezionata inizialmente
+*/
 function resetSelect( id ) {
 	$('select#' + id).find("option:selected").prop("selected", false);
 }
 
+/*
+*	resetAnnoteModalWindow
+*
+*	ripristina la finestra modale per creare annotazioni allo stato iniziale
+*/
 function resetAnnoteModalWindow() {
 	if (widgetShow != "")
 			$('#' + widgetShow).addClass('hide');
@@ -310,6 +340,11 @@ function switchAnnotationType() {
 	}
 }
 
+/*
+* clearWidget
+*
+* ripristina il widget del tipo passato allo stato iniziale
+*/
 function clearWidget( type ) {
 	$('#annote button.btn-success').unbind("click");
 	switch( type ) {
@@ -339,7 +374,12 @@ function clearWidget( type ) {
 	}	
 }
 
-
+/*
+* selectWid
+*
+* visualizza il widget indicato il annType
+* selValue serve a impostare valori preselezionati nelle select
+*/
 function selectWid (annType, selValue) {
 	switch(annType) {
 		case "hasAuthor":
@@ -478,6 +518,7 @@ function selectWid (annType, selValue) {
 			break;
 	} 
 }
+
 /*
 * showAnnotationForm
 *
@@ -494,6 +535,11 @@ function showAnnotationForm() {
 	selectWid(annotationSel, null);
 }
 
+/*
+* inputFade
+*
+* nasconde l'elemento idHide mentre mostra l'elemento idShow
+*/
 function inputFade( idShow, idHide) {
 	$('#' + idShow).fadeIn("slow");
 	$('#' + idHide).fadeOut("slow");
@@ -502,7 +548,7 @@ function inputFade( idShow, idHide) {
 /*
 * searchDoc 
 *
-* cerca tutti i documenti nella doc list il cui nome inizia con il valore dell'input cerca
+* cerca tutti i documenti nella doc list il cui nome contiene il valore dell'input cerca
 */
 function searchDoc() {
 	var docVal = $('#cerca input').val();
@@ -515,27 +561,29 @@ function searchDoc() {
 	}
 }
 
-
-
-
-
+/*
+* selectFilterAll 
+*
+* esegue il check ti tutti i checkbox relativi ai filtri
+*/
 function selectFilterAll () {
 	$('#filter div.row input:not(:checked)').trigger("click");	
 }
 
+/*
+* selectFilterNone 
+*
+* annulla il check ti tutti i checkbox relativi ai filtri
+*/
 function selectFilterNone () {
 	$('#filter div.row input:checked').trigger("click");
 }
 
-
 /*
-if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))
-		filterAuthor();
-	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
-		filterDate();
-		
-	*/
-
+* restoreFilter 
+*
+* annulla l'effetto del filtro e rispristina l'effetto degli altri filtri che potrebbero essere stati modificati
+*/
 function restoreFilter(tipo) {
 	switch (tipo) {
 		case "ann":
@@ -575,6 +623,11 @@ function restoreFilter(tipo) {
 	}
 }
 
+/*
+* controlfilter 
+*
+* applica tutti i filtri selezionati riguardanti il tipo di annotazioni
+*/
 function controlfilter() {
 
 	var element = document.getElementsByClassName("colori");
@@ -587,6 +640,11 @@ function controlfilter() {
 	}
 }
 
+/*
+* toggleFilterAuthor 
+*
+* abilita o disabilita il filtro autore
+*/
 function toggleFilterAuthor() {
 	if( $('#filter form fieldset div.checkbox input[value="selAuthor"]').is(':checked'))  {
 		$('#filterAuthor').prop('disabled', false);
@@ -599,8 +657,11 @@ function toggleFilterAuthor() {
 	}
 }
 
-
-
+/*
+* toggleFilterAuthor 
+*
+* applica o rimuove il filtro per nome dell'annotatore
+*/
 function filterAuthor() {
 	if( filteraut != undefined) { 
 		restoreFilter("author");
@@ -609,6 +670,11 @@ function filterAuthor() {
 	$('.docStyle span:not([data-autore="' + filteraut + '"])').addClass("noneColor");
 }
 
+/*
+* filterAnn 
+*
+* applica o rimuove il filtro per tipo di annotazione
+*/
 function filterAnn(){
 	if( $(this).is(':checked')) {
 		$('.' + $(this).val()).removeClass('noneColor');	
@@ -618,6 +684,11 @@ function filterAnn(){
 		$('.' + $(this).val()).addClass('noneColor');
 }
 
+/*
+* toggleFilterData 
+*
+* abilita o disabilita il filtro data
+*/
 function toggleFilterData() {
 	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
 		$('#filterDate').prop('disabled', false);
@@ -627,6 +698,11 @@ function toggleFilterData() {
 	}
 }
 
+/*
+* filterDate 
+*
+* applica il filtro per data mostrando le annotazioni effettuate dopo la data inserita
+*/
 function filterDate() {
 	restoreFilter("date");
 	
@@ -658,24 +734,20 @@ function listMaxHeight (id) {
 	$('#' + id).css('max-height', docListHeight);
 }
 
-
-
-
-
-
-
 $(document).ready(function () {
 	
+	// ridemensiona l'altezza della doc list e documentAnnotation ogni volta che il documento cambia dimensione
 	listMaxHeight("docList");
 	listMaxHeight("documentAnnotation");
 	$(window).resize(function () {
 		listMaxHeight("docList");
 		listMaxHeight("documentAnnotation");
-	}); // ridemensiona l'altezza della doc list ogni volta che il documento cambia dimensione
+	}); 
 	
+
 	$('#annote-nav-button').parent().addClass('disabled');
 	$('#filter input[type="checkbox"]').prop("disabled","disabled");
-//	$('#filter input[type="checkbox"]:not("#filterDate, #filterAuthor")').prop("checked", true);
+	
 	$('#filterDate, #filterAuthor').prop("checked", false);
 	$('#filterDate').datepicker({
 	altFormat: "yy-mm-dd",
@@ -696,10 +768,11 @@ $(document).ready(function () {
 	$('.doc-area #documentTab li a button.close').click(deleteTab);
 	
 	
-	$( '.colori' ).on( 'click' , filterAnn);
+	$('.colori').on( 'click' , filterAnn);
 	$('#filterAuthor').on('change', filterAuthor);
 	$('#filterDate').on('change', filterDate);
 		
+	// riempo la select del widget data
 	var currentYear = new Date().getFullYear();
 	for (var i = currentYear; i >= 1900; i--)
 		$("#valDate").append('<option value="' + i +'">' + i + '</option>');
@@ -709,5 +782,3 @@ $(document).ready(function () {
 
 
 });
-
-
