@@ -1,9 +1,8 @@
 /*
 * loadDocList
 *
-* carica i documenti dal lind docs e li inserisce in una tabella
-* se i documenti sono piu' di 10 mostra i pulsanti per lo switch di pagina
-*
+* carica i documenti dal link docs e li inserisce in una lista nell'area laterale
+* inizializza la funzione di ricerca documenti
 */
 function loadDocList() {
 	$.ajax({
@@ -32,8 +31,15 @@ function loadDocList() {
 	$('#cerca input').on('change', searchDoc);
 }
 
-
-
+/*
+* openDoc
+*
+* apre il documento selezionato nell'area centrale.
+* carica le annotazioni sul documento e sul frammento.
+* se e' il primo documento che viene aperto nasconde l'introduzione e poi abilita il pulsante per eseguire annotazioni e i filtri
+* title e' il titolo del documento da aprire
+* itemId e' una stringa per identificare il documento
+*/
 function openDoc( title, itemId ) { 
 	
 	if ($('#' + itemId).hasClass('active')) { //set the focus on the document
@@ -97,21 +103,13 @@ function openDoc( title, itemId ) {
 	}
 }
 
-
-
-
-
-
-
-//funzione che fa una query per ogni tipo di annotazione sul documento
-function caricaAnnDoc() {
+/*
+* caricaAnnDoc
+* 
+* funzione che esegue una query per ogni tipo di annotazione sul documento
+*/
+function caricaAnnDoc() {	
 	
-	/*
-	//rimuovo i metadati presenti
-	$('#documentAnnotation .list-group a').remove();
-	*/
-	
-	//carico i nuovi metadati
 	var doc = $('.active.doc-tabs a').text() + '.html';
 	doc = doc.substr(2);
 	
@@ -125,10 +123,3 @@ function caricaAnnDoc() {
 		query('select ?txt ?nm ?ml ?dt where { ?ann a oa:Annotation ; oa:hasTarget <'+dpref['ao']+doc+'> ; oa:hasBody ?b ; oa:annotatedBy ?aut ; oa:annotatedAt ?dt . ?aut schema:email ?ml ; foaf:name ?nm . ?b rdf:predicate schema:comment ; rdf:object ?txt .  } order by ?dt ', getAnnDoc, 'hasComment', undefined, undefined, undefined, defTimeout )
 	);
 }
-
-
-
-
-
-
-
