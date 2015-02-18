@@ -122,8 +122,14 @@ function addNoteFromInfo(ancestor, start, end, tipo, ind) {
 	insertNote(selez, offs, offe, tipo, false, ind);
 }
 
-
-//funzione che inserisce un'annotazione su documento tra quelle non salvate e la rende visibile chiamando insertAnnDoc. I parametri sono gli stessi di addNote
+/*
+* salvaTempAnn
+*
+* crea un'aanotazione temporanea sul documento e la rende visibile
+* type e' il tipo dell'annotazione
+* val e' un vettore di due elementi formato dalla coppia [ valore, valore leggibile]
+* tripla e' un vettore di 3 elementi con le informazioni per il salvataggio sul triple store
+*/
 function salvaTempAnn(tipo, val,tripla) {
 	var n;
 	var docName = $('.active.doc-tabs a').text();
@@ -146,12 +152,14 @@ function salvaTempAnn(tipo, val,tripla) {
 	$('#manage-nav-button').parent().removeClass('disabled');
 }
 
-/* funzione che inserisce gli span di un'annotazione su frammento e chiama ChangeColor per renderla visibile o meno in base ai filtri.
-- il parametro "nodi" e' un vettore con tutti i nodi di testo dell'annotazione
-- "offStart" e "offEnd" sono gli offset relativi rispettivamente al primo e all'ultimo nodo
-- "tipo" e' il tipo dell'annotazione
-- "temp" e' un valore booleano che e' true se l'annotazione e' ancora non salvata, false altrimenti
-- "index" l'indice dell'annotazione nel vettore corrispondente, identificato tramite "temp"
+/* 
+* insertNote
+*
+* inserice visivamente un'annotazione sul frammento
+* nodi e' il vettore dei nodi di testo dell'annotazione
+* tipo e' il tipo di annotazione
+* temp e' un booleano che indica se l'annotazione e' temporanea
+* index e' l'indice nel vettore di note (locali o remote) 
 */
 function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 	for (var i=0; i<nodi.length; i++) {
@@ -182,8 +190,11 @@ function insertNote(nodi, offStart, offEnd, tipo, temp, index) {
 	}	
 }
 
-
-//funzione che restituisce il riferimento al vettore delle annotazioni non salvate se il parametro passato e' una striga uguale a "true", altrimenti al vettore delle annotazioni salvate su triple store
+/*
+* getRightNotes
+*
+* restituisce il riferimento al vettore di note in base al valore di temp
+*/
 function getRightNotes(temp) {
 	if (temp === "true" || temp === true )
 		return notes;
@@ -227,12 +238,7 @@ function prepareAnnotationInfo(obj, i) {
 			$(info).addClass('hide');
 			$(info).addClass('annotationInfo');
 			var index = $(obj).attr("data-ann");
-			var ann;
-		
-			if( $(obj).attr("data-temp") === true || $(obj).attr("data-temp") === "true" )
-				ann = notes[index];
-			else
-				ann = notesRem[index];
+			var ann = getRightNotes($(obj).attr("data-temp"))[index];
 		
 			$(info).append('<div><strong>Autore:</strong> ' + ann.autore + '<div>');
 			$(info).append('<div><strong>Email:</strong></strong> ' + ann.mail + '<div>');
@@ -536,7 +542,7 @@ function inserAnn(n) {
 		target:tar,  
 		anntype: n.type,
 		uriann: 'mailto:' + usr.email, 
-		oraann: n.data /*+'^^'+dpref['xs']+'date'*/, 
+		oraann: n.data , 
 		labelstat: n.valueLeg, 
 		subject: sub, 
 		predicate: n.tripla[1], 
