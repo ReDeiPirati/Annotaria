@@ -614,28 +614,16 @@ function insertTripleStore() {
 			if (fallite.length == 0) {
 				alert("Annotazioni caricate!!!");
 				$('#manage-nav-button').parent().addClass('disabled');
+				$('#manage-local-annotation').modal('hide');
 				notes = [];
 			}
 			else {
 				alert(fallite.length + " annotazioni non sono state salvate.");
 				notes = fallite;
+				$('#manage-local-annotation').modal('hide');
 			}
 		});
 	}
-}
-
-function confirmLocalAnnotation(){
-	$.when( insertTripleStore() ).then(function (data) { 
-		if (data.success == "true") { 
-			$('#manage-local-annotation').modal('hide');
-		}
-		else {
-			alert("Errore nell'inserimento: "+data.message[data.message.length-1]);
-		}
-	},
-	function () {
-		alert("Errore nello script di inserimento");
-	});	
 }
 
 function createDeleteButton(obj, tag){
