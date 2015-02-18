@@ -126,7 +126,7 @@ function addNoteFromInfo(ancestor, start, end, tipo, ind) {
 * salvaTempAnn
 *
 * crea un'aanotazione temporanea sul documento e la rende visibile
-* type e' il tipo dell'annotazione
+* tipo e' il tipo dell'annotazione
 * val e' un vettore di due elementi formato dalla coppia [ valore, valore leggibile]
 * tripla e' un vettore di 3 elementi con le informazioni per il salvataggio sul triple store
 */
@@ -220,7 +220,7 @@ function prepareAnnotationInfo(obj, i) {
 			$(info).append('<div><strong>Autore:</strong> ' + ann.autore + '<div>');
 			$(info).append('<div><strong>Email:</strong></strong> ' + ann.mail + '<div>');
 			$(info).append('<div><strong>Data:</strong></strong></strong> ' + ann.data.replace('T', ', ') + '<div>');
-			$(info).append('<div><strong>Tipo:</strong> ' + ann.type + '<div>');
+			$(info).append('<div><strong>Tipo:</strong> ' + tipoLeggibile[ann.type] + '<div>');
 			$(info).append('<div><strong>Annotazione:</strong> ' + ann.valueLeg + '<div>');
 			$('.alert.alert-info').append(info);
 			prepareAnnotationInfo($(obj).parent(), i + 1);
@@ -267,7 +267,7 @@ function showAnnotationInfo(e) {
 */
 function insertAnnDoc(tipo, ann, id) {
 	if ($('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo).length == 0) {
-		$('#documentAnnotation .tab-pane.active .list-group').append('<a href="#" class="list-group-item disabled" id="docAnn' + tipo + '">' + tipo + '<span class="badge">0</span></a>');
+		$('#documentAnnotation .tab-pane.active .list-group').append('<a href="#" class="list-group-item disabled" id="docAnn' + tipo + '">' + tipoLeggibile[tipo] + '<span class="badge">0</span></a>');
 	}
 	
 	var eventualeId = ""; //id per annotazioni temporanee
@@ -466,7 +466,7 @@ function updateAnn (ann, tag, newval, newvalLeg, frag) {
 
 	//riaggiungo l'annotazione sul documento e aggiorno le altre
 	if(frag)
-		$('span-ann-' + ann.primoSpan).attr('data-data', ann.data);
+		cambiaDataSpanAnn(ann.primoSpan, ann.data);
 	else {
 		$('#a-doc-' + ann.num + ' div.cont').text('Annotazione: ' + ann.valueLeg);
 		$('#a-doc-' + ann.num + ' div.data').text('Data: ' + ann.data);
@@ -636,12 +636,30 @@ function insertSingleNote(ann) {
 * cambiaTemp se true si aggiorna il campo data-temp in annotazione non temporanea
 */
 function cambiaIndSpanAnn(n, ind, cambiaTemp) {
-	var span,  next = n;
+	var span;
+	var next = n;
 	do {
 		span = $('#span-ann-'+next);
 		span.attr('data-ann',ind);
 		if (cambiaTemp)
 			span.attr('data-temp','false');
+		next = span.attr('data-next');
+	} while (next!='none');
+}
+
+/* 
+* cambiaDataSpanAnn
+*
+* aggiorna l'attributo data-ann di tutti gli span di un'annotazione
+* n e' il numero identificativo del primo span
+* data e' il nuovo valore della data 
+*/
+function cambiaDataSpanAnn(n, data) {
+	var span;
+	var next = n;
+	do {
+		span = $('#span-ann-'+next);
+		span.attr('data-data',data);
 		next = span.attr('data-next');
 	} while (next!='none');
 }
@@ -742,7 +760,7 @@ function listLocalNotes() {
 			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
 		}
 		var aId = "a-ann-" +i;
-		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="' + aId + '"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + notes[i].type + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div></div></a>');
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="' + aId + '"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + tipoLeggibile[notes[i].type] + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div></div></a>');
 
 		
 		var buttondiv = document.createElement("div");
