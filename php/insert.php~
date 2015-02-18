@@ -183,7 +183,7 @@ try
 	//is an annotation on a Uri or a literal
 	if( in_array( $_POST["anntype"] , $sonoUri ) )
 	{
-		$uriobj = new EasyRdf_Resource($_POST["object"]);	
+		$uriobj = new EasyRdf_ParsedUri($_POST["object"]);	
 		$graph -> add( $stat , $namespacelist -> get("RDFobject") ,  $uriobj  );
 	}
 	else
