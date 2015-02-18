@@ -202,34 +202,11 @@ function getRightNotes(temp) {
 		return notesRem;
 }
 
-/* funzione che restituisce l'indice dell'annotazione che ha la data piu' recente dalla lista "ann" a partire dall'indice "from"
-"ann" e' un vettore di oggetti composti dai campi temp e ind, che indicano rispettivamente se l'annotazione e' non salvata e l'indice di tale annotazione nel suo vettore
+/*
+* prepareAnnotationInfo
+*
+* inserisce i dati nel widget per visualizzare le info sulle annotazioni cliccate
 */
-function getMax(ann, from) {
-	var max, data = '0';
-	for (var i=from; i<ann.length; i++) {
-		vet = getRightNotes(ann[i].temp);
-		if (vet[ann[i].ind].data > data) {
-			max = i
-			data = vet[ann[i].ind].data;
-		}
-	}
-	return max;
-}
-
-//funzione che ordina per data le annotazoni in una lista con le caratteristiche descritte nella funzione getMax
-function ordinaPerData(ann) {
-	for (var i=0; i<ann.length; i++) {
-		vet = getRightNotes(ann[i].temp);
-		var j=getMax(ann, i);
-		var tmp=ann[i];
-		ann[i]=ann[j];
-		ann[j]=tmp;
-	}
-}
-
-
-
 function prepareAnnotationInfo(obj, i) {
 	if( $(obj).is('span[id|="span-ann"]') ) {
 		if(!$(obj).is('.noneColor')) {
@@ -253,11 +230,21 @@ function prepareAnnotationInfo(obj, i) {
 	}	
 }
 
+/*
+* switchAnnotationInfo
+*
+* mostra l'annotazione selezionata nella select del widget delle info
+*/
 function switchAnnotationInfo() {
 	$('.annotationInfo:not(".hide")').addClass('hide');
 	$($('.annotationInfo')[$(this).val() -1 ]).removeClass('hide');
 }
 
+/*
+* showAnnotationInfo
+*
+* invocata al click sull'annotazione stoppa la propagazione del click e mostra il widget per visualizzare le info
+*/
 function showAnnotationInfo(e) {
 	e.stopPropagation();
 	$('#annShowSelect option').remove();
@@ -270,11 +257,13 @@ function showAnnotationInfo(e) {
 	}
 }
 
-
-/* funzione che inserisce visivamente un'annotazione su documento dell'utente o dal triple store aggiungendo il div corrispondente nel riquadro delle proprieta' del documento.
-- il parametro "tipo" e' il tipo dell'annotazione
-- "ann" e' un vettore dove ann[0] e' il corpo dell'annotazione, ann[1] il nome dell'autore, ann[2] la sua mail e ann[3] la data dell'annotazione
-- "id" e' l'identificativo delle annotazioni dell'utente, dato dal numero progressivo nAnnDoc. Se questo parametro non e' passato allora l'annotazione viene dal triple store
+/*
+* insertAnnDoc
+*
+* inserisce visivamente un annotazione sul documento della sezione meta-dati
+* tipo e' il tipo di annotazione
+* ann e' un vettore di 4 elementi [ value, nome annotatore, mail annotatore, data annotazione]
+* id e' il numero di nAnnDoc usato per identificare le annotazioni temporanee. se non e' passato l'annotazione proviene dal triple store
 */
 function insertAnnDoc(tipo, ann, id) {
 	if ($('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo).length == 0) {
@@ -288,16 +277,30 @@ function insertAnnDoc(tipo, ann, id) {
 	$('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').html( parseInt( $('#documentAnnotation .tab-pane.active .list-group a#docAnn' + tipo + ' span.badge').text()) + 1);
 }
 
+/*
+* newListIstance
+*
+* funzione da passare come succFunz a insClasse per selezionare nella select l'elemento appena inserito
+* value e' il valore dell'annotazione
+* valueLeg e' il valore in forma leggibile
+*/
 function newListIstance (val, valueLeg) {
 	$("#InstanceSelect").prepend("<option value='" + val + "'>" + valueLeg + "</option>");
 	$('#InstanceSelect').find('option:selected').prop('selected',false);
 	$($('#InstanceSelect option')[0]).prop('selected',true);
 }
 
-/* funzione che inserisce 2 o 3 statement nel triple store relativi allo stesso soggetto
-- "sog", "pre" e "ogg" sono soggetto, predicato e oggetto del primo statement
-- "pre2" e "ogg2" predicato e oggetto del secondo
-- "ogg3" viene usato solo per le annotazioni di tipo citazione, per cui il predicato e' noto a priori
+/*
+* insClasse
+*
+* inserisce uno o piu' statament relativi allo stesso soggetto nel triple store
+* sog e' il soggetto del primo statement
+* pre e' il predicato del primo statement
+* ogg e' l'oggetto del primo statement
+* pre2 e' il predicato del secondo statement
+* ogg2 e' l'oggetto del secondo statement
+* ogg3 e; l'oggetto del terzo statement
+* succFunz e' la funzione invocata in caso di successo 
 */
 function insClasse(sog, pre, ogg,pre2,ogg2,ogg3, succFunz) {
 	return $.ajax({
@@ -308,8 +311,14 @@ function insClasse(sog, pre, ogg,pre2,ogg2,ogg3, succFunz) {
 	});
 }
 
+/*
+* addInstanceSelectOption
+*
+* prende il valore della nuova istanza e prepara tutti i dati per inserirlo nel triple store 
+* citType e' il tipo di citazione
+* addinfo e' un vettore di 3 elementi contenenti gli uri da aggiungere prima degli oggetti/soggetti degli statement
+*/
 function addInstanceSelectOption (citType, addinfo ) {
-	
 	var nome = $("#InstanceText").val().trim();
 	if(nome != "") {
 		var err = false;
@@ -359,7 +368,17 @@ function addInstanceSelectOption (citType, addinfo ) {
 		return false;
 }
 
-
+/*
+* insertLocalAnnotation
+*
+* funzione chiamata dal pulsante crea del widget annote.
+* inserisce la nuova annotazione tra le annotaizoni temporanee e poi la visualizza
+* citType e' il tipo di citazione
+* fragment indica se l'annotazione e' sul documento o sul frammento
+* idData e' l'id dell-elemento da cui ottenere il valore della selezione
+* tripla e' un vettore di 3 elementi contenenti uri utilizzati dal server per l'inserimento dell'annotazione nel triple store
+* addinfo e' un vettore di 3 elementi contenenti gli uri da aggiungere prima degli oggetti/soggetti degli statement in addIstanceSelectOption
+*/
 function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 	var funz = null;
 	
@@ -388,7 +407,11 @@ function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 	}
 }
 
-//funzione che dato il numero progressivo del primo span di un'annotazione ne rimuove tutti gli span
+/*
+* cancSpanAnn
+*
+* dato il numero identificativo di una span, la cancella e esegue lo stesso su tutte le sue discendenti
+*/
 function cancSpanAnn(n) {
 	var span,  next = n;
 	do {
@@ -397,12 +420,13 @@ function cancSpanAnn(n) {
 		span.contents().unwrap();
 	} while (next!='none');
 }
+
 /*
-function findAnn( ann) {
-	for( var i=0; i< notes.length; i++)
-		if( notes[i] == ann )
-			return i;
-}
+* deleteLocalAnnotation
+*
+* elimina l'annotazione temporanea passata per parametro sia visivamente che dal vettore delle note
+* ann e' l'oggetto del vettore di note corrispondente all'annotazione da eliminare
+* tag e' l'elemento della finestra manage corrispondente all'annotazione da eliminare
 */
 function deleteLocalAnnotation ( ann, tag ) {
 	$('#' + tag).remove();
@@ -423,6 +447,16 @@ function deleteLocalAnnotation ( ann, tag ) {
 		$('#manage-nav-button').parent().addClass('disabled');
 }
 
+/*
+* updateAnn
+*
+* aggiorna l'annotazione temporanea passata per parametro sia visivamente che nel vettore delle note
+* ann e' l'oggetto del vettore di note corrispondente all'annotazione da aggiornare
+* tag e' l'elemento della finestra manage corrispondente all'annotazione da aggiornare
+* newval e' il nuovo value da dare all'annotazione
+* newvalLeg e' il nuovo valore leggibile da dare all'annotazione
+* frag indica se l'annotazione e' sul documento o sul frammento
+*/
 function updateAnn (ann, tag, newval, newvalLeg, frag) {
 	$('#annote').modal('hide');
 	ann.value = newval;
@@ -439,6 +473,13 @@ function updateAnn (ann, tag, newval, newvalLeg, frag) {
 	}
 }
 
+/*
+* updateLocalAnnotation
+*
+* visualizza il widget annote con il form relativo al tipo di annotazione da aggionare
+* ann e' l'oggetto del vettore di note corrispondente all'annotazione da aggiornare
+* tag e' l'elemento della finestra manage corrispondente all'annotazione da aggiornare
+*/
 function updateLocalAnnotation (ann, tag){
 	
 	resetAnnoteModalWindow();
@@ -528,7 +569,11 @@ function updateLocalAnnotation (ann, tag){
 	
 }
 
-//funzione che data un'annotazione la inserisce nel triple store
+/*
+* inserAnn
+*
+* inserisce l'annotazione n nel triple store e restituisce il risultato della chiamata ajax
+*/
 function inserAnn(n) {
 	var sub = dpref['ao'] + n.doc;
 	var tar= dpref['ao'] + n.doc + '.html';
@@ -565,7 +610,12 @@ function inserAnn(n) {
 	});
 }
 
-//funzione che fa partire la richiesta di inserimento nel triple store dell'annotazione passata e ne registra l'esito
+/*
+* insertSingleNote
+*
+* esegue singole richieste di inserimento sul triple store e setta il campo successo nelle annotazioni 
+* temporanee in basa al risultato della funzione inserAnn
+*/
 function insertSingleNote(ann) {
 	return $.when(inserAnn(ann)).then(function (data, textStatus, jqXHR) {
 		if (data.success == "true")
@@ -577,11 +627,13 @@ function insertSingleNote(ann) {
 	});
 }
 
-
-/* funzione che cambia l'attributo data-ann di tutti gli span di un'annotazione, che indica l'indice di tale annotazione nel vettore relativo.
-- il parametro "n" e' il numero progressivo del primo span
-- "ind" il nuovo indice dell'annotazione nel proprio vettore
-- "cambiaTemp" e' un booleano che indica se impostare a false l'attributo data-temp, che indica se l'annotazione e' tra quelle non salvate o no
+/* 
+* cambiaIndSpanAnn
+*
+* aggiorna l'attributo data-ann di tutti gli span di un'annotazione
+* n e' il numero identificativo del primo span
+* ind e' il nuovo indice dell'oggetto, corrispondente all'annotazione, nel vettore di note
+* cambiaTemp se true si aggiorna il campo data-temp in annotazione non temporanea
 */
 function cambiaIndSpanAnn(n, ind, cambiaTemp) {
 	var span,  next = n;
@@ -594,7 +646,12 @@ function cambiaIndSpanAnn(n, ind, cambiaTemp) {
 	} while (next!='none');
 }
 
-//funzione che tenta di salvare tutte le annotazioni temporanee nel triple store e da messaggi di successo o errore in base all'esito
+/*
+* insertTripleStore
+*
+* cerca di salvare tutte le annotazioni temporanee nel triple store.
+* le annotazioni no caricate rimangono in notes
+*/
 function insertTripleStore() {
 	if (confirm("Vuoi procedere a salvare in modo permanente le annotazioni?")) {
 		var aspetta = [];
@@ -632,6 +689,13 @@ function insertTripleStore() {
 	}
 }
 
+/*
+* createDeleteButton
+*
+* crea il punsalte per eliminare le annotazioni temporanee
+* ann e' l'oggetto del vettore di note corrispondente all'annotazione da eliminare
+* tag e' l'elemento della finestra manage corrispondente all'annotazione da eliminare
+*/
 function createDeleteButton(obj, tag){
 	var but = document.createElement("button");
 	$(but).attr('type','button');
@@ -644,6 +708,13 @@ function createDeleteButton(obj, tag){
 	return but;
 }
 
+/*
+* createUpdateButton
+*
+* crea il punsalte per aggiornare le annotazioni temporanee
+* ann e' l'oggetto del vettore di note corrispondente all'annotazione da aggiornare
+* tag e' l'elemento della finestra manage corrispondente all'annotazione da aggiornare
+*/
 function createUpdateButton( obj, tag) {
 	var but = document.createElement("button");
 	$(but).attr('type','button');
@@ -655,6 +726,12 @@ function createUpdateButton( obj, tag) {
 	return but;
 }
 
+/*
+* listLocalNotes
+*
+* prepara il widget mangae-local-annotation  per la visualizzazione delle annotazioni
+* temporanee da visualizzare
+*/
 function listLocalNotes() {
 	$('#manage-local-annotation div.modal-body .list-group a').remove();
 	for (var i =0; i < notes.length; i++) {
