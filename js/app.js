@@ -288,7 +288,9 @@ function validSelection(sel) {
 */
 function saveSelection() {
 	resetAnnoteModalWindow();
-	currentSelection = selection().getRangeAt(0);	
+	var sel = selection();
+	if (sel.rangeCount > 0)
+		currentSelection = sel.getRangeAt(0);	
 }
 
 /*
