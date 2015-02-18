@@ -524,10 +524,10 @@ function updateLocalAnnotation (ann, tag){
 
 //funzione che data un'annotazione la inserisce nel triple store
 function inserAnn(n) {
-	var sub = dpref['ao'] + ann.doc;
-	var tar= dpref['ao'] + ann.doc + '.html';
+	var sub = dpref['ao'] + n.doc;
+	var tar= dpref['ao'] + n.doc + '.html';
 	if (n.type == 'hasAuthor')
-		sub = dpref['ao'] + ann.doc.substr(0, ann.doc.length-5);
+		sub = dpref['ao'] + n.doc.substr(0, n.doc.length-5);
 	if (n.primoSpan > -1)
 		sub += '#' + n.id + '-' + n.offStart + '-' + n.offEnd;
 	dati = { 
