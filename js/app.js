@@ -284,10 +284,11 @@ function validSelection(sel) {
 /*
 *	saveSelection
 *
-*	salva il frammento di testo selezionato al momento della chiamata
+*	salva il frammento di testo selezionato al momento della chiamata e resetta il widget annote
 */
 function saveSelection() {
-	currentSelection = selection().getRangeAt(0);
+	resetAnnoteModalWindow();
+	currentSelection = selection().getRangeAt(0);	
 }
 
 /*
@@ -747,7 +748,7 @@ $(document).ready(function () {
 
 	$('#annote-nav-button').parent().addClass('disabled');
 	$('#filter input[type="checkbox"]').prop("disabled","disabled");
-	
+	$('#filterDate, #filterAuthor').prop("disabled", "disabled");
 	$('#filterDate, #filterAuthor').prop("checked", false);
 	$('#filterDate').datepicker({
 	altFormat: "yy-mm-dd",

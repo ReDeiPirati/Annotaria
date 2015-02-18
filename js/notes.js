@@ -464,7 +464,6 @@ function updateAnn (ann, tag, newval, newvalLeg, frag) {
 	ann.data = currtime();
 	$($('#' + tag + ' div.row div')[1]).text(newvalLeg);
 
-	//riaggiungo l'annotazione sul documento e aggiorno le altre
 	if(frag)
 		cambiaDataSpanAnn(ann.primoSpan, ann.data);
 	else {
