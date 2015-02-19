@@ -433,7 +433,7 @@ function deleteLocalAnnotation ( ann, tag ) {
 	
 	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
 	
-	if( tag != "") {
+	if( tag != undefined) {
 		var num = notes.indexOf(ann);
 		for( var i = num +1; i < notes.length; i++) {
 			if(notes[i].primoSpan > -1)

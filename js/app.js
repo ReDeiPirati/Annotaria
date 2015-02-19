@@ -32,6 +32,8 @@ var widgetShow = "";				// widget visualizzato
 var FragAnnotation = false;	// falso se l'annotazione e' sul documento, true altrimenti
 var currentSelection;				// selezione corrente
 var usr = {};								// contiene i dati dell'utente {nome, email}
+usr.name = "";							
+usr.email = "";
 
 					/*ANN*/
 var nSpanAnnotazioni = 0;		//contatore delle annotazioni sul frammento
@@ -136,24 +138,44 @@ function checkTab() {
 * rimuove la classe active del documento dalla doc-list
 */
 function deleteTab() {
-	var tabId = $(this).parent().attr("href");
+	if(usr.name != "") {
+		if(confirm("Chiudendo questa tab tutte le annotazioni su quel documento saranno cancellate. Proseguire?")) {	
+			var docName = $(this).parent().text();
+			docName = docName.substr(2);
+			var i = 0;
+			do {
+				if( notes[i].doc == docName) 
+					deleteLocalAnnotation(notes[i], "");
+				else
+					i++;
+			} while( i < notes.length);
+			closeDocument($(this));
+		}	
+	}
+	else
+		closeDocument($(this));
+}
+
+function closeDocument(tag) {
+	var tabId = tag.parent().attr("href");
 	var listId = tabId.split('-');
 	$(tabId).remove();
-	$(this).parent().parent().remove();
+	tag.parent().parent().remove();
 	$('#' + listId[1]).removeClass('active');
-	
+
 	$('#MetaTab-' + listId[1]).parent().remove();
 	$('#Meta-' + listId[1]).remove();
-	
-	
+
+
 	activeDoc --;
-	
+
 	if(activeDoc && !$('.doc-area #documentTab li.active').length) { // activeDoc != 0 && tabs.active == 0
 		$('.doc-area #documentTab li a').first().trigger("click");
 		$('#metaTab li a').first().trigger("click");
 	}
 	checkTab();
 }
+
 
 /*
 *	toggleModeSelector()
@@ -226,7 +248,7 @@ function setProvenance() {
 */
 function resetLocalAnnotation() {
 	for( var i = 0; i<notes.length; i++)
-		deleteLocalAnnotation( notes[i], "");
+		deleteLocalAnnotation( notes[i], undefinedf);
 	nAnnDoc = 0; 
 	notes = []; 
 }
@@ -275,8 +297,7 @@ function validSelection(sel) {
 		}
 		
 		var docContent = document.getElementById('documentTabContent');
-		var defaultdoc = document.getElementById('Doc1'); 
-		return ((anc == docContent || anc.isDescendantOf(docContent)) && anc != defaultdoc && !anc.isDescendantOf(defaultdoc));
+		return ((anc == docContent || anc.isDescendantOf(docContent)));
 	}
 	else return false;
 }
