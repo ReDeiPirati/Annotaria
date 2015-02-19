@@ -1,20 +1,20 @@
 <?php
 	
-# questo script inserisce un'annotazione su frammento o su documento sul triple store utilizzando le informazioni passate come parametri CGI:
-# - "endpoint" e' l'URL del server fuseki in cui inserire le triple
-# - "anntype" e' il tipo dell'annotazione
-# - "labelann" e' l'etichetta dell'annotazione
-# - "target" e' una stringa che se equivale a "frammento" indica che l'annotazione e' su frammento, altrimenti e' su documento
-# - "doc" e' l'URI completo del documento su cui e' fatta l'annotazione
-# - "val" e' l'id del tag piu' interno che contiene entrambi gli estremi dell'annotazione
-# - "start" e "end" sono gli offset di inizio e fine relativamente al tag il cui id e' "val"
-# - "subject", "predicate" e "object" sono le 3 parti dello statement da associare all'annotazione
-# - "labelstat" e' l'etichetta relativa allo statement, puo' anche non essere passata
-# - "uriann" e' l'URI che identifica l'autore dell'annotazione
-# - "oraann" e' una stringa contenente la data dell'annotazione
-# - "nomeann" e' una stringa contenente il nome dell'annotatore
-# - "emailann" e' una stringa contenente la mail dell'annotatore
-# lo script restituisce sempre un dizionario con due chiavi, se viene eseguito con successo alla chiave "success" corrisponde il valore "true", altrimenti "false"
+# questo script inserisce un'annotazione su frammento o su documento sul triple store utilizzando i parametri di POST:
+# - $POST["endpoint"] contiene l'URL del server fuseki in cui inserire le triple
+# - $POST["anntype"] contiene il tipo dell'annotazione
+# - $POST["labelann"] contiene l'etichetta dell'annotazione
+# - $POST["target"] indica se é un'annotazine su frammento o su documento
+# - $POST["doc"] contiene l'URI completo del documento su cui e' fatta l'annotazione
+# - $POST["val"] contiene l'id del tag piu' interno che contiene entrambi gli estremi dell'annotazione
+# - $POST["start"] e $POST["end"] contengono gli offset di inizio e fine rispetto al tag il cui id e' contenuto in $POST["val"]
+# - $POST["subject"] , $POST["predicate"] e $POST["object"] contengono le 3 parti dello statement da associare all'annotazione
+# - $POST["labelstat"] contiene l'etichetta relativa allo statement (é opzionale)
+# - $POST"uriann" contiene l'URI che identifica l'autore dell'annotazione
+# - $POST["oraann"] contiene una stringa con la data dell'annotazione
+# - $POST["nomeann"] contiene una stringa con il nome dell'annotatore
+# - $POST["emailann"] contiene una stringa contenente la mail dell'annotatore
+# lo script restituisce un dizionario con due chiavi, se viene eseguito con successo alla chiave "success" corrisponde il valore "true", altrimenti "false" , più informazioni di debug nell'array message
 
 
 

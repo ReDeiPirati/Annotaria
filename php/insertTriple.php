@@ -1,11 +1,11 @@
 <?php
 
 # questo script inserisce nel triple store 2 o 3 triple, in base ai parametri:
-# - "endpoint" e' l'URL del server fuseki in cui inserire le triple
-# - "sog", "pre" e "ogg" sono i 3 elementi del primo statement
-# - "pre2" e "ogg2" sono predicato e oggetto del secondo statement, come soggetto viene usato sempre "sog"
-# - "ogg3" indica l'oggetto per il terzo statement, usato solo per le annotazioni di tipo citazione e puo' quindi non essere passato
-# lo script restituisce sempre un dizionario con due chiavi, se viene eseguito con successo alla chiave "success" corrisponde il valore "true", altrimenti "false"
+# - $POST["endpoint"] contiene l'URL del server fuseki in cui inserire le triple
+# - $POST["sog"], $POST["pre"] e $POST["ogg"] contengono i 3 elementi del primo statement
+# - $POST["pre2"] e $POST["ogg2"] contengono predicato e oggetto del secondo statement, come soggetto viene usato sempre $POST["sog"]
+# - $POST["ogg3"] contiene l'oggetto per il terzo statement (solo per le citazioni)
+# lo script restituisce  un dizionario con due chiavi, se viene eseguito con successo alla chiave "success" corrisponde il valore "true", altrimenti "false"  , più valori di debug nell'array message
 
 
 
@@ -43,10 +43,10 @@ try
 
 	if ( array_key_exists( "ogg3" , $_POST ) )
 	{
-		$uriogg3 = new EasyRdf_ParsedUri($_POST["ogg3"]);	
+		$uriogg3 = new EasyRdf_Resource($_POST["ogg3"]);	
 		$graph -> add( $urisog , $uripre ,  $uriogg3  );
 
-		$uriogg2 = new EasyRdf_ParsedUri($_POST["ogg2"]);
+		$uriogg2 = new EasyRdf_Resource($_POST["ogg2"]);
 		$graph -> add( $urisog , $uripre2 ,  $uriogg2  );	
 	}
 	else
