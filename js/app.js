@@ -661,7 +661,7 @@ function toggleFilterAuthor() {
 }
 
 /*
-* toggleFilterAuthor 
+* filterAuthor 
 *
 * applica o rimuove il filtro per nome dell'annotatore
 */
@@ -693,8 +693,10 @@ function filterAnn(){
 * abilita o disabilita il filtro data
 */
 function toggleFilterData() {
-	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked'))
+	if( $('#filter form fieldset div.checkbox input[value="selDate"]').is(':checked')){
 		$('#filterDate').prop('disabled', false);
+		filterDate();
+	}
 	else {
 		$('#filterDate').prop('disabled', true);
 		restoreFilter("date");
