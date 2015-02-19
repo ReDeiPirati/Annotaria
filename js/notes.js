@@ -774,14 +774,12 @@ function createUpdateButton( obj, tag) {
 function listLocalNotes() {
 	$('#manage-local-annotation div.modal-body .list-group a').remove();
 	for (var i =0; i < notes.length; i++) {
-		var value = notes[i].value.split('/');
-		value  = value[value.length -1];
-		
+				
 		if ($('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').length == 0) {
 			$('#manage-local-annotation div.modal-body .list-group').append('<a href="#" class="list-group-item disabled" name="manageDoc' + notes[i].doc + '">' + notes[i].doc + '<span class="badge">0</span></a>');
 		}
 		var aId = "a-ann-" +i;
-		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="' + aId + '"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + tipoLeggibile[notes[i].type] + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + value + '</div></div></a>');
+		$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + notes[i].doc + '"]').after('<a href="#" class="list-group-item" id="' + aId + '"><div class="row"><div class="col-xs-12 col-sm-3 col-md-3">' + tipoLeggibile[notes[i].type] + '</div><div class="col-xs-12 col-sm-7 col-md-7 ">' + notes[i].valueLeg + '</div></div></a>');
 
 		
 		var buttondiv = document.createElement("div");

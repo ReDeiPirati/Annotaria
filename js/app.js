@@ -134,8 +134,7 @@ function checkTab() {
 /*
 * deleteTab ()
 *
-* elimina la tab di cui e' stata cliccata la x e il relativo tabcontent
-* rimuove la classe active del documento dalla doc-list
+* verifica in che modalita' si e' chiama closedocument per eliminare le tab. 
 */
 function deleteTab() {
 	if(usr.name != "") {
@@ -143,12 +142,14 @@ function deleteTab() {
 			var docName = $(this).parent().text();
 			docName = docName.substr(2);
 			var i = 0;
-			do {
-				if( notes[i].doc == docName) 
-					deleteLocalAnnotation(notes[i], "");
-				else
-					i++;
-			} while( i < notes.length);
+			if(notes.length != 0) {
+				do {
+					if( notes[i].doc == docName) 
+						deleteLocalAnnotation(notes[i], "");
+					else
+						i++;
+				} while( i < notes.length);
+			}
 			closeDocument($(this));
 		}	
 	}
@@ -156,6 +157,12 @@ function deleteTab() {
 		closeDocument($(this));
 }
 
+/*
+* closeDocument ()
+*
+* elimina la tab di cui e' stata cliccata la x e il relativo tabcontent
+* rimuove la classe active del documento dalla doc-list
+*/
 function closeDocument(tag) {
 	var tabId = tag.parent().attr("href");
 	var listId = tabId.split('-');
@@ -207,7 +214,7 @@ function titleAnnotator() {
 * titleReader
 *
 * modifica il navbar-brand e la scritta del mode 
-* nasconde il pulsante annote e mange della navbar
+* nasconde il pulsante annote e manage della navbar
 */
 function titleReader() {
 	$('.navbar-brand').text("Leggotaria");
