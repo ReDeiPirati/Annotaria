@@ -86,7 +86,7 @@ function addNote(type, val,tripla) {
 	};
 	notes.push(n);
 	
-	$('#manage-nav-button').parent().removeClass('disabled');
+	$('#manage-nav-button').prop('disabled',false);
 	
 	insertNote(nTestoSelezionati, currentSelection.startOffset, currentSelection.endOffset, type, true, notes.length-1);
 	restoreFilter("ann");
@@ -149,7 +149,7 @@ function salvaTempAnn(tipo, val,tripla) {
 	insertAnnDoc(tipo, [n.valueLeg, usr.name, usr.email, n.data], n.num); //inserisce l'annotazione tra i metadati
 	nAnnDoc++;
 	
-	$('#manage-nav-button').parent().removeClass('disabled');
+	$('#manage-nav-button').prop('disabled',false);
 }
 
 /* 
@@ -450,7 +450,7 @@ function deleteLocalAnnotation ( ann, tag ) {
 	}
 	
 	if (notes.length == 0)
-		$('#manage-nav-button').parent().addClass('disabled');
+		$('#manage-nav-button').prop("disabled",true);
 }
 
 /*
@@ -715,7 +715,7 @@ function insertTripleStore() {
 			
 			if (fallite.length == 0) {
 				alert("Annotazioni caricate!!!");
-				$('#manage-nav-button').parent().addClass('disabled');
+				$('#manage-nav-button').prop("disabled",true);
 				$('#manage-local-annotation').modal('hide');
 				notes = [];
 			}

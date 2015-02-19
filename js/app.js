@@ -222,7 +222,7 @@ function titleReader() {
 	htmlString += '&nbsp;<span class="caret"></span>';
 	$('#mode').html(htmlString);
 	$('#annote-nav-button').addClass('hide');
-	$('#manage-nav-button').parent().addClass('disabled');
+	$('#manage-nav-button').prop("disabled",true);
 	$('#manage-nav-button').addClass('hide');
 	toggleModeSelector();
 }
@@ -777,10 +777,10 @@ $(document).ready(function () {
 		listMaxHeight("documentAnnotation");
 	}); 
 	
-
-	$('#annote-nav-button').parent().addClass('disabled');
-	$('#filter input[type="checkbox"]').prop("disabled","disabled");
-	$('#filterDate, #filterAuthor').prop("disabled", "disabled");
+	$('#manage-nav-button').prop("disabled",true);
+	$('#annote-nav-button').prop("disabled",true);
+	$('#filter input[type="checkbox"]').prop("disabled",true);
+	$('#filterDate, #filterAuthor').prop("disabled", true);
 	$('#filterDate, #filterAuthor').prop("checked", false);
 	$('#filterDate').datepicker({
 	altFormat: "yy-mm-dd",
