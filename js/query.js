@@ -4,19 +4,17 @@
 - "succfunz" e' la funzione da eseguire se la query ha successo
 - "id" e "tag" sono variabili passate come parametro a succfunz, insieme al json della risposta alla query
 - "errfunz" e' la funzione da eseguire se la richiesta non ha successo
-- "loadId" e' l'id dell'immagine da mostrare mentre la richiesta e' in corso
 - "timeout" e' il tempo massimo di attesa oltre il quale si presume che la richesta sia fallita
 - "initial" e' un ulteriore parametro per "succfunz", usato per la modifica delle annotazioni per riprstinare il menu dell'annotazone com'era al momento del salvataggio
 */
-function query(query, succfunz, id, tag, errfunz, loadId, timeout, initial) {
+function query(query, succfunz, id, tag, errfunz, timeout, initial) {
 	var myquery = PREFIXES+query;
 	var encodedquery = encodeURIComponent(myquery);
 	var queryUrl = endpointURL + "?query=" + encodedquery + "&format=json";
 	var dati = {dataType:"jsonp" , url:queryUrl , success:function (d) {succfunz(d,id,tag,initial)}};
 	if (errfunz)
 		dati.error = errfunz;
-	var req = $.ajax(dati).always(function () {$(loadId).addClass('hide')});
-	$(loadId).removeClass('hide');
+	var req = $.ajax(dati);
 	if (timeout) {
 		if (timeout>0)
 			setTimeout(function(){ if (req.readyState == 1) req.abort();}, timeout);
