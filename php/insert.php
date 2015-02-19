@@ -50,9 +50,6 @@ try
 	$litnomeann = new EasyRdf_Literal( $_POST["nomeann"] );
 	$litemailann = new EasyRdf_Literal( $_POST["emailann"] );
 
-
-	$doc = new EasyRdf_Resource( $_POST["doc"] );
-
 	$uritarget = new EasyRdf_Resource( $_POST["target"] );
 
 	$urisub = new EasyRdf_Resource( $_POST["subject"] );
