@@ -433,8 +433,14 @@ function deleteLocalAnnotation ( ann, tag ) {
 	
 	$('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').html( parseInt( $('#manage-local-annotation div.modal-body .list-group a[name="manageDoc' + ann.doc + '"] span.badge').text()) - 1);
 	
-	if( tag != "")
-		notes.splice( notes.indexOf(ann), 1);
+	if( tag != "") {
+		var num = notes.indexOf(ann);
+		for( var i = num +1; i < notes.length; i++) {
+			if(notes[i].primoSpan > -1)
+				cambiaNumSpanAnn(notes[i].primoSpan, i - 1);
+		}
+		notes.splice( num, 1);
+	}
 	
 	if (ann.primoSpan > -1)
 		cancSpanAnn(ann.primoSpan); //questa chiamata da loop
@@ -659,6 +665,22 @@ function cambiaDataSpanAnn(n, data) {
 	do {
 		span = $('#span-ann-'+next);
 		span.attr('data-data',data);
+		next = span.attr('data-next');
+	} while (next!='none');
+}
+/* 
+* cambiaNumSpanAnn
+*
+* aggiorna l'attributo data-ann di tutti gli span di un'annotazione
+* n e' il numero identificativo del primo span
+* num e' il nuovo valore della data-ann
+*/
+function cambiaNumSpanAnn(n, num) {
+	var span;
+	var next = n;
+	do {
+		span = $('#span-ann-'+next);
+		span.attr('data-ann',num);
 		next = span.attr('data-next');
 	} while (next!='none');
 }
