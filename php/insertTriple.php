@@ -5,7 +5,7 @@
 # - "sog", "pre" e "ogg" sono i 3 elementi del primo statement
 # - "pre2" e "ogg2" sono predicato e oggetto del secondo statement, come soggetto viene usato sempre "sog"
 # - "ogg3" indica l'oggetto per il terzo statement, usato solo per le annotazioni di tipo citazione e puo' quindi non essere passato
-# lo script restituisce sempre un dizionario con due chiavi, se viene eseguito con successo alla chiave "success" corrisponde il valore "true", altrimenti "false"
+# lo script restituisce  un dizionario con due chiavi, se viene eseguito con successo alla chiave "success" corrisponde il valore "true", altrimenti "false" più valori di debug nell'array message
 
 
 
@@ -43,10 +43,10 @@ try
 
 	if ( array_key_exists( "ogg3" , $_POST ) )
 	{
-		$uriogg3 = new EasyRdf_ParsedUri($_POST["ogg3"]);	
+		$uriogg3 = new EasyRdf_Resource($_POST["ogg3"]);	
 		$graph -> add( $urisog , $uripre ,  $uriogg3  );
 
-		$uriogg2 = new EasyRdf_ParsedUri($_POST["ogg2"]);
+		$uriogg2 = new EasyRdf_Resource($_POST["ogg2"]);
 		$graph -> add( $urisog , $uripre2 ,  $uriogg2  );	
 	}
 	else

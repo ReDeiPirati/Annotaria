@@ -1,11 +1,11 @@
 
-/* funzione generica per effettuare una query sul triple store
-- il parametro "query" e' una stringa contenente la query da eseguire, senza prefissi
-- "succfunz" e' la funzione da eseguire se la query ha successo
-- "id" e "tag" sono variabili passate come parametro a succfunz, insieme al json della risposta alla query
-- "errfunz" e' la funzione da eseguire se la richiesta non ha successo
-- "timeout" e' il tempo massimo di attesa oltre il quale si presume che la richesta sia fallita
-- "initial" e' un ulteriore parametro per "succfunz", usato per la modifica delle annotazioni per riprstinare il menu dell'annotazone com'era al momento del salvataggio
+/* funzione che effettua una query sul triple store
+- query e' una stringa che contiene la query da eseguire senza prefissi
+- succfunz funzione successo
+- id e tag sono variabili da passare a succfunz, insieme al json della risposta alla query , particolarmente utili per le funzioni elenco
+- errfunz funzione errore
+- timeout e' il tempo massimo di attesa per la richesta 
+- initial e' un ulteriore parametro per "succfunz", usato per la modifica delle annotazioni per riprstinare il menu dell'annotazone com'era al momento del salvataggio
 */
 function query(query, succfunz, id, tag, errfunz, timeout, initial) {
 	var myquery = PREFIXES+query;
@@ -23,7 +23,7 @@ function query(query, succfunz, id, tag, errfunz, timeout, initial) {
 }
 
 
-//funzione che crea l'elenco dei risultati di una query su dbpedia. Il significato dei parametri e' lo stesso della funzione elenco.
+//funzione che crea l'elenco dei risultati di una query su dbpedia.
 function elencoDbp(json, id, tag) {
 	$('#'+id+' '+tag).remove();
 	var head = json.head.vars;
@@ -34,7 +34,7 @@ function elencoDbp(json, id, tag) {
 }
 
 
-//funzione per effettuare una query su dbpedia, il significato dei parametri e' lo stesso della funzione query
+//funzione per effettuare una query su dbpedia
 function querydbp(query, succfunz, id, tag, timeout) {
 	var myquery = query;
 	var encodedquery = encodeURIComponent(myquery);
@@ -54,7 +54,8 @@ function querydbp(query, succfunz, id, tag, timeout) {
 }
 
 
-//funzione che aggiunge tanti tag di tipo "tag" all'interno del nodo con id "id" quanti sono i risultati contenuti in "json". Se "initial" e' passato, viene selezionato il tag con attributo value pari a "initial"
+
+//funzione che aggiunge dei tag di tipo "tag" nell'id passato in base al risultato della query.Se "initial" e' passato, viene selezionato il tag con attributo value pari a "initial"
 function elenco(json, id, tag, initial) {
 	$('#'+id+' '+tag).remove();
 	var head = json.head.vars;
@@ -71,7 +72,7 @@ function elenco(json, id, tag, initial) {
 }
 
 
-//funzione che crea l'elenco dei documenti citabili per l'annotazione di tipo citazione. I parametri sono gli stessi della funzione elenco
+//funzione che crea l'elenco dei documenti citabili per l'annotazione di tipo citazione. 
 function elencoDocs(json, id, tag, initial) {
 	$('#'+id+' '+tag).remove();
 	var head = json.head.vars;
