@@ -67,7 +67,7 @@ function elenco(json, id, tag, initial) {
 		$('option[value="'+initial+'"]').prop('selected', true);
 	}
 	if ($('#'+id+' '+tag).length == 0)
-		$('#'+id).append('<'+tag+' id="vuoto"></'+tag+'>');
+		$('#'+id).append('<'+tag+'></'+tag+'>');
 		
 }
 

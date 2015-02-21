@@ -1,5 +1,0 @@
-Problemi:
- - il footer si alza dal fondo pagina quando apro un documento
- - quando cambio da annotazioni sul documento ad annotazioni sul segmento non scompaiono i form dell'annotazione precedente
- - finire le annottazioni sul segmento
-
