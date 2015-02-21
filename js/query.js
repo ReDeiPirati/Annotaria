@@ -29,7 +29,7 @@ function elencoDbp(json, id, tag) {
 	var head = json.head.vars;
 	var queryResults = json.results.bindings;
 	for (var item in queryResults) {
-		$('#'+id).append('<'+tag+' value="'+ queryResults[item]["a"].value +'">'+queryResults[item]["a"].value+'</'+tag+'>');
+		$('#'+id).append('<'+tag+' value="'+ queryResults[item]["uri"].value +'">'+queryResults[item]["uri"].value+'</'+tag+'>');
 	}
 }
 

@@ -792,9 +792,10 @@ $(document).ready(function () {
 	$('#sel_reader').toggle();
 		
 	$('#sel_reader').click(resetProvenance);
+
 	$('#DbpediaSearch').click(function() {
-		querydbp("select distinct ?a where {?a rdf:type owl:Thing; foaf:name ?b. FILTER contains(str(?a), \"" + $('#DbpediaText').val() + "\")}", elencoDbp, "DbpediaSelect","option",60000);
-	});
+		querydbp( "SELECT distinct ?uri  WHERE { {   ?uri rdfs:label ?label . FILTER (lang(?label) = \"en\").  ?label bif:contains \"" + $('#DbpediaText').val() + "\" . ?uri dcterms:subject ?blanknode1 } UNION { ?uri dbpprop:name ?dbname . FILTER (lang(?dbname) = \"en\"). ?dbname bif:contains \"" + $('#DbpediaText').val() + "\" . ?uri dcterms:subject ?blanknode2 } UNION { ?uri foaf:name ?fname . FILTER (lang(?fname) = \"en\"). ?fname bif:contains \"" + $('#DbpediaText').val() + "\" .?uri dcterms:subject ?blanknode3 } } LIMIT 1000", elencoDbp, "DbpediaSelect","option", 60000 ); });
+
 	
 	$('#annShowSelect').on('change', switchAnnotationInfo );
 	
