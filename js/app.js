@@ -255,7 +255,7 @@ function setProvenance() {
 */
 function resetLocalAnnotation() {
 	for( var i = 0; i<notes.length; i++)
-		deleteLocalAnnotation( notes[i], undefinedf);
+		deleteLocalAnnotation( notes[i], undefined);
 	nAnnDoc = 0; 
 	notes = []; 
 }
