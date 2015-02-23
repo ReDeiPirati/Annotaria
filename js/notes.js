@@ -545,7 +545,7 @@ function updateLocalAnnotation (ann, tag){
 			break;
 
 		case "relatesTo":
-			$('#DbpediaSelect').append($('<option>').prop("selected", true).value(ann.value).text(ann.valueLeg));
+			$('#DbpediaSelect').append($('<option>').prop("selected", true).val(ann.value).text(ann.valueLeg));
 			$('#annote button.btn-success').unbind("click").click(function() {updateAnn(ann, tag, $('#DbpediaSelect').val(), $('#DbpediaSelect option:selected').text(), true);});
 			break;
 
