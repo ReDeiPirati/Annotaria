@@ -511,6 +511,7 @@ function selectWid (annType, selValue) {
 			widgetShow = "widDbpedia";
 			clearWidget("widDbpedia");
 			$('#widDbpedia').removeClass("hide");
+			$('#DbpediaText').val(currentSelection.toString());
 			var tripla=['fabio:Expression',dpref['skos']+'related','skos:Concept'];
 			$('#annote button.btn-success').unbind("click").click(function() {insertLocalAnnotation ("relatesTo", FragAnnotation, "DbpediaSelect", tripla);});
 			break;
