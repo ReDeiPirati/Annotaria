@@ -388,7 +388,7 @@ function insertLocalAnnotation (citType, fragment, idData, tripla, addinfo) {
 		funz = salvaTempAnn;
 	
 	if ($('#'+idData).val() != '') {
-		if ($("input[type='radio'][name='InstanceRadio']:checked").val() == 'add') {
+		if ( addinfo != undefined && $("input[type='radio'][name='InstanceRadio']:checked").val() == 'add') {
 			if (!addInstanceSelectOption (citType, addinfo)) {
 				alert("Impossibile creare la nuova istanza");
 				return ;
