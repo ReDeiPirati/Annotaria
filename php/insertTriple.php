@@ -41,7 +41,7 @@ try
 
 	$graph -> add( $urisog , $uripre ,  $uriogg );
 
-	if ( array_key_exists( "ogg3" , $_POST ) )
+	if ( $_POST["ogg3"] != "" )
 	{
 		$uriogg3 = new EasyRdf_Resource($_POST["ogg3"]);	
 		$graph -> add( $urisog , $uripre ,  $uriogg3  );
